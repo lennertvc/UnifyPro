@@ -1,0 +1,40 @@
+#tag MultiImage
+Image DocumentsArchitecture1
+	#tag ImageRepresentation
+		SaveInfo = APHRcwECAQAAAAJEAAAAAAJEAAIAAAxNYWNpbnRvc2ggSEQAAAAAAAAAAAAAAAAAAADP1EbmSCsAAAKuQ9IaRG9jdW1lbnRzQXJjaGl0ZWN0dXJlMS5qcGcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAq5EU9SHU7EAAAAAAAAAAP////8AAAkgAAAAAAAAAAAAAAAAAAAAB1hKQ29jb2EAABAACAAAz9QqxgAAABEACAAA1IdFoQAAAAEAJAKuQ9ICChZ5AEBV7wKepIQCnqR0ABr8/gAJM7AACTOvAAJm+QACAINNYWNpbnRvc2ggSEQ6VXNlcnM6AGphbnZlcnJlcHQ6AERvY3VtZW50czoARGV2ZWxvcG1lbnQ6AFByb2plY3RzOgBQZXJzb25hbDoAWG9qbzoAWEpGcmFtZXdvcmtzOgBYSkNvY29hOgBEb2N1bWVudHNBcmNoaXRlY3R1cmUxLmpwZwAADgA2ABoARABvAGMAdQBtAGUAbgB0AHMAQQByAGMAaABpAHQAZQBjAHQAdQByAGUAMQAuAGoAcABnAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAbVVzZXJzL2phbnZlcnJlcHQvRG9jdW1lbnRzL0RldmVsb3BtZW50L1Byb2plY3RzL1BlcnNvbmFsL1hvam8vWEpGcmFtZXdvcmtzL1hKQ29jb2EvRG9jdW1lbnRzQXJjaGl0ZWN0dXJlMS5qcGcAABMAAS8AABUAAgAR//8AAAAAAAAAAA==
+		FullPath = /Users/janverrept/Documents/Development/Projects/Personal/Xojo/XJFrameworks/XJCocoa/DocumentsArchitecture1.jpg
+		PartialPath = ..\..\XJFrameworks\XJCocoa\DocumentsArchitecture1.jpg
+		#tag ImageSpecification
+			Comment = 
+			Device = 31
+			HSize = -1.00
+			Orientation = Any
+			Platform = 15
+			PPI = 72
+			VSize = -1.00
+		#tag EndImageSpecification
+	#tag EndImageRepresentation
+	#tag ImageRepresentation
+		#tag ImageSpecification
+			Comment = 
+			Device = 31
+			HSize = -1.00
+			Orientation = Any
+			Platform = 15
+			PPI = 144
+			VSize = -1.00
+		#tag EndImageSpecification
+	#tag EndImageRepresentation
+	#tag ImageRepresentation
+		#tag ImageSpecification
+			Comment = 
+			Device = 31
+			HSize = -1.00
+			Orientation = Any
+			Platform = 15
+			PPI = 216
+			VSize = -1.00
+		#tag EndImageSpecification
+	#tag EndImageRepresentation
+End Image
+#tag EndMultiImage
