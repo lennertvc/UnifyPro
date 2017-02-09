@@ -1,6 +1,17 @@
 #tag Class
 Protected Class UnifyPro
 Inherits Application
+	#tag Note, Name = ToDo Anja
+		
+		
+	#tag EndNote
+
+	#tag Note, Name = ToDo Jan
+		Database toevoegen
+		
+	#tag EndNote
+
+
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"&Delete"
