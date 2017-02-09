@@ -1,0 +1,17 @@
+
+# Created by https://www.gitignore.io/api/xojo
+
+### Xojo ###
+# Xojo (formerly REALbasic and Real Studio)
+
+Builds*
+*.debug
+*.debug.app
+Debug*.exe
+Debug*/Debug*.exe
+Debug*/Debug*\ Libs
+*.rbuistate
+*.xojo_uistate
+*.obsolete
+
+# End of https://www.gitignore.io/api/xojo
