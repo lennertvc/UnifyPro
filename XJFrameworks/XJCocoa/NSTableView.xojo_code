@@ -1,5 +1,5 @@
 #tag Class
-Protected Class NsTableView
+Protected Class NSTableView
 Inherits Listbox
 	#tag ViewBehavior
 		#tag ViewProperty

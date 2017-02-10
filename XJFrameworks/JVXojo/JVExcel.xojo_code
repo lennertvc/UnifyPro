@@ -31,19 +31,13 @@ Inherits ExcelApplication
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function expandRangeDown(startRange as ExcelRange, numberOfTimes as Integer =1) As ExcelRange
+		Function expandRangeDown(startRange as ExcelRange) As ExcelRange
 		  dim firstCellValue as string = startRange.Cells(1,1).value
-		  dim expandedRange as ExcelRange
 		  
 		  // Like Ctrl+Shift+Down-arrow
 		  if firstCellValue <> "" then
 		    
-		    dim endRange as ExcelRange = StartRange
-		    for expansion as integer = 1 to numberOfTimes
-		      endRange = endRange.End_(Office.xlDown)
-		    next
-		    
-		    expandedRange = me.range(startRange, endRange)
+		    dim expandedRange as ExcelRange = me.Range(startRange,startRange.End_(Office.xlDown))
 		    return expandedRange
 		    
 		  else
@@ -55,19 +49,13 @@ Inherits ExcelApplication
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function expandRangeRight(startRange as ExcelRange, numberOfTimes  as Integer=1) As ExcelRange
-		  dim firstCellValue as string = startRange.Cells(1,1).value
-		  dim expandedRange as ExcelRange
+		Function expandRangeRight(startRange as ExcelRange) As ExcelRange
+		  dim firstCellValue as string = me.range(startRange).Cells(1,1).value
 		  
 		  // Like Ctrl+Shift+Down-arrow
 		  if firstCellValue <> "" then
 		    
-		    dim endRange as ExcelRange = StartRange
-		    for expansion as integer = 1 to numberOfTimes
-		      endRange = endRange.End_(Office.xlToRight)
-		    next
-		    
-		    expandedRange = me.range(startRange, endRange)
+		    dim expandedRange as ExcelRange = me.Range(startRange,startRange.End_(Office.xlToRight))
 		    return expandedRange
 		    
 		  else

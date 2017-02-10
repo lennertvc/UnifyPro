@@ -38,8 +38,7 @@ Implements NSWindowDelegate
 		  aboutwindow.appVersionLabel.text = "Version "+app.fullVersion + Chr(9) + Str(app.BuildDate.Year)
 		  
 		  // Set the developer
-		  aboutwindow.developerLabel.text = "Developed by:"+ENDOFLINE+_
-		  app.developer
+		  aboutwindow.developerLabel.text = "Developed by: " + app.developer
 		  
 		  // Set the beta testing
 		  if app.betaTesting <> "" then

@@ -7,8 +7,8 @@ Protected Class NSArrayController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub constructor(content() as object)
-		  arrangedObjects = content
+		Sub constructor(model() as object)
+		  arrangedObjects = model
 		  
 		End Sub
 	#tag EndMethod

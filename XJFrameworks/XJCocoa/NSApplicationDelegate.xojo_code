@@ -68,7 +68,7 @@ Implements JVPrefsChangedObserver
 			  Dim iconFile As FolderItem =  pathFinder.findFile("AppIcon.png")
 			  
 			  if iconFile <> nil then
-			     icon = JVPicture.Open(iconFile)
+			    icon = JVPicture.Open(iconFile)
 			    // set the icon by code
 			    //...
 			  else
