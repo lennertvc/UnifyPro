@@ -1,6 +1,6 @@
 #tag Class
 Protected Class UnifyPro
-Inherits Application
+Inherits NSApplicationDelegate
 	#tag Note, Name = ToDo Anja
 		
 		
@@ -11,6 +11,9 @@ Inherits Application
 		
 	#tag EndNote
 
+
+	#tag Constant, Name = Developer, Type = String, Dynamic = False, Default = \"Lennert Van Campenhout\rJan Verrept", Scope = Public
+	#tag EndConstant
 
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
@@ -27,5 +30,19 @@ Inherits Application
 	#tag EndConstant
 
 
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="fullVersion"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="shortName"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Class
 #tag EndClass
