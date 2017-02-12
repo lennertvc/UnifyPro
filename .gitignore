@@ -43,3 +43,4 @@ Debug*/Debug*\ Libs
 *.obsolete
 
 # End of https://www.gitignore.io/api/xojo,macos
+.DS_Store

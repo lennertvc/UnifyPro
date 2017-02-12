@@ -31,7 +31,7 @@ Implements NSWindowDelegate
 		  // Set the icon
 		  If app.icon <> Nil Then
 		    dim iconbox as Canvas =  aboutwindow.iconBox
-		    iconbox.Backdrop = app.icon.rescale(iconbox.width, iconbox.height)
+		    iconbox.Backdrop = app.icon.rescale(iconbox.width*iconbox.ScaleFactor, iconbox.height*iconbox.ScaleFactor)
 		  End If
 		  
 		  //Set the applications version
@@ -39,12 +39,12 @@ Implements NSWindowDelegate
 		  
 		  // Set the developer
 		  aboutwindow.developerLabel.text = "Developed by: " +ENDOFLINE+ _
-		   app.developer
+		  app.developer
 		  
 		  // Set the beta testing
 		  if app.betaTesting <> "" then
 		    aboutwindow.betaTestingLabel.text = "Beta testing performed by: "+ENDOFLINE+ _ 
-		     app.betaTesting
+		    app.betaTesting
 		  else
 		    aboutwindow.betaTestingLabel.text = ""
 		  end if
