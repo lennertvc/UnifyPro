@@ -1,6 +1,13 @@
 #tag Class
 Protected Class UnifyPro
 Inherits NSApplicationDelegate
+	#tag Event
+		Sub Open()
+		  mainController = new mainWindowController
+		End Sub
+	#tag EndEvent
+
+
 	#tag Note, Name = ToDo Anja
 		
 		
