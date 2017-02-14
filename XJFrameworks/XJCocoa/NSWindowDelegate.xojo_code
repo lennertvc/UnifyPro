@@ -36,6 +36,12 @@ Protected Interface NSWindowDelegate
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub onWindowResizing(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Note, Name = Protocol description
 		Defines the protocol all NSWindow-delegates must conform to

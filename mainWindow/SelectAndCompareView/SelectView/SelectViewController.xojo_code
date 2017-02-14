@@ -1,11 +1,41 @@
 #tag Class
-Protected Class RegelingenListViewController
+Protected Class SelectViewController
 Inherits NSViewController
+	#tag Method, Flags = &h0
+		Sub autoLayout()
+		  selectView.ListViewLeft.Height = view.height/2
+		  selectView.ListViewRight.Height = view.height/2
+		  
+		  
+		  selectView.ListViewLeft.Width = view.width/2
+		  selectView.ListViewRight.Width = view.width/2
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new RegelingenListView, nil)
+		  Super.Constructor(new SelectView, nil)
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onviewActivate(sender as nsview)
+		  autoLayout
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onViewResizing(sender as NSView)
+		  autoLayout
 		End Sub
 	#tag EndMethod
 
@@ -13,10 +43,10 @@ Inherits NSViewController
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return RegelingenListView(view)
+			  return SelectView(view)
 			End Get
 		#tag EndGetter
-		regelingeListView As RegelingenListView
+		selectView As SelectView
 	#tag EndComputedProperty
 
 

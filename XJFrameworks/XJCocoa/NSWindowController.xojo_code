@@ -92,6 +92,14 @@ Implements NSWindowDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowResizing(sender as NSWindow)
+		  // Part of the NSWindowDelegate interface.
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub showModalWindow()
 		  window.ShowModal
 		End Sub

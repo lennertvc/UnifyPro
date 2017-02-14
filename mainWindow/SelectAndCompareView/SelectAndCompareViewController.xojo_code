@@ -1,16 +1,17 @@
 #tag Class
-Protected Class NSView
-Inherits ContainerControl
+Protected Class SelectAndCompareViewController
+Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor
+		  Super.Constructor( new SelectAndCompareView, nil)
 		  
-		  // Fit view to superview by default
-		  lockLeft =True
-		  lockRight =True
-		  lockTop =True
-		  lockBottom =True
+		  
+		  dim selectViewController as new SelectViewController
+		  dim compareViewController as new CompareViewController
+		  
+		  selectViewController.view.EmbedWithin(SelectAndCompareView)
+		  compareViewController.view.EmbedWithin(SelectAndCompareView)
 		End Sub
 	#tag EndMethod
 
@@ -18,68 +19,10 @@ Inherits ContainerControl
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  
-			  if (window <> nil) and (trueWindow <> nil) then
-			    return TRUE
-			  else
-			    return FALSE
-			  end if
-			  
+			  return SelectAndCompareView(view)
 			End Get
 		#tag EndGetter
-		isInstalled As Boolean
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h21
-		Private mviewDelegate As NSViewDelegate
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		owner As NSViewController
-	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mviewDelegate
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  
-			  if mviewDelegate <> nil then
-			    
-			    // Remove any previously set delegate
-			    RemoveHandler open, AddressOf mviewDelegate.onViewOpen
-			    RemoveHandler activate, AddressOf mviewDelegate.onViewActivate
-			    RemoveHandler close, AddressOf mviewDelegate.onviewClose
-			    RemoveHandler contentsChanged, AddressOf mviewDelegate.onviewContentsChanged
-			    RemoveHandler resizing, AddressOf mviewDelegate.onViewResizing
-			    
-			  end if
-			  
-			  // Set the delegate
-			  mviewDelegate = value
-			  
-			  if mviewDelegate <> nil then
-			    
-			    // Redirect all events to the delegate
-			    AddHandler open, AddressOf mviewDelegate.onViewOpen
-			    AddHandler activate, AddressOf mviewDelegate.onViewActivate
-			    AddHandler close, AddressOf mviewDelegate.onViewClose
-			    AddHandler contentsChanged, AddressOf mviewDelegate.onviewContentsChanged
-			    AddHandler resizing, AddressOf mviewDelegate.onviewResizing
-			    
-			  end if
-			  
-			  
-			  
-			  
-			  
-			  
-			End Set
-		#tag EndSetter
-		viewDelegate As NSViewDelegate
+		selectAndCompareView As SelectAndCompareView
 	#tag EndComputedProperty
 
 

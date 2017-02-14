@@ -25,6 +25,8 @@ Inherits Window
 			    RemoveHandler Paint, AddressOf mwindowDelegate.onWindowPaint
 			    RemoveHandler CancelClose, AddressOf mwindowDelegate.onWindowCancelClose
 			    RemoveHandler Close, AddressOf mwindowDelegate.onWindowClose
+			    RemoveHandler Resizing, AddressOf mwindowDelegate.onWindowResizing
+			    
 			    
 			  end if
 			  
@@ -39,6 +41,7 @@ Inherits Window
 			    AddHandler Paint, AddressOf mwindowDelegate.onWindowPaint
 			    AddHandler CancelClose, AddressOf mwindowDelegate.onWindowCancelClose
 			    AddHandler Close, AddressOf mwindowDelegate.onWindowClose
+			    AddHandler Resizing, AddressOf mwindowDelegate.onWindowResizing
 			    
 			  end if
 			  

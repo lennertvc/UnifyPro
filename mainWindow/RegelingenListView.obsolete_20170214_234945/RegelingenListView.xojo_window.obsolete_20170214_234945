@@ -1,5 +1,5 @@
 #tag Window
-Begin NSView CompareView
+Begin NSView RegelingenListView
    AcceptFocus     =   False
    AcceptTabs      =   True
    AutoDeactivate  =   True
@@ -9,7 +9,7 @@ Begin NSView CompareView
    Enabled         =   True
    EraseBackground =   True
    HasBackColor    =   False
-   Height          =   308
+   Height          =   448
    HelpTag         =   ""
    InitialParent   =   ""
    Left            =   0
@@ -24,40 +24,106 @@ Begin NSView CompareView
    Transparent     =   True
    UseFocusRing    =   False
    Visible         =   True
-   Width           =   594
-   Begin Label Label1
+   Width           =   656
+   Begin Listbox ListViewLeft
       AutoDeactivate  =   True
+      AutoHideScrollbars=   True
       Bold            =   False
+      Border          =   True
+      ColumnCount     =   1
+      ColumnsResizable=   False
+      ColumnWidths    =   ""
       DataField       =   ""
       DataSource      =   ""
+      DefaultRowHeight=   -1
       Enabled         =   True
-      Height          =   20
+      EnableDrag      =   False
+      EnableDragReorder=   False
+      GridLinesHorizontal=   0
+      GridLinesVertical=   0
+      HasHeading      =   False
+      HeadingIndex    =   -1
+      Height          =   408
       HelpTag         =   ""
+      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
+      InitialValue    =   ""
       Italic          =   False
-      Left            =   106
-      LockBottom      =   False
+      Left            =   20
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Multiline       =   False
+      RequiresSelection=   False
       Scope           =   0
-      Selectable      =   False
+      ScrollbarHorizontal=   False
+      ScrollBarVertical=   True
+      SelectionType   =   0
       TabIndex        =   0
       TabPanelIndex   =   0
-      Text            =   "Hier komt de interface om alle regelingentypes te vergelijken"
-      TextAlign       =   0
-      TextColor       =   &c00000000
+      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   144
-      Transparent     =   True
+      Top             =   20
       Underline       =   False
+      UseFocusRing    =   True
       Visible         =   True
-      Width           =   382
+      Width           =   300
+      _ScrollOffset   =   0
+      _ScrollWidth    =   -1
+   End
+   Begin Listbox ListViewRight
+      AutoDeactivate  =   True
+      AutoHideScrollbars=   True
+      Bold            =   False
+      Border          =   True
+      ColumnCount     =   1
+      ColumnsResizable=   False
+      ColumnWidths    =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      DefaultRowHeight=   -1
+      Enabled         =   True
+      EnableDrag      =   False
+      EnableDragReorder=   False
+      GridLinesHorizontal=   0
+      GridLinesVertical=   0
+      HasHeading      =   False
+      HeadingIndex    =   -1
+      Height          =   408
+      HelpTag         =   ""
+      Hierarchical    =   False
+      Index           =   -2147483648
+      InitialParent   =   ""
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   336
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   False
+      LockRight       =   True
+      LockTop         =   True
+      RequiresSelection=   False
+      Scope           =   0
+      ScrollbarHorizontal=   False
+      ScrollBarVertical=   True
+      SelectionType   =   0
+      TabIndex        =   1
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   20
+      Underline       =   False
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   300
+      _ScrollOffset   =   0
+      _ScrollWidth    =   -1
    End
 End
 #tag EndWindow
@@ -66,10 +132,10 @@ End
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return compareViewController(owner)
+			  return RegelingenListViewController(owner)
 			End Get
 		#tag EndGetter
-		compareViewController As CompareViewController
+		RegelingenListViewController As RegelingenListViewController
 	#tag EndComputedProperty
 
 

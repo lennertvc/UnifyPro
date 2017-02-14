@@ -1,17 +1,28 @@
 #tag Class
-Protected Class mainWindowController
-Inherits NSWindowController
+Protected Class RegelingenListViewController
+Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new MainWindow, nil)
+		  Super.Constructor(new RegelingenListView, nil)
 		  
-		  dim selectAndCompareViewController as new SelectAndCompareViewController
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onViewResizing(sender as NSView)
+		  RegelingenListView.ListViewLeft.Height = sender.height/2
+		  RegelingenListView.ListViewRight.Height = sender.height/2
 		  
-		  mainWindow.mainTabPanel.append(selectAndCompareViewController.view, "List and Compare")
-		  mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
 		  
-		  window.Show
+		  RegelingenListView.ListViewLeft.Width = sender.width/2
+		  RegelingenListView.ListViewRight.Width = sender.width/2
+		  
+		  
+		  
+		  
+		  
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -20,10 +31,10 @@ Inherits NSWindowController
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return  MainWindow(window)
+			  return RegelingenListView(view)
 			End Get
 		#tag EndGetter
-		mainWindow As MainWindow
+		regelingenListView As RegelingenListView
 	#tag EndComputedProperty
 
 
