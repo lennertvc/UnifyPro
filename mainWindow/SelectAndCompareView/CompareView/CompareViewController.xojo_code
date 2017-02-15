@@ -3,23 +3,25 @@ Protected Class CompareViewController
 Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub autoLayout()
+		  me.view.top = me.view.window.height/2+margins
+		  me.view.left = 0+margins
+		  me.view.width = me.view.window.width-(margins*2)
+		  me.view.height = me.view.window.height/2-(margins*2)
 		  
 		  CompareView.ListMetaLeft.top = 0
 		  CompareView.ListMetaLeft.left = 0
-		  CompareView.ListMetaLeft.Width = view.width/2
-		  CompareView.ListMetaLeft.height = view.height/2
-		  
+		  CompareView.ListMetaLeft.Width = me.view.width/2-margins/2
+		  CompareView.ListMetaLeft.height = me.view.height/2-margins/2
 		  
 		  CompareView.ListMetaRight.top = 0
-		  CompareView.ListMetaRight.left = view.width/2
-		  CompareView.ListMetaRight.Width = view.width/2
-		  CompareView.ListMetaRight.height = view.height/2
+		  CompareView.ListMetaRight.left = me.view.width/2+Margins/2
+		  CompareView.ListMetaRight.Width = me.view.width/2-margins/2
+		  CompareView.ListMetaRight.height = me.view.height/2-margins/2
 		  
-		  
-		  CompareView.ReportView.top = view.height/2
+		  CompareView.ReportView.top = me.view.height/2+margins/2
 		  CompareView.ReportView.left = 0
-		  CompareView.ReportView.Width = view.width
-		  CompareView.ReportView.height = view.height/2
+		  CompareView.ReportView.Width = me.view.width
+		  CompareView.ReportView.height = me.view.height/2-margins/2
 		End Sub
 	#tag EndMethod
 
@@ -52,6 +54,10 @@ Inherits NSViewController
 		#tag EndGetter
 		compareView As CompareView
 	#tag EndComputedProperty
+
+
+	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
 
 
 	#tag ViewBehavior

@@ -3,18 +3,20 @@ Protected Class SelectViewController
 Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub autoLayout()
-		  selectView.ListViewLeft.Height = view.height/2
-		  selectView.ListViewRight.Height = view.height/2
+		  me.view.top = 0+margins
+		  me.view.left = 0+margins
+		  me.view.width = me.view.window.width-(margins*2)
+		  me.view.height = me.view.window.height/2-(margins*2)
 		  
+		  selectView.ListViewLeft.top = 0
+		  selectView.ListViewLeft.left = 0
+		  selectView.ListViewLeft.Width = me.view.width/2-margins/2
+		  selectView.ListViewLeft.Height = me.view.height
 		  
-		  selectView.ListViewLeft.Width = view.width/2
-		  selectView.ListViewRight.Width = view.width/2
-		  
-		  
-		  
-		  
-		  
-		  
+		  selectView.ListViewRight.top = 0
+		  selectView.ListViewRight.left = me.view.width/2+Margins/2
+		  selectView.ListViewRight.Width = me.view.width/2-margins/2
+		  selectView.ListViewRight.Height = me.view.height
 		  
 		End Sub
 	#tag EndMethod
@@ -48,6 +50,10 @@ Inherits NSViewController
 		#tag EndGetter
 		selectView As SelectView
 	#tag EndComputedProperty
+
+
+	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
 
 
 	#tag ViewBehavior

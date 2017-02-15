@@ -6,9 +6,15 @@ Inherits NSWindowController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new MainWindow, nil)
 		  
-		  dim selectAndCompareViewController as new SelectAndCompareViewController
+		  // Create the subcontrollers
+		  selectAndCompareViewController = new SelectAndCompareViewController
 		  
+		  // Install the view hierarchy
 		  mainWindow.mainTabPanel.append(selectAndCompareViewController.view, "List and Compare")
+		  selectAndCompareViewController.view.EmbedWithin(me.window)
+		  selectAndCompareViewController.selectViewController.view.EmbedWithin(selectAndCompareViewController.view)
+		  selectAndCompareViewController.compareViewController.view.EmbedWithin(selectAndCompareViewController.view)
+		  
 		  mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
 		  
 		  window.Show
@@ -25,6 +31,10 @@ Inherits NSWindowController
 		#tag EndGetter
 		mainWindow As MainWindow
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		selectAndCompareViewController As SelectAndCompareViewController
+	#tag EndProperty
 
 
 	#tag ViewBehavior
