@@ -19,6 +19,7 @@ Inherits Window
 			Set
 			  
 			  if mwindowDelegate <> nil then
+			    
 			    // Remove any previously set delegate
 			    RemoveHandler Open, AddressOf mwindowDelegate.onWindowOpen
 			    RemoveHandler Activate, AddressOf mwindowDelegate.onWindowActivate
@@ -26,7 +27,8 @@ Inherits Window
 			    RemoveHandler CancelClose, AddressOf mwindowDelegate.onWindowCancelClose
 			    RemoveHandler Close, AddressOf mwindowDelegate.onWindowClose
 			    RemoveHandler Resizing, AddressOf mwindowDelegate.onWindowResizing
-			    
+			    RemoveHandler Maximize, AddressOf mwindowDelegate.onWindowMaximize
+			    RemoveHandler Minimize, AddressOf mwindowDelegate.onWindowMinimize
 			    
 			  end if
 			  
@@ -42,6 +44,8 @@ Inherits Window
 			    AddHandler CancelClose, AddressOf mwindowDelegate.onWindowCancelClose
 			    AddHandler Close, AddressOf mwindowDelegate.onWindowClose
 			    AddHandler Resizing, AddressOf mwindowDelegate.onWindowResizing
+			    AddHandler Maximize, AddressOf mwindowDelegate.onWindowMaximize
+			    AddHandler Minimize, AddressOf mwindowDelegate.onWindowMinimize
 			    
 			  end if
 			  

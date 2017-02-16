@@ -25,6 +25,18 @@ Protected Interface NSWindowDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowMaximize(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowMinimize(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onWindowOpen(sender as NSWindow)
 		  
 		End Sub

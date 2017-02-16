@@ -27,7 +27,7 @@ Begin NSView CompareView
    Width           =   594
    Begin HTMLViewer ReportView
       AutoDeactivate  =   True
-      Enabled         =   True
+      Enabled         =   False
       Height          =   338
       HelpTag         =   ""
       Index           =   -2147483648
@@ -37,7 +37,7 @@ Begin NSView CompareView
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   False
-      Renderer        =   1
+      Renderer        =   0
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0
@@ -48,28 +48,28 @@ Begin NSView CompareView
    End
    Begin Listbox ListMetaLeft
       AutoDeactivate  =   True
-      AutoHideScrollbars=   True
+      AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   1
+      ColumnCount     =   2
       ColumnsResizable=   False
-      ColumnWidths    =   ""
+      ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   0
-      GridLinesVertical=   0
-      HasHeading      =   False
+      GridLinesHorizontal=   2
+      GridLinesVertical=   2
+      HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   200
+      Height          =   188
       HelpTag         =   ""
       Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   ""
+      InitialValue    =   "Label	Commentaar"
       Italic          =   False
       Left            =   20
       LockBottom      =   True
@@ -88,7 +88,7 @@ Begin NSView CompareView
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   20
+      Top             =   32
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
@@ -98,28 +98,28 @@ Begin NSView CompareView
    End
    Begin Listbox ListMetaRight
       AutoDeactivate  =   True
-      AutoHideScrollbars=   True
+      AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   1
+      ColumnCount     =   2
       ColumnsResizable=   False
-      ColumnWidths    =   ""
+      ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   0
-      GridLinesVertical=   0
-      HasHeading      =   False
+      GridLinesHorizontal=   2
+      GridLinesVertical=   2
+      HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   200
+      Height          =   188
       HelpTag         =   ""
       Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   ""
+      InitialValue    =   "Label	Commentaar"
       Italic          =   False
       Left            =   303
       LockBottom      =   True
@@ -138,13 +138,47 @@ Begin NSView CompareView
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   20
+      Top             =   32
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   271
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
+   End
+   Begin Label Label1
+      AutoDeactivate  =   True
+      Bold            =   True
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   15
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   True
+      Left            =   4
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      Text            =   "Metadata"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   18.0
+      TextUnit        =   0
+      Top             =   7
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   100
    End
 End
 #tag EndWindow
@@ -162,6 +196,13 @@ End
 
 #tag EndWindowCode
 
+#tag Events ReportView
+	#tag Event
+		Sub DocumentComplete(URL as String)
+		  Enabled = FALSE
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

@@ -15,10 +15,18 @@ Inherits NSWindowController
 		  selectAndCompareViewController.selectViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  selectAndCompareViewController.compareViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  
+		  mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
 		  mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
 		  
 		  window.Show
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowMaximize(sender as NSWindow)
+		  selectAndCompareViewController.selectViewController.autoLayout
+		  selectAndCompareViewController.CompareViewController.autoLayout
 		End Sub
 	#tag EndMethod
 

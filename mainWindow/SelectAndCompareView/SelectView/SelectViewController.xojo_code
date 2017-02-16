@@ -6,7 +6,7 @@ Inherits NSViewController
 		  me.view.top = 0+margins
 		  me.view.left = 0+margins
 		  me.view.width = me.view.window.width-(margins*2)
-		  me.view.height = me.view.window.height/2-(margins*2)
+		  me.view.height = me.view.window.height/4-(margins*2)
 		  
 		  selectView.ListViewLeft.top = 0
 		  selectView.ListViewLeft.left = 0
@@ -26,6 +26,7 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, nil)
 		  
+		  exportFolder =SpecialFolder.Temporary
 		End Sub
 	#tag EndMethod
 
@@ -41,6 +42,10 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		exportFolder As FolderItem
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

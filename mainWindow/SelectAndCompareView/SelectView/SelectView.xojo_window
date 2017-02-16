@@ -27,28 +27,28 @@ Begin NSView SelectView
    Width           =   656
    Begin Listbox ListViewLeft
       AutoDeactivate  =   True
-      AutoHideScrollbars=   True
+      AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   1
+      ColumnCount     =   2
       ColumnsResizable=   False
-      ColumnWidths    =   ""
+      ColumnWidths    =   "34%,67%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   0
-      GridLinesVertical=   0
-      HasHeading      =   False
+      GridLinesHorizontal=   2
+      GridLinesVertical=   2
+      HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   408
       HelpTag         =   ""
-      Hierarchical    =   False
+      Hierarchical    =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   ""
+      InitialValue    =   "Type	Regeling"
       Italic          =   False
       Left            =   20
       LockBottom      =   True
@@ -71,34 +71,34 @@ Begin NSView SelectView
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   300
+      Width           =   282
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin Listbox ListViewRight
       AutoDeactivate  =   True
-      AutoHideScrollbars=   True
+      AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   1
+      ColumnCount     =   2
       ColumnsResizable=   False
-      ColumnWidths    =   ""
+      ColumnWidths    =   "34%,67%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   0
-      GridLinesVertical=   0
-      HasHeading      =   False
+      GridLinesHorizontal=   2
+      GridLinesVertical=   2
+      HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   408
       HelpTag         =   ""
-      Hierarchical    =   False
+      Hierarchical    =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   ""
+      InitialValue    =   "Type	Regeling"
       Italic          =   False
       Left            =   336
       LockBottom      =   True
@@ -141,6 +141,20 @@ End
 
 #tag EndWindowCode
 
+#tag Events ListViewLeft
+	#tag Event
+		Sub Open()
+		  Me.ColumnType(1) = Listbox.TypeCheckbox
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ListViewRight
+	#tag Event
+		Sub Open()
+		  Me.ColumnType(1) = Listbox.TypeCheckbox
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

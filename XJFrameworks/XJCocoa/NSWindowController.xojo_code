@@ -76,6 +76,22 @@ Implements NSWindowDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowMaximize(sender as NSWindow)
+		  // Part of the NSWindowDelegate interface.
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowMinimize(sender as NSWindow)
+		  // Part of the NSWindowDelegate interface.
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onWindowOpen(sender as NSWindow)
 		  // Part of the NSWindowDelegate interface.
 		  
