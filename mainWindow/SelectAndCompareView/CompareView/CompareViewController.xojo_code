@@ -36,9 +36,9 @@ Inherits NSViewController
 		  
 		  dim compShellController as new JVTerminalViewController
 		  compShellController.view = JVTerminalViewController.MainTerminalView
-		    
+		  
 		  compShellController.terminal.Execute("c:\program files (x86)\Compare It!\wincmp3.exe", leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
-		                     
+		  
 		  showReport
 		End Sub
 	#tag EndMethod
@@ -48,9 +48,7 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new CompareView, nil)
 		  
-		  compareView.Enabled =FALSE
-		  
-		  dim reportFolder as folderitem = SpecialFolder.Temporary
+		  dim reportFolder as folderitem = SpecialFolder.Temporary.child("UnifyPro")
 		  dim reportName  as String = "CompareItReport.html"
 		  reportFile = reportFolder.Child(reportName)
 		  
@@ -73,7 +71,8 @@ Inherits NSViewController
 		Sub showReport()
 		  
 		  compareView.ReportView.LoadPage(reportFile)
-		  compareView.Enabled = TRUE
+		  compareView.ReportView.Enabled = TRUE
+		  
 		End Sub
 	#tag EndMethod
 

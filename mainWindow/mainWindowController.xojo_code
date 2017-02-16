@@ -15,8 +15,11 @@ Inherits NSWindowController
 		  selectAndCompareViewController.selectViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  selectAndCompareViewController.compareViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  
-		  mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
-		  mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
+		  // Add some extra tools during debuging
+		  #if DebugBuild then
+		    mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
+		    mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
+		  #endif
 		  
 		  window.Show
 		  

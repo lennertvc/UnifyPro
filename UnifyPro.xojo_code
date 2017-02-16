@@ -5,26 +5,47 @@ Inherits NSApplicationDelegate
 		Sub Open()
 		  mainController = new mainWindowController
 		  
-		  mainWindowController.selectAndCompareViewController.compareViewController.showReport
-		  // JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("ShowReport",  AddressOf testRoutineShowReport)
+		  #if DebugBuild then
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineRefillDatabase))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Export both types",  NSButton.action(addressof testRoutineExportLeftAndRigthSelection))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Show TestReport",  NSButton.action(addressof testRoutineShowReport))
+		  #endif
 		End Sub
 	#tag EndEvent
 
 
 	#tag Method, Flags = &h0
-		Sub testRoutineShowReport()
+		Sub testRoutineExportLeftAndRigthSelection(sender as NSButton)
 		  
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub testRoutineRefillDatabase(sender as NSButton)
+		  
+		End Sub
+	#tag EndMethod
 
-	#tag Note, Name = ToDo Anja
+	#tag Method, Flags = &h0
+		Sub testRoutineShowReport(sender as NSButton)
+		  dim exportFolder as FolderItem = mainWindowController.selectAndCompareViewController.selectViewController.exportFolder
+		  dim TestFile1 as Folderitem = exportFolder.child("TypeLeft.xst")
+		  dim TestFile2 as Folderitem = exportFolder.child("TypeRight.xst")
+		  mainWindowController.selectAndCompareViewController.compareViewController.compare(TestFile1, TestFile2)
+		End Sub
+	#tag EndMethod
+
+
+	#tag Note, Name = ToDo Jan
+		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
+		kleuren achtergronden source/target "left"/"right"
+		Oplossen scrollProbleem html-view
 		
 		
 	#tag EndNote
 
-	#tag Note, Name = ToDo Jan
-		Database toevoegen
+	#tag Note, Name = ToDo Lennert
+		
 		
 	#tag EndNote
 

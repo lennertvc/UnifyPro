@@ -26,7 +26,13 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, nil)
 		  
-		  exportFolder =SpecialFolder.Temporary
+		  exportFolder =SpecialFolder.Temporary.child("UnifyPro")
+		  if exportFolder = nil then
+		    //What to do?
+		  end if
+		  if  not exportFolder.Exists then
+		    exportFolder.CreateAsFolder
+		  end if
 		End Sub
 	#tag EndMethod
 

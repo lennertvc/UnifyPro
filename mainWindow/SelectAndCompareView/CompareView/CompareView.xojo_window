@@ -26,8 +26,8 @@ Begin NSView CompareView
    Visible         =   True
    Width           =   594
    Begin HTMLViewer ReportView
-      AutoDeactivate  =   True
-      Enabled         =   False
+      AutoDeactivate  =   False
+      Enabled         =   True
       Height          =   338
       HelpTag         =   ""
       Index           =   -2147483648
@@ -196,13 +196,6 @@ End
 
 #tag EndWindowCode
 
-#tag Events ReportView
-	#tag Event
-		Sub DocumentComplete(URL as String)
-		  Enabled = FALSE
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"
