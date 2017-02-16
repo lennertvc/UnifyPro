@@ -26,6 +26,12 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub compare(leftFile as folderItem, rightFile as FolderItem)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new CompareView, nil)
@@ -42,6 +48,15 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub onViewResizing(sender as NSView)
 		  autoLayout
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showReport()
+		  
+		  dim reportFinder as new JVPathFinder
+		  dim reportFile as FolderItem = reportFinder.findFile("CompareItReport")
+		  compareView.ReportView.LoadPage(reportFile)
 		End Sub
 	#tag EndMethod
 

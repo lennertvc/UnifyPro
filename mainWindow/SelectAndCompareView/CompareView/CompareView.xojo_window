@@ -37,7 +37,7 @@ Begin NSView CompareView
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   False
-      Renderer        =   0
+      Renderer        =   1
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0

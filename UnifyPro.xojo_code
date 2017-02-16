@@ -4,8 +4,18 @@ Inherits NSApplicationDelegate
 	#tag Event
 		Sub Open()
 		  mainController = new mainWindowController
+		  
+		  mainWindowController.selectAndCompareViewController.compareViewController.showReport
+		  // JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("ShowReport",  AddressOf testRoutineShowReport)
 		End Sub
 	#tag EndEvent
+
+
+	#tag Method, Flags = &h0
+		Sub testRoutineShowReport()
+		  
+		End Sub
+	#tag EndMethod
 
 
 	#tag Note, Name = ToDo Anja
@@ -17,6 +27,16 @@ Inherits NSApplicationDelegate
 		Database toevoegen
 		
 	#tag EndNote
+
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mainWindowController(mainController)
+			End Get
+		#tag EndGetter
+		mainWindowController As mainWindowController
+	#tag EndComputedProperty
 
 
 	#tag Constant, Name = Developer, Type = String, Dynamic = False, Default = \"Lennert Van Campenhout\nJan Verrept", Scope = Public
