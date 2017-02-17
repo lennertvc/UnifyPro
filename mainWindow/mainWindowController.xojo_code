@@ -11,7 +11,6 @@ Inherits NSWindowController
 		  
 		  // Install the view hierarchy
 		  mainWindow.mainTabPanel.append(selectAndCompareViewController.view, "List and Compare")
-		  selectAndCompareViewController.view.EmbedWithin(me.window)
 		  selectAndCompareViewController.selectViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  selectAndCompareViewController.compareViewController.view.EmbedWithin(selectAndCompareViewController.view)
 		  

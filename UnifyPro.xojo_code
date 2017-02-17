@@ -37,7 +37,6 @@ Inherits NSApplicationDelegate
 
 
 	#tag Note, Name = ToDo Jan
-		Oplossen scrollProbleem html-view
 		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
 		
 		
