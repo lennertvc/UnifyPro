@@ -37,9 +37,8 @@ Inherits NSApplicationDelegate
 
 
 	#tag Note, Name = ToDo Jan
-		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
-		kleuren achtergronden source/target "left"/"right"
 		Oplossen scrollProbleem html-view
+		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
 		
 		
 	#tag EndNote

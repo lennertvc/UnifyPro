@@ -25,6 +25,12 @@ Protected Interface NSViewDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onViewResized(sender as NSView)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onViewResizing(sender as NSView)
 		  
 		End Sub

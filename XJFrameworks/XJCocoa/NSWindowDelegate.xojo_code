@@ -49,6 +49,12 @@ Protected Interface NSWindowDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowResized(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onWindowResizing(sender as NSWindow)
 		  
 		End Sub

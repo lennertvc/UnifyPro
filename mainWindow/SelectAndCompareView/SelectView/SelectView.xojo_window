@@ -144,15 +144,33 @@ End
 #tag Events ListViewLeft
 	#tag Event
 		Sub Open()
-		  Me.ColumnType(1) = Listbox.TypeCheckbox
+		  Me.ColumnType(0) = Listbox.TypeCheckbox
+		  me.AddRow("Testtype links")
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      g.ForeColor = &cff0000
+		      g.FillRect(0, 0, g.Width, g.Height)
+		  End If
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events ListViewRight
 	#tag Event
 		Sub Open()
-		  Me.ColumnType(1) = Listbox.TypeCheckbox
+		  Me.ColumnType(0) = Listbox.TypeCheckbox
+		  me.AddRow("Testtype rechts")
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      g.ForeColor = &c00ff00
+		      g.FillRect(0, 0, g.Width, g.Height)
+		  End If
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

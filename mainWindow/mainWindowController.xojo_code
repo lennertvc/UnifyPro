@@ -22,12 +22,13 @@ Inherits NSWindowController
 		  #endif
 		  
 		  window.Show
+		  window.maximize
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub onWindowMaximize(sender as NSWindow)
+		Sub onWindowResized(sender as NSWindow)
 		  selectAndCompareViewController.selectViewController.autoLayout
 		  selectAndCompareViewController.CompareViewController.autoLayout
 		End Sub

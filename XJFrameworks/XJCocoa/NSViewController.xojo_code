@@ -62,6 +62,14 @@ Implements NSViewDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onViewResized(sender as NSView)
+		  // Part of the NSViewDelegate interface.
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onViewResizing(sender as NSView)
 		  // Part of the NSViewDelegate interface.
 		  
