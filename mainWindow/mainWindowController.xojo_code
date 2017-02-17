@@ -7,12 +7,14 @@ Inherits NSWindowController
 		  Super.Constructor(new MainWindow, nil)
 		  
 		  // Create the subcontrollers
-		  selectAndCompareViewController = new SelectAndCompareViewController
+		  selectViewController = new SelectViewController
+		  compareViewController = new CompareViewController
 		  
 		  // Install the view hierarchy
-		  mainWindow.mainTabPanel.append(selectAndCompareViewController.view, "List and Compare")
-		  selectAndCompareViewController.selectViewController.view.EmbedWithin(selectAndCompareViewController.view)
-		  selectAndCompareViewController.compareViewController.view.EmbedWithin(selectAndCompareViewController.view)
+		  dim mainView as new NSView
+		  mainWindow.mainTabPanel.append(mainView, "List and Compare")
+		  selectViewController.view.EmbedWithin(mainView)
+		  compareViewController.view.EmbedWithin(mainView)
 		  
 		  // Add some extra tools during debuging
 		  #if DebugBuild then
@@ -28,11 +30,15 @@ Inherits NSWindowController
 
 	#tag Method, Flags = &h0
 		Sub onWindowResized(sender as NSWindow)
-		  selectAndCompareViewController.selectViewController.autoLayout
-		  selectAndCompareViewController.CompareViewController.autoLayout
+		  selectViewController.autoLayout
+		  compareViewController.autoLayout
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		compareViewController As CompareViewController
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -44,7 +50,7 @@ Inherits NSWindowController
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		selectAndCompareViewController As SelectAndCompareViewController
+		selectViewController As SelectViewController
 	#tag EndProperty
 
 

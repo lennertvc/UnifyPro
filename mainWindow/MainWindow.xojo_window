@@ -53,7 +53,7 @@ Begin NSWindow MainWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   False
-      Value           =   -1
+      Value           =   2147483647
       Visible         =   True
       Width           =   710
    End

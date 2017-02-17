@@ -48,7 +48,7 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new CompareView, nil)
 		  
-		  dim reportFolder as folderitem = SpecialFolder.Temporary.child("UnifyPro")
+		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  dim reportName  as String = "CompareItReport.html"
 		  reportFile = reportFolder.Child(reportName)
 		  
@@ -71,7 +71,6 @@ Inherits NSViewController
 		Sub showReport()
 		  
 		  compareView.ReportView.LoadPage(reportFile)
-		  compareView.ReportView.Enabled = TRUE
 		  
 		End Sub
 	#tag EndMethod

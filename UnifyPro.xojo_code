@@ -28,10 +28,10 @@ Inherits NSApplicationDelegate
 
 	#tag Method, Flags = &h0
 		Sub testRoutineShowReport(sender as NSButton)
-		  dim exportFolder as FolderItem = mainWindowController.selectAndCompareViewController.selectViewController.exportFolder
+		  dim exportFolder as FolderItem = mainWindowController.selectViewController.exportFolder
 		  dim TestFile1 as Folderitem = exportFolder.child("TypeLeft.xst")
 		  dim TestFile2 as Folderitem = exportFolder.child("TypeRight.xst")
-		  mainWindowController.selectAndCompareViewController.compareViewController.compare(TestFile1, TestFile2)
+		  mainWindowController.compareViewController.compare(TestFile1, TestFile2)
 		End Sub
 	#tag EndMethod
 
