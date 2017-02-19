@@ -120,6 +120,16 @@ Inherits NSViewController
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="selectedLeft"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="selectedRight"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"

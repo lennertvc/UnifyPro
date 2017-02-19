@@ -3,35 +3,38 @@ Protected Class UnifyPro
 Inherits NSApplicationDelegate
 	#tag Event
 		Sub Open()
+		  
+		  preProcessor = new PreProcessor
 		  mainController = new mainWindowController
 		  
+		  datamodel = RegelingenDataBase.open
+		  
+		  
 		  #if DebugBuild then
-		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineRefillDatabase))
-		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Export both types",  NSButton.action(addressof testRoutineExportLeftAndRigthSelection))
-		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Show TestReport",  NSButton.action(addressof testRoutineShowReport))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Collect Projects",  NSButton.action(addressof  testRoutineCollectProjects))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Update Projects",  NSButton.action(addressof testRoutineUpdateProjects))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineFillDatabase))
 		  #endif
 		End Sub
 	#tag EndEvent
 
 
 	#tag Method, Flags = &h0
-		Sub testRoutineExportLeftAndRigthSelection(sender as NSButton)
+		Sub testRoutinecollectProjects(sender as NSButton)
 		  
+		  preProcessor.collectProjects
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub testRoutineRefillDatabase(sender as NSButton)
-		  
+		Sub testRoutineFillDatabase(sender as NSButton)
+		  preProcessor.fillDatabase
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub testRoutineShowReport(sender as NSButton)
-		  dim exportFolder as FolderItem = mainWindowController.selectViewController.exportFolder
-		  dim TestFile1 as Folderitem = exportFolder.child("TypeLeft.xst")
-		  dim TestFile2 as Folderitem = exportFolder.child("TypeRight.xst")
-		  mainWindowController.compareViewController.compare(TestFile1, TestFile2)
+		Sub testRoutineUpdateprojects(sender as NSButton)
+		  preProcessor.updateProjects
 		End Sub
 	#tag EndMethod
 
@@ -44,9 +47,21 @@ Inherits NSApplicationDelegate
 
 	#tag Note, Name = ToDo Lennert
 		
+		Review eigen code na consolidatie (nu grotendeels onder preProcessing)!!!
+		
+		
+		Private methods als dusdanig aanduiden
+		
+		Wegwerken defaultvalues in arrays door gebruik van append inplaats van item(i)
+		
+		For next loops indien mogelijk voorzien van fast enumaration
 		
 	#tag EndNote
 
+
+	#tag Property, Flags = &h0
+		dataModel As RegelingenDataBase
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -56,6 +71,10 @@ Inherits NSApplicationDelegate
 		#tag EndGetter
 		mainWindowController As mainWindowController
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		preProcessor As PreProcessor
+	#tag EndProperty
 
 
 	#tag Constant, Name = Developer, Type = String, Dynamic = False, Default = \"Lennert Van Campenhout\nJan Verrept", Scope = Public

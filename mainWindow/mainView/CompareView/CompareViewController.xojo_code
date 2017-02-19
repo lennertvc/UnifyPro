@@ -51,7 +51,6 @@ Inherits NSViewController
 		  Super.Constructor(new CompareView, nil)
 		  
 		  
-		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  dim reportName  as String
 		  #if TargetWindows then

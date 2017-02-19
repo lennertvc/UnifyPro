@@ -1,0 +1,821 @@
+#tag Class
+Protected Class RegelingenDataBase
+Inherits SQLiteDatabase
+	#tag Method, Flags = &h0
+		Function addCodeToDB(originalcode as string,cleanedupcode as String) As Boolean
+		  Dim record As New DatabaseRecord
+		  // ID will be added automatically
+		  record.Column("OriginalCode") = originalcode
+		  record.Column("CleanedUpCode") = cleanedupcode
+		  
+		  InsertRecord("RegelingTypes", record)
+		  
+		  If Error Then
+		    MsgBox("DB Error: " + ErrorMessage)
+		    Return False
+		  End If
+		  
+		  Return True
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function addFilePath(filePath as string = "",foreignkey as integer) As Boolean
+		  Dim record As New DatabaseRecord
+		  // ID will be added automatically
+		  record.Column("FilePath") = filepath
+		  
+		  // Foreign keys
+		  record.IntegerColumn("RegelingTypeID") = foreignkey
+		  
+		  InsertRecord("Regelingen", record)
+		  
+		  If Error Then
+		    MsgBox("DB Error: " + ErrorMessage)
+		    Return False
+		  End If
+		  
+		  Return True
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function addSignal(name as String, DIaddress as String, DOaddress as String = "", AIaddress as String = "", AOaddress as String = "", measuringRange as String = "", comment as String ="", tag as Integer) As Boolean
+		  'Dim record As New DatabaseRecord
+		  
+		  // ID will be added automatically
+		  'record.Column("Name") = name
+		  
+		  'dim longAddress as String = ""
+		  'dim type as SignalType = SignalType.Unknown
+		  'if DIaddress <> "" then 
+		  'longAddress = DIaddress
+		  'type = signalType.DigitalIn
+		  'elseif DOaddress <> "" then 
+		  'longAddress = DOaddress
+		  'type = SignalType.DigitalOut
+		  'elseif AIaddress <> "" then 
+		  'longAddress = AIaddress
+		  'type = SignalType.AnalogIn
+		  'elseif AOaddress <> "" then 
+		  'longAddress = AIaddress
+		  'type = SignalType.AnalogOut
+		  'end if
+		  
+		  'record.IntegerColumn("Type") = Integer(type)
+		  'record.Column("MeasuringRange") = measuringRange
+		  'record.Column("Comment") = comment
+		  
+		  // Foreign keys
+		  'record.IntegerColumn("Tag") = tag 
+		  
+		  'InsertRecord("Signals", record)
+		  
+		  'If Error Then
+		  'MsgBox("DB Error: " + ErrorMessage)
+		  'Return False
+		  'End If
+		  
+		  'Return True
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function convertCode(arrayOriginalCode() as string) As string()
+		  dim hulp,hulpstring,backuphulp as string
+		  dim SR_Beluchting as Boolean
+		  dim arrayCleanedUpCode() as string = array  ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
+		  
+		  
+		  for i as integer = 0 to arrayOriginalCode.ubound
+		    
+		    hulp=arrayOriginalCode(i)
+		    Dim re As New RegEx
+		    dim hulpkarakter as new RegExMatch
+		    
+		    re.SearchPattern = "\t"
+		    re.ReplacementPattern = " "
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "WHILE\("
+		    re.ReplacementPattern = "WHILE ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\)AND"
+		    re.ReplacementPattern = ") AND"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\)DO"
+		    re.ReplacementPattern = ") DO"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\)OR"
+		    re.ReplacementPattern = ") OR"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\)NOT"
+		    re.ReplacementPattern = ") NOT"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\)THEN"
+		    re.ReplacementPattern = ") THEN"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "IF\("
+		    re.ReplacementPattern = "IF ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "ELSIF\("
+		    re.ReplacementPattern = "ELSIF ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "RE\("
+		    re.ReplacementPattern = "RE ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "FE\("
+		    re.ReplacementPattern = "FE ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "SET\("
+		    re.ReplacementPattern = "SET ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "RESET\("
+		    re.ReplacementPattern = "RESET ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "DEC_INT\("
+		    re.ReplacementPattern = "DEC_INT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "INC_INT\("
+		    re.ReplacementPattern = "INC_INT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "ROL_ARINT\("
+		    re.ReplacementPattern = "ROL_ARINT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "ROR_ARINT\("
+		    re.ReplacementPattern = "ROR_ARINT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "SUM_ARINT\("
+		    re.ReplacementPattern = "SUM_ARINT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "AND\("
+		    re.ReplacementPattern = "AND ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "NOT\("
+		    re.ReplacementPattern = "NOT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "OR\("
+		    re.ReplacementPattern = "OR ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "REAL_TO_INT\("
+		    re.ReplacementPattern = "REAL_TO_INT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "INT_TO_REAL\("
+		    re.ReplacementPattern = "INT_TO_REAL ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "DINT_TO_INT\("
+		    re.ReplacementPattern = "DINT_TO_INT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "INT_TO_DINT\("
+		    re.ReplacementPattern = "INT_TO_DINT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "INOUT\("
+		    re.ReplacementPattern = "INOUT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "MOVE_INT_AREBOOL\("
+		    re.ReplacementPattern = "MOVE_INT_AREBOOL ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "MOVE_INT_ARINT\("
+		    re.ReplacementPattern = "MOVE_INT_ARINT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ":=\s+"
+		    re.ReplacementPattern = ":="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s+:="
+		    re.ReplacementPattern = ":="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "(\s)+;"
+		    re.ReplacementPattern = ";"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ";+"
+		    re.ReplacementPattern = ";"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\(\s+"
+		    re.ReplacementPattern = "("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s+\)"
+		    re.ReplacementPattern = ")"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    //re.SearchPattern = "\(\*[^\(\*]+\*\)"
+		    //re.ReplacementPattern = " "
+		    //re.Options.ReplaceAllMatches = True
+		    //hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\(\*.+\*\)"
+		    re.ReplacementPattern = " "
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "[\n\r]+"
+		    re.ReplacementPattern = " "
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    backuphulp=hulp
+		    re.SearchPattern = "Ba[a-z]+"
+		    hulpkarakter=re.search(hulp)
+		    SR_beluchting=hulpkarakter <> nil
+		    
+		    
+		    if not SR_beluchting then
+		      re.SearchPattern = "\<\?xml.*\</identProgram\>"
+		      re.ReplacementPattern = ""
+		      re.Options.ReplaceAllMatches = True
+		      hulp=re.Replace(hulp)
+		    else
+		      re.SearchPattern = "\</program\>(\s)+\<program\>.*"
+		      re.ReplacementPattern = ""
+		      re.Options.ReplaceAllMatches = true
+		      hulp=re.Replace(hulp)
+		      
+		      re.SearchPattern = "\<\?xml.*\</identProgram\>"
+		      re.ReplacementPattern = ""
+		      re.Options.ReplaceAllMatches = true
+		      hulp=re.Replace(hulp)
+		      
+		      re.SearchPattern = "Ba[a-z]+" 
+		      hulpkarakter=re.search(hulp)
+		      if hulpkarakter <> nil then
+		        hulp=backuphulp
+		        re.SearchPattern = "IF NOT Bavropvt.+\<program\>"
+		        re.ReplacementPattern = ""
+		        re.Options.ReplaceAllMatches = true
+		        hulp=re.Replace(hulp)
+		        
+		        re.SearchPattern = "\<\?xml.*\</identProgram\>"
+		        re.ReplacementPattern = ""
+		        re.Options.ReplaceAllMatches = true
+		        hulp=re.Replace(hulp)
+		      end if
+		      
+		    end if
+		    
+		    re.SearchPattern = "\(\*.*\*\)"
+		    re.ReplacementPattern = " "
+		    re.Options.greedy = False
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s{2,}"
+		    re.Options.greedy = True
+		    re.ReplacementPattern = " "
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ";\s"
+		    re.ReplacementPattern = ";"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "&lt;"
+		    re.ReplacementPattern = "<"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "&gt;"
+		    re.ReplacementPattern = ">"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ";"
+		    re.ReplacementPattern = ";\n"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\<.[^\(\)]+\>"
+		    re.ReplacementPattern = ""
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s<"
+		    re.ReplacementPattern = "<"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "<\s"
+		    re.ReplacementPattern = "<"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s>"
+		    re.ReplacementPattern = ">"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ">\s"
+		    re.ReplacementPattern = ">"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s<="
+		    re.ReplacementPattern = "<="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "<=\s"
+		    re.ReplacementPattern = "<="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s>="
+		    re.ReplacementPattern = ">="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ">=\s"
+		    re.ReplacementPattern = ">="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s\+"
+		    re.ReplacementPattern = "+"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\+\s"
+		    re.ReplacementPattern = "+"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s-"
+		    re.ReplacementPattern = "-"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "-\s"
+		    re.ReplacementPattern = "-"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s\*"
+		    re.ReplacementPattern = "*"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\*\s"
+		    re.ReplacementPattern = "*"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = ",\s"
+		    re.ReplacementPattern = ","
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s,"
+		    re.ReplacementPattern = ","
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s:"
+		    re.ReplacementPattern = ":"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s:"
+		    re.ReplacementPattern = ":"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s/"
+		    re.ReplacementPattern = "/"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "/\s"
+		    re.ReplacementPattern = "/"
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "\s="
+		    re.ReplacementPattern = "="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "=\s"
+		    re.ReplacementPattern = "="
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    
+		    dim index88 as integer=0
+		    dim match as RegExMatch
+		    dim aresult() as string  = array("-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1")
+		    
+		    re.SearchPattern = " ?L[0-9]{2,}:[^=]"
+		    match = re.Search(hulp)
+		    
+		    Do
+		        If match <> Nil Then
+		         aresult(index88)=match.SubExpressionString(0)
+		        index88=index88+1    
+		      end if   
+		      match=re.search
+		    Loop Until match Is Nil
+		    
+		    if aresult(0) <> "-1" then
+		      
+		      dim hulp2 as string
+		      for index1 as integer = 0 to aResult.Ubound
+		        hulp2=replace(aresult(index1),":","")
+		        hulp2=trim(hulp2)
+		        re.SearchPattern = hulp2
+		        re.Options.ReplaceAllMatches = True
+		        re.ReplacementPattern = "L10"+str(index1)
+		        hulp=re.Replace(hulp)
+		      next
+		      
+		    end if
+		    re.SearchPattern = "[\n\r]+"
+		    re.ReplacementPattern = " "
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    hulp=hulp.RTrim
+		    hulp=hulp.LTrim
+		    hulp=hulp.Lowercase
+		      ArrayCleanedUpCode(i)=hulp
+		    
+		  next
+		  
+		  return arrayCleanedUpCode()
+		  
+		  
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Shared Function Create() As AutomationProjectsDbase
+		  Dim database As  New AutomationProjectsDbase
+		  database.databaseFile = defaultFile
+		  
+		  if database.createDatabaseFile then
+		    
+		    database.updateDbaseDiagram
+		    return database
+		    
+		  else
+		    
+		    msgbox("[AutomationProjectsDbase] Error creating database-file  'AutomationProjectsDbase' "+database.ErrorMessage)
+		    return nil
+		    
+		  end if
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function extractOriginalCode() As string()
+		  dim arrayOriginalCode() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
+		  
+		  //open files and fill array
+		  Dim t As TextinputStream
+		  dim textarea1 as new textarea
+		  dim index as integer = 0
+		  
+		  dim folder as new folderitem(testfilelocation)
+		  for i as integer = 1 to folder.count
+		    if folder.item(i).name.right(4)<>".stu" then
+		       t = TextinputStream.open(folder.item(i))
+		      textarea1.text= t.ReadAll()
+		      arrayOriginalCode(index)=TextArea1.text
+		      index=index+1
+		      t.close
+		    end if
+		  next
+		  
+		  //delete files
+		  dim j as integer = 0
+		  while j<=30
+		    for i as integer = 1 to folder.count
+		      if folder.item(i).name.right(4)<>".stu" then
+		        folder.item(i).delete
+		      end if
+		    next
+		    j=j+1
+		  wend
+		  
+		  return arrayOriginalCode()
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function lookupRecord(lookupTable as String,lookupField as String, lookupValue as string) As integer
+		  dim number as integer =0
+		  'dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From "+lookupTable+" WHERE "+lookupField+" = '"+lookupValue+"'")
+		  dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From regelingTypes where cleanedUpCode= "+"'"+lookupValue+"'")
+		  if previousrecords.fieldcount>=1 then
+		    system.DebugLog("ident")
+		    previousRecords.MoveFirst 
+		    number=previousRecords.Field("regelingTypeID").IntegerValue
+		    return number
+		  end if
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function newPKFromTable(TableName as String) As Integer
+		  dim newPK as RecordSet= SQLSelect("select seq from sqlite_sequence where name='"+TableName +"';")
+		  return newPK.Field("seq").IntegerValue
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Shared Function Open() As AutomationProjectsDbase
+		  
+		  If  (defaultFile <> nil) and (defaultFile.exists) Then
+		    
+		    // or Open
+		    Dim database As New AutomationProjectsDbase
+		    database.databaseFile = defaultFile
+		    
+		    if database.connect Then
+		      database.updateDbaseDiagram
+		      return database
+		    else
+		      msgbox("[AutomationProjectsDbase] Error connecting to database Automation Projects' "+database.ErrorMessage)
+		      return nil
+		    end if
+		    
+		  else
+		    
+		    // Create
+		    return AutomationProjectsDbase.Create
+		    
+		  end if
+		  
+		  
+		  
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function retrieveSectionNames(projectFile as FolderItem) As string()
+		  //create and open a unity project
+		  dim oProject as new unitypro(projectfile)
+		  dim arraySectionNames() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
+		  
+		  //export sections
+		  dim oUnityproject as unityproject = oProject.project
+		  dim aSection() as Unityproserver.section 
+		  aSection=oUnityproject.sectionswithprefix("R_")
+		  for index1 as integer = 0 to aSection.ubound 
+		    oUnityproject.ExportasTempfile(aSection(index1))
+		  next
+		  
+		  //fill array with section names
+		  dim folder as new folderitem(testfilelocation)
+		  dim j as integer =0
+		  for i as integer = 1 to folder.count
+		    if folder.item(i).name.right(4)<>".stu" then
+		      arraySectionNames(j)=folder.item(i).name
+		      j=j+1
+		    end if
+		  next
+		  
+		  return arraySectionNames()
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub updateDbaseDiagram()
+		  
+		  'SQLExecute("PRAGMA FOREIGN_KEYS = ON;")
+		  
+		  'SQLExecute("CREATE TABLE IF NOT EXISTS Projects ("+ _
+		  '"ID integer PRIMARY KEY AUTOINCREMENT NOT NULL,"+ _
+		  '"Name text NOT NULL,"+ _
+		  '"Kostenplaats integer NOT NULL,"+ _
+		  '"Number text NOT NULL"+ _
+		  '");")
+		  
+		  'SQLExecute("CREATE TABLE IF NOT EXISTS PLCs ("+ _
+		  '"ID integer PRIMARY KEY AUTOINCREMENT NOT NULL,"+ _
+		  '"Name text,"+ _
+		  '"Number integer NOT NULL,"+ _
+		  '"Project integer NOT NULL,"+ _
+		  '"FOREIGN KEY(Project) REFERENCES Projects(ID)"+ _
+		  '");")
+		  
+		  
+		  'SQLExecute("CREATE TABLE IF NOT EXISTS Tags ("+ _
+		  '"ID integer PRIMARY KEY AUTOINCREMENT NOT NULL,"+ _
+		  '"Name text NOT NULL,"+ _
+		  '"Number integer NOT NULL,"+ _
+		  '"Description text NOT NULL,"+ _
+		  '"PLC integer NOT NULL,"+ _
+		  '"FOREIGN KEY(PLC) REFERENCES PLCs(ID)"+ _
+		  '");")
+		  
+		  'SQLExecute("CREATE TABLE IF NOT EXISTS Signals ("+ _
+		  '"ID integer PRIMARY KEY AUTOINCREMENT NOT NULL,"+ _
+		  '"Name text NOT NULL,"+ _
+		  '"Address text NOT NULL,"+ _
+		  '"ShortAddress text NOT NULL,"+ _ 
+		  '"Type integer NOT NULL,"+ _ 
+		  '"MeasuringRange text,"+ _
+		  '"Comment text,"+ _
+		  '"Tag integer NOT NULL,"+ _
+		  '"FOREIGN KEY(Tag) REFERENCES Tags(ID)"+ _
+		  '");")
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim fileName as String = "Regelingendatabase.db"
+			  dim file as folderitem = Volume(0).Child("Users").Child("User2210").Child("Desktop").Child("Xojo").Child("regelingendatabase").child(filename)
+			  system.debuglog("Database is located at "+file.NativePath+" for this platform")
+			  return file
+			End Get
+		#tag EndGetter
+		Shared defaultFile As FolderItem
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		parsedTagNames() As String
+	#tag EndProperty
+
+
+	#tag Constant, Name = testfilelocation, Type = String, Dynamic = False, Default = \"C:\\Users\\user2210\\Desktop\\XOJO\\TEST\\STU DONE\\", Scope = Public
+	#tag EndConstant
+
+
+	#tag Enum, Name = SignalType, Type = Integer, Flags = &h0
+		Unknown
+		  DigitalIn
+		  DigitalOut
+		  AnalogIn
+		AnalogOut
+	#tag EndEnum
+
+
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="DatabaseFile"
+			Visible=true
+			Type="FolderItem"
+			EditorType="FolderItem"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="DebugMode"
+			Visible=true
+			Type="Boolean"
+			EditorType="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="EncryptionKey"
+			Visible=true
+			Type="String"
+			EditorType="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LoadExtensions"
+			Visible=true
+			Type="Boolean"
+			EditorType="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="MultiUser"
+			Visible=true
+			Type="Boolean"
+			EditorType="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShortColumnNames"
+			Visible=true
+			Type="Boolean"
+			EditorType="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ThreadYieldInterval"
+			Visible=true
+			Type="Integer"
+			EditorType="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Timeout"
+			Visible=true
+			Type="Double"
+			EditorType="Double"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			Type="Integer"
+		#tag EndViewProperty
+	#tag EndViewBehavior
+End Class
+#tag EndClass
