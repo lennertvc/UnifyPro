@@ -329,7 +329,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, CurrentValue_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( CurrentValue_Param )
-			    COM.FreeVARIANT( CurrentValue_Param ) 
+			    COM.FreeVARIANT( CurrentValue_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on InitialValue", resultCode )
@@ -342,7 +342,7 @@ Inherits COM.IDispatch
 			  If mThis = Nil Then Raise New NilObjectException
 			  Dim func As New InitialValue_Put_Func1( mThis.Ptr( 0 ).Ptr( 48 ) )
 			  Dim Local_rhs_Param As Ptr
-			  Dim mb As MemoryBlock = COM.RBVariantToVARIANT( value ) 
+			  Dim mb As MemoryBlock = COM.RBVariantToVARIANT( value )
 			  Local_rhs_Param = mb
 			  Dim resultCode As Integer = func.Invoke( mThis, Local_rhs_Param)
 			  If 0 = resultCode Then
@@ -399,7 +399,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, CurrentValue_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( CurrentValue_Param )
-			    COM.FreeVARIANT( CurrentValue_Param ) 
+			    COM.FreeVARIANT( CurrentValue_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on TopologicalAddress", resultCode )
@@ -412,7 +412,7 @@ Inherits COM.IDispatch
 			  If mThis = Nil Then Raise New NilObjectException
 			  Dim func As New TopologicalAddress_Put_Func1( mThis.Ptr( 0 ).Ptr( 56 ) )
 			  Dim Local_rhs_Param As Ptr
-			  Dim mb As MemoryBlock = COM.RBVariantToVARIANT( value ) 
+			  Dim mb As MemoryBlock = COM.RBVariantToVARIANT( value )
 			  Local_rhs_Param = mb
 			  Dim resultCode As Integer = func.Invoke( mThis, Local_rhs_Param)
 			  If 0 = resultCode Then
@@ -530,11 +530,45 @@ Inherits COM.IDispatch
 			Name="TypeCategory"
 			Group="Behavior"
 			Type="epsrTypeCategory"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_TYPECAT_UNKNOWN"
+				"1 - PSR_TYPECAT_EDT"
+				"2 - PSR_TYPECAT_DDT_STRUCT"
+				"3 - PSR_TYPECAT_DDT_ARRAY"
+				"4 - PSR_TYPECAT_IODDT"
+				"5 - PSR_TYPECAT_EFB"
+				"6 - PSR_TYPECAT_DFB"
+				"7 - PSR_TYPECAT_ANONYMOUS_ARRAY"
+				"8 - PSR_TYPECAT_ANY_ARRAY"
+				"9 - PSR_TYPECAT_ANY_REF"
+				"10 - PSR_TYPECAT_ANY_DDT_REF"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="TypeCode"
 			Group="Behavior"
 			Type="epsrTypeCode"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_TYPECODE_UNKNOWN"
+				"1 - PSR_TYPECODE_INT"
+				"2 - PSR_TYPECODE_DINT"
+				"3 - PSR_TYPECODE_BOOL"
+				"4 - PSR_TYPECODE_UINT"
+				"5 - PSR_TYPECODE_UDINT"
+				"6 - PSR_TYPECODE_REAL"
+				"7 - PSR_TYPECODE_TIME"
+				"8 - PSR_TYPECODE_DATE"
+				"9 - PSR_TYPECODE_BYTE"
+				"10 - PSR_TYPECODE_DT"
+				"11 - PSR_TYPECODE_DWORD"
+				"12 - PSR_TYPECODE_EBOOL"
+				"13 - PSR_TYPECODE_STRING"
+				"14 - PSR_TYPECODE_WSTRING"
+				"15 - PSR_TYPECODE_TOD"
+				"16 - PSR_TYPECODE_WORD"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="TypeName"

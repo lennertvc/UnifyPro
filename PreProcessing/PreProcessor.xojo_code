@@ -2,7 +2,7 @@
 Protected Class PreProcessor
 	#tag Method, Flags = &h0
 		Sub collectProjects()
-		  
+		  // (sniffer van Lennert)
 		  Dim rootFolder As FolderItem
 		  rootFolder = SelectFolder
 		  If rootFolder<> Nil Then
@@ -14,9 +14,13 @@ Protected Class PreProcessor
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  
-		  sourceFolder =  SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects")
+		  dim sourceFolderParent as folderitem =  SpecialFolder.ApplicationData.child("UnifyPro")
+		  if  sourceFolderParent = nil or not sourceFolderParent.Exists then
+		    sourceFolderParent.CreateAsFolder
+		  end if
 		  
-		  if  not sourceFolder.Exists then
+		  sourceFolder =  SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects")
+		  if  sourceFolder = nil or not sourceFolder.Exists then
 		    sourceFolder.CreateAsFolder
 		  end if
 		End Sub
@@ -457,85 +461,85 @@ Protected Class PreProcessor
 
 	#tag Method, Flags = &h21
 		Private Function extractOriginalCode() As string()
-		  dim arrayOriginalCode() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
-		  
-		  //open files and fill array
-		  Dim t As TextinputStream
-		  dim textarea1 as new textarea
-		  dim index as integer = 0
-		  
-		  dim folder as new folderitem(testfilelocation)
-		  for i as integer = 1 to folder.count
-		    if folder.item(i).name.right(4)<>".stu" then
-		      t = TextinputStream.open(folder.item(i))
-		      textarea1.text= t.ReadAll()
-		      arrayOriginalCode(index)=TextArea1.text
-		      index=index+1
-		      t.close
-		    end if
-		  next
-		  
-		  //delete files
-		  dim j as integer = 0
-		  while j<=30
-		    for i as integer = 1 to folder.count
-		      if folder.item(i).name.right(4)<>".stu" then
-		        folder.item(i).delete
-		      end if
-		    next
-		    j=j+1
-		  wend
-		  
-		  return arrayOriginalCode()
-		  
-		  
-		  
-		  
-		  
-		  
-		  
+		  // dim arrayOriginalCode() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
+		  // 
+		  // //open files and fill array
+		  // Dim t As TextinputStream
+		  // dim textarea1 as new textarea
+		  // dim index as integer = 0
+		  // 
+		  // dim folder as new folderitem(testfilelocation)
+		  // for i as integer = 1 to folder.count
+		  // if folder.item(i).name.right(4)<>".stu" then
+		  // t = TextinputStream.open(folder.item(i))
+		  // textarea1.text= t.ReadAll()
+		  // arrayOriginalCode(index)=TextArea1.text
+		  // index=index+1
+		  // t.close
+		  // end if
+		  // next
+		  // 
+		  // //delete files
+		  // dim j as integer = 0
+		  // while j<=30
+		  // for i as integer = 1 to folder.count
+		  // if folder.item(i).name.right(4)<>".stu" then
+		  // folder.item(i).delete
+		  // end if
+		  // next
+		  // j=j+1
+		  // wend
+		  // 
+		  // return arrayOriginalCode()
+		  // 
+		  // 
+		  // 
+		  // 
+		  // 
+		  // 
+		  // 
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub fillDatabase()
-		  dim array0() as string
-		  dim array1() as string
-		  dim array2() as string
-		  dim projectFiles() as FolderItem = listProjectFiles
-		  
-		  for j as integer = 0 to listProjectFiles.Ubound
-		    
-		    //starup project + retrieve sectionnames
-		    array0=retrieveSectionNames(projectFiles(j))
-		    
-		    //extract original code (destination table = regelingtypes, column = originalcode)
-		    array1=extractoriginalcode
-		    
-		    //convert original code (destination table = regelingtypes, column = cleanedupcode)
-		    array2=convertCode(array1)
-		    
-		    //write to DB (table = RegelingTypes)
-		    
-		    for i as integer =0 to array2.ubound
-		      if array2(i)<>"" then
-		        if app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) <>0 then
-		          'call datamodel.addcodetodb(array1(i),array2(i)) 
-		          call app.datamodel.addFilePath(projectFiles(j).name + " " +"-" +" " + array0(i) ,app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) )
-		        end if
-		        if app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) = 0 then
-		          call app.datamodel.addcodetodb(array1(i),array2(i)) 
-		          call app.datamodel.addFilePath(projectFiles(j).name + " " +"-" +" " + array0(i) ,app.datamodel.newpkfromtable("regelingTypes"))
-		        end if
-		        
-		      end if
-		    next
-		    
-		    // Quit Unity if it's still running
-		    quitApplication
-		    
-		  next
+		  // dim array0() as string
+		  // dim array1() as string
+		  // dim array2() as string
+		  // dim projectFiles() as FolderItem = listProjectFiles
+		  // 
+		  // for j as integer = 0 to listProjectFiles.Ubound
+		  // 
+		  // //starup project + retrieve sectionnames
+		  // array0=retrieveSectionNames(projectFiles(j))
+		  // 
+		  // //extract original code (destination table = regelingtypes, column = originalcode)
+		  // array1=extractoriginalcode
+		  // 
+		  // //convert original code (destination table = regelingtypes, column = cleanedupcode)
+		  // array2=convertCode(array1)
+		  // 
+		  // //write to DB (table = RegelingTypes)
+		  // 
+		  // for i as integer =0 to array2.ubound
+		  // if array2(i)<>"" then
+		  // if app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) <>0 then
+		  // 'call datamodel.addcodetodb(array1(i),array2(i)) 
+		  // call app.datamodel.addFilePath(projectFiles(j).name + " " +"-" +" " + array0(i) ,app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) )
+		  // end if
+		  // if app.datamodel.lookupRecord("regelingTypes","cleanedUpCode",array2(i)) = 0 then
+		  // call app.datamodel.addcodetodb(array1(i),array2(i)) 
+		  // call app.datamodel.addFilePath(projectFiles(j).name + " " +"-" +" " + array0(i) ,app.datamodel.newpkfromtable("regelingTypes"))
+		  // end if
+		  // 
+		  // end if
+		  // next
+		  // 
+		  // // Quit Unity if it's still running
+		  // quitApplication
+		  // 
+		  // next
 		End Sub
 	#tag EndMethod
 
@@ -553,35 +557,35 @@ Protected Class PreProcessor
 
 	#tag Method, Flags = &h21
 		Private Function retrieveSectionNames(projectFile as FolderItem) As string()
-		  //create and open a unity project
-		  dim oProject as new unitypro(projectfile)
-		  dim arraySectionNames() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
-		  
-		  //export sections
-		  dim oUnityproject as unityproject = oProject.project
-		  dim aSection() as Unityproserver.section 
-		  aSection=oUnityproject.sectionswithprefix("R_")
-		  for index1 as integer = 0 to aSection.ubound 
-		    oUnityproject.ExportasTempfile(aSection(index1))
-		  next
-		  
-		  //fill array with section names
-		  dim folder as new folderitem(testfilelocation)
-		  dim j as integer =0
-		  for i as integer = 1 to folder.count
-		    if folder.item(i).name.right(4)<>".stu" then
-		      arraySectionNames(j)=folder.item(i).name
-		      j=j+1
-		    end if
-		  next
-		  
-		  return arraySectionNames()
+		  // //create and open a unity project
+		  // dim oProject as new unitypro(projectfile)
+		  // dim arraySectionNames() as string = array ("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","")
+		  // 
+		  // //export sections
+		  // dim oUnityproject as unityproject = oProject.project
+		  // dim aSection() as Unityproserver.section 
+		  // aSection=oUnityproject.sectionswithprefix("R_")
+		  // for index1 as integer = 0 to aSection.ubound 
+		  // oUnityproject.ExportasTempfile(aSection(index1))
+		  // next
+		  // 
+		  // //fill array with section names
+		  // dim folder as new folderitem(testfilelocation)
+		  // dim j as integer =0
+		  // for i as integer = 1 to folder.count
+		  // if folder.item(i).name.right(4)<>".stu" then
+		  // arraySectionNames(j)=folder.item(i).name
+		  // j=j+1
+		  // end if
+		  // next
+		  // 
+		  // return arraySectionNames()
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub updateProjects()
-		  //   Insert Lennerts Update-code here
+		  //   Insert Lennerts Update-code here (Conversie naar laatste versie)
 		  
 		End Sub
 	#tag EndMethod

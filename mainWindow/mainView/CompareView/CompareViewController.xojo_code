@@ -38,7 +38,7 @@ Inherits NSViewController
 		    dim compareShellController as new JVTerminalViewController
 		    compareShellController.view = JVTerminalViewController.MainTerminalView
 		    
-		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe", leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
+		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe,"+leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
 		  #endif
 		  
 		  showReport

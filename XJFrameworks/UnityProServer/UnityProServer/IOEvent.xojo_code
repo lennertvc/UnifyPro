@@ -295,6 +295,15 @@ Inherits COM.IDispatch
 			Name="Language"
 			Group="Behavior"
 			Type="epsrLanguage"
+			EditorType="Enum"
+			#tag EnumValues
+				"134 - psrILlanguage"
+				"135 - psrSTlanguage"
+				"136 - psrLDlanguage"
+				"137 - psrFBDlanguage"
+				"138 - psrSFClanguage"
+				"330 - psrLL984language"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"

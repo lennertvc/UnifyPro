@@ -1,6 +1,6 @@
 #tag Module
 Protected Module UnityProLibset
-	#tag PathToTypeLibrary = C:\Program Files (x86)\Common Files\Schneider Electric Shared\Tlb\LibsetServer.tlb
+	#tag PathToTypeLibrary = C : \ Program Files ( x86 ) \ Common Files \ Schneider Electric Shared \ Tlb \ LibsetServer . tlb
 	#tag Enum, Name = eLibsetLanguage, Type = Integer, Flags = &h0
 		LIBSRV_LANG_ENGLISH = 0
 		  LIBSRV_LANG_SPANISH = 1

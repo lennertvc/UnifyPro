@@ -3,17 +3,19 @@ Protected Class UnifyPro
 Inherits NSApplicationDelegate
 	#tag Event
 		Sub Open()
+		  datamodel = RegelingenDataBase.open
 		  
 		  preProcessor = new PreProcessor
 		  mainController = new mainWindowController
-		  
-		  datamodel = RegelingenDataBase.open
 		  
 		  
 		  #if DebugBuild then
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Collect Projects",  NSButton.action(addressof  testRoutineCollectProjects))
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Update Projects",  NSButton.action(addressof testRoutineUpdateProjects))
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineFillDatabase))
+		    
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Lees listings",  NSButton.action(addressof testRoutineLeestListings))
+		    
 		  #endif
 		End Sub
 	#tag EndEvent
@@ -29,6 +31,12 @@ Inherits NSApplicationDelegate
 	#tag Method, Flags = &h0
 		Sub testRoutineFillDatabase(sender as NSButton)
 		  preProcessor.fillDatabase
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub testRoutineLeestListings(sender as NSButton)
+		  mainWindowController.selectViewController.syncInterface(TRUE)
 		End Sub
 	#tag EndMethod
 

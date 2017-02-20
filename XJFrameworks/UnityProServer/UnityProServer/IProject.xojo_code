@@ -637,7 +637,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, pSignature_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( pSignature_Param )
-			    COM.FreeVARIANT( pSignature_Param ) 
+			    COM.FreeVARIANT( pSignature_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on CurrentSignature", resultCode )
@@ -812,7 +812,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, pVariant_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( pVariant_Param )
-			    COM.FreeVARIANT( pVariant_Param ) 
+			    COM.FreeVARIANT( pVariant_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on InfoCreation", resultCode )
@@ -833,7 +833,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, pVariant_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( pVariant_Param )
-			    COM.FreeVARIANT( pVariant_Param ) 
+			    COM.FreeVARIANT( pVariant_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on InfoModification", resultCode )

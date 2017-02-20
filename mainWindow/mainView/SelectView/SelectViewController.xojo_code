@@ -9,14 +9,21 @@ Inherits NSViewController
 		  selectView.height = selectView.window.Height*0.33
 		  
 		  dim extraRoomForListBoxHeader as Integer= 10
-		  Dim usefulHeight as Integer = selectView.height-extraRoomForListBoxHeader
+		  Dim extraRoomForFilterFields as Integer = 22
+		  Dim usefulHeight as Integer = selectView.height-extraRoomForListBoxHeader-extraRoomForFilterFields
 		  
-		  selectView.ListViewLeft.top = 0+margins+extraRoomForListBoxHeader
+		  selectView.TextFieldFilterLeft.top= 0+margins
+		  selectView.TextFieldFilterLeft.left= 0+margins
+		  
+		  selectView.ListViewLeft.top = 0+margins+extraRoomForListBoxHeader+extraRoomForFilterFields
 		  selectView.ListViewLeft.left = 0+margins
 		  selectView.ListViewLeft.Width = selectView.width*0.5-margins*1.5
 		  selectView.ListViewLeft.Height = usefulHeight-margins*1.5
 		  
-		  selectView.ListViewRight.top = 0+margins+extraRoomForListBoxHeader
+		  selectView.TextFieldFilterRight.top = 0+margins
+		  selectView.TextFieldFilterRight.left = selectView.width*0.5+margins*0.5
+		  
+		  selectView.ListViewRight.top = 0+margins+extraRoomForListBoxHeader+extraRoomForFilterFields
 		  selectView.ListViewRight.left = selectView.width*0.5+margins*0.5
 		  selectView.ListViewRight.Width = selectView.width*0.5-margins*1.5
 		  selectView.ListViewRight.Height = usefulHeight-margins*1.5
@@ -27,7 +34,7 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, nil)
+		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT regelingID,  filePath , t.regelingTypeID,  t.procesDeel, (SELECT COUNT(regelingTypeID) FROM Regelingen a WHERE a.regelingTypeID = b.regelingTypeID) AS timesUsed, t.originalCode, t.cleanedUpCode  FROM Regelingen b  NATURAL JOIN RegelingTypes t  WHERE filepath LIKE ? ORDER BY timesUsed DESC , regelingTypeID"))
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -71,10 +78,43 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub syncInterface(up as Boolean)
+		  if up then
+		    
+		    dim leftFilterValue as Variant ="%"+selectview.TextFieldFilterLeft.Text+"%"
+		    selectData.BindType(array(leftFilterValue))
+		    selectData.Bind(array(leftFilterValue))
+		    dim dataLeft as Recordset = selectData.SQLSelect
+		    
+		    dim rightFilterValue as Variant ="%"+selectview.TextFieldFilterRight.Text+"%"
+		    selectData.BindType(array(rightFilterValue))
+		    selectData.Bind(array(rightFilterValue))
+		    dim dataRight as Recordset = selectData.SQLSelect
+		    
+		    system.DebugLog("Einde update")
+		    
+		  else
+		    
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		exportFolder As FolderItem
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return SQLitePreparedStatement(representedObject)
+			End Get
+		#tag EndGetter
+		selectData As SQLitePreparedStatement
+	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
 		selectedLeft As Integer

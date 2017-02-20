@@ -349,6 +349,17 @@ Inherits COM.IDispatch
 			Name="TypeCategory"
 			Group="Behavior"
 			Type="eLibsetTypeCategory"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - LIBSRV_TYPECAT_UNKNOWN"
+				"1 - LIBSRV_TYPECAT_EDT"
+				"2 - LIBSRV_TYPECAT_DDT_STRUCT"
+				"3 - LIBSRV_TYPECAT_DDT_ARRAY"
+				"4 - LIBSRV_TYPECAT_IODDT"
+				"5 - LIBSRV_TYPECAT_EFB"
+				"6 - LIBSRV_TYPECAT_DFB"
+				"7 - LIBSRV_TYPECAT_ANONYMOUS_ARRAY"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ValidationDate"

@@ -328,6 +328,20 @@ Inherits COM.IDispatch
 			Name="TypeCategory"
 			Group="Behavior"
 			Type="epsrTypeCategory"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_TYPECAT_UNKNOWN"
+				"1 - PSR_TYPECAT_EDT"
+				"2 - PSR_TYPECAT_DDT_STRUCT"
+				"3 - PSR_TYPECAT_DDT_ARRAY"
+				"4 - PSR_TYPECAT_IODDT"
+				"5 - PSR_TYPECAT_EFB"
+				"6 - PSR_TYPECAT_DFB"
+				"7 - PSR_TYPECAT_ANONYMOUS_ARRAY"
+				"8 - PSR_TYPECAT_ANY_ARRAY"
+				"9 - PSR_TYPECAT_ANY_REF"
+				"10 - PSR_TYPECAT_ANY_DDT_REF"
+			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

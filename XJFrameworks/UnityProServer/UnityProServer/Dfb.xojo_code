@@ -424,7 +424,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, pCurrentDate_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( pCurrentDate_Param )
-			    COM.FreeVARIANT( pCurrentDate_Param ) 
+			    COM.FreeVARIANT( pCurrentDate_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on ValidationDate", resultCode )
@@ -500,6 +500,13 @@ Inherits COM.IDispatch
 			Name="Protection"
 			Group="Behavior"
 			Type="epsrDfbProtection"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_DFB_PROTECTION_UNKNOWN"
+				"1 - PSR_DFB_PROTECTION_NONE"
+				"2 - PSR_DFB_PROTECTION_READ_ONLY"
+				"3 - PSR_DFB_PROTECTION_NO_READ_WRITE"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -518,6 +525,20 @@ Inherits COM.IDispatch
 			Name="TypeCategory"
 			Group="Behavior"
 			Type="epsrTypeCategory"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_TYPECAT_UNKNOWN"
+				"1 - PSR_TYPECAT_EDT"
+				"2 - PSR_TYPECAT_DDT_STRUCT"
+				"3 - PSR_TYPECAT_DDT_ARRAY"
+				"4 - PSR_TYPECAT_IODDT"
+				"5 - PSR_TYPECAT_EFB"
+				"6 - PSR_TYPECAT_DFB"
+				"7 - PSR_TYPECAT_ANONYMOUS_ARRAY"
+				"8 - PSR_TYPECAT_ANY_ARRAY"
+				"9 - PSR_TYPECAT_ANY_REF"
+				"10 - PSR_TYPECAT_ANY_DDT_REF"
+			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

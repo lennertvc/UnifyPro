@@ -1,6 +1,6 @@
 #tag Module
 Protected Module UnityProServer
-	#tag PathToTypeLibrary = C:\Program Files (x86)\Common Files\Schneider Electric Shared\Tlb\PServer.tlb
+	#tag PathToTypeLibrary = C : \ Program Files ( x86 ) \ Common Files \ Schneider Electric Shared \ Tlb \ PServer . tlb
 	#tag Enum, Name = epsrAccessRight, Type = Integer, Flags = &h0
 		PSR_ACCESS_RIGHT_UNKNOWN = 0
 		  PSR_ACCESS_RIGHT_NO_ACCESS = 1

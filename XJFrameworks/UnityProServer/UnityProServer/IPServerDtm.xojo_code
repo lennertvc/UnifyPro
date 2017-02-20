@@ -448,6 +448,14 @@ Inherits COM.IDispatch
 			Name="DtmType"
 			Group="Behavior"
 			Type="epsrDtmType"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - psrDtmType_communication"
+				"1 - psrDtmType_gateway"
+				"2 - psrDtmType_block"
+				"3 - psrDtmType_module"
+				"4 - psrDtmType_device"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Id"

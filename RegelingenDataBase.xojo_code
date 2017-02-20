@@ -97,7 +97,7 @@ Inherits SQLiteDatabase
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return  App.ExecutableFile.parent.Child("RegelingenDataBase.db")
+			  Return  App.ExecutableFile.parent.parent.Child("RegelingenDataBase.db")
 			  
 			End Get
 		#tag EndGetter

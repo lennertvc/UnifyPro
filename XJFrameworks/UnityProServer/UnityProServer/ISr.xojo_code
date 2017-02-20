@@ -318,6 +318,15 @@ Inherits COM.IDispatch
 			Name="Language"
 			Group="Behavior"
 			Type="epsrLanguage"
+			EditorType="Enum"
+			#tag EnumValues
+				"134 - psrILlanguage"
+				"135 - psrSTlanguage"
+				"136 - psrLDlanguage"
+				"137 - psrFBDlanguage"
+				"138 - psrSFClanguage"
+				"330 - psrLL984language"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -336,6 +345,12 @@ Inherits COM.IDispatch
 			Name="Protection"
 			Group="Behavior"
 			Type="epsrSectionProtection"
+			EditorType="Enum"
+			#tag EnumValues
+				"1 - PSR_SECTION_PROTECTION_NONE"
+				"2 - PSR_SECTION_PROTECTION_READ_ONLY"
+				"3 - PSR_SECTION_PROTECTION_NO_READ_WRITE"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

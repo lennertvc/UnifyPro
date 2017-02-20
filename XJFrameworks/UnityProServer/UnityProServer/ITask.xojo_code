@@ -306,6 +306,11 @@ Inherits COM.IDispatch
 			Name="Periodicity"
 			Group="Behavior"
 			Type="epsrPeriodicity"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - PSR_PERIODIC"
+				"1 - PSR_CYCLIC"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

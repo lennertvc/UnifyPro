@@ -1377,7 +1377,7 @@ Inherits COM.IDispatch
 			  Dim resultCode As Integer = func.Invoke( mThis, pVal_Param )
 			  If 0 = resultCode Then
 			    Dim retVal As Variant = COM.VARIANTToRBVariant( pVal_Param )
-			    COM.FreeVARIANT( pVal_Param ) 
+			    COM.FreeVARIANT( pVal_Param )
 			    Return retVal
 			  Else
 			    Raise New COM.COMException("Failed on TargetSignature", resultCode )
@@ -1513,6 +1513,16 @@ Inherits COM.IDispatch
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="SelectTarget"
+			Group="Behavior"
+			Type="epsrTargetConnection"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - psrConnectToPlc"
+				"1 - psrConnectToSimulator"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="SimulatorConnectionAddress"
 			Group="Behavior"
 			Type="String"
@@ -1529,6 +1539,42 @@ Inherits COM.IDispatch
 			Visible=true
 			Group="ID"
 			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TargetConnectionMode"
+			Group="Behavior"
+			Type="epsrConnectionMode"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - psrConnectionModeUnknown"
+				"1 - psrConnectionModePrimary"
+				"2 - psrConnectionModeSecondary"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TargetConnectionState"
+			Group="Behavior"
+			Type="epsrConnectionState"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - psrConnectionStateOffline"
+				"1 - psrConnectionStateDifferent"
+				"2 - psrConnectionStateEqual"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TargetState"
+			Group="Behavior"
+			Type="epsrPlcState"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - psrPlcStateUnknown"
+				"1 - psrPlcStateStop"
+				"2 - psrPlcStateRun"
+				"3 - psrPlcStateDefault"
+				"4 - psrPlcStateNoConf"
+				"5 - psrPlcStateHalt"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
