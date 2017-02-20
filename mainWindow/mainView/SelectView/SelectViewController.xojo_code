@@ -82,57 +82,60 @@ Inherits NSViewController
 		Sub syncInterface(up as Boolean)
 		  if up then
 		    
+		    // Fill the lefthand TreeView
 		    
 		    dim leftFilterValue as Variant ="%"+selectview.TextFieldFilterLeft.Text+"%"
 		    selectData.BindType(array(leftFilterValue))
 		    selectData.Bind(array(leftFilterValue))
 		    dim dataLeft as Recordset = selectData.SQLSelect
 		    
-		    dim previousType as String
-		    previousType  = ""
-		    
 		    If dataLeft <> Nil Then
+		      
+		      dim regelingType as String
+		      dim regelingen(-1,-1) as String
+		      dim regelingCounter as Integer
+		      dim currentTypeID as String
+		      dim previousTypeID as String
+		      
+		      redim regelingen(-1,-1)
+		      regelingCounter = 0
+		      previousTypeID  = ""
+		      
 		        While Not dataLeft.EOF
+		        dim lastRownUmber as Integer = selectView.ListViewLeft.ListCount-1
 		        
-		        dim currentType as String = dataLeft.IdxField(5)
+		        regelingType = dataLeft.IdxField(7).stringvalue+ " Keer " + dataLeft.IdxField(6).stringvalue + " Regeling " +dataLeft.IdxField(5).stringvalue
 		        
-		        If currentType <>  previousType then
-		          selectView.ListViewLeft.AddFolder(currentType)
+		        redim regelingen(regelingCounter, 2)
+		        regelingen(regelingCounter, 0) = dataLeft.IdxField(2).stringvalue
+		        regelingen(regelingCounter, 1) = dataLeft.IdxField(3).stringvalue
+		        regelingen(regelingCounter, 2) = dataLeft.IdxField(4).stringvalue
+		        
+		        currentTypeID = dataLeft.IdxField(5).StringValue
+		        If currentTypeID <>  previousTypeID then
+		          
+		          if lastRownUmber >= 0 then
+		            selectView.ListViewLeft.RowTag(lastRownUmber) = regelingen
+		            regelingCounter = 0
+		          end if
+		          
+		          selectView.ListViewLeft.AddFolder(regelingType)
+		          
 		        end if
 		        
+		            previousTypeID = currentTypeID
+		            regelingCounter = regelingCounter+1
 		            dataLeft.MoveNext
+		            
 		        Wend
+		      
 		        dataLeft.Close
 		    End If
 		    
 		    
-		    dim rightFilterValue as Variant ="%"+selectview.TextFieldFilterRight.Text+"%"
-		    selectData.BindType(array(rightFilterValue))
-		    selectData.Bind(array(rightFilterValue))
-		    dim dataRight as Recordset = selectData.SQLSelect
-		    
-		    previousType  = ""
-		    
-		    If dataRight <> Nil Then
-		        While Not dataRight.EOF
-		        
-		        dim currentType as String = dataRight.IdxField(5)
-		        
-		        If currentType <>  previousType then
-		          selectView.ListViewLeft.AddFolder(currentType)
-		        end if
-		        
-		            dataRight.MoveNext
-		        Wend
-		        dataRight.Close
-		    End If
-		    
-		    
-		    
-		  else
-		    
-		    
-		  end if
+		  End If
+		  
+		  
 		  
 		End Sub
 	#tag EndMethod

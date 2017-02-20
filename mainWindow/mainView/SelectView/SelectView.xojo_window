@@ -25,7 +25,7 @@ Begin NSView SelectView
    UseFocusRing    =   False
    Visible         =   True
    Width           =   656
-   Begin Listbox ListViewLeft
+   Begin JVTreeview ListViewLeft
       AutoDeactivate  =   True
       AutoHideScrollbars=   False
       Bold            =   False
@@ -75,7 +75,7 @@ Begin NSView SelectView
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin Listbox ListViewRight
+   Begin JVTreeview ListViewRight
       AutoDeactivate  =   True
       AutoHideScrollbars=   False
       Bold            =   False
@@ -229,7 +229,6 @@ End
 	#tag Event
 		Sub Open()
 		  Me.ColumnType(0) = Listbox.TypeCheckbox
-		  me.AddFolder("Testtype links")
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -251,7 +250,6 @@ End
 	#tag Event
 		Sub Open()
 		  Me.ColumnType(0) = Listbox.TypeCheckbox
-		  me.AddFolder("Testtype rechts")
 		End Sub
 	#tag EndEvent
 	#tag Event
