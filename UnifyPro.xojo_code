@@ -40,7 +40,11 @@ Inherits NSApplicationDelegate
 
 
 	#tag Note, Name = ToDo Jan
+		View aanmaken met count van related records regelingen 
+		
 		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
+		
+		Filterveld voorzien voor project
 		
 		
 	#tag EndNote
@@ -55,6 +59,10 @@ Inherits NSApplicationDelegate
 		Wegwerken defaultvalues in arrays door gebruik van append inplaats van item(i)
 		
 		For next loops indien mogelijk voorzien van fast enumaration
+		
+		Vullen velde procesdeel
+		Vullen van metadata
+		Vullen van filepath
 		
 	#tag EndNote
 
