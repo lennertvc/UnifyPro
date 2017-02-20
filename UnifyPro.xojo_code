@@ -60,9 +60,10 @@ Inherits NSApplicationDelegate
 		
 		For next loops indien mogelijk voorzien van fast enumaration
 		
-		Vullen velde procesdeel
-		Vullen van metadata
+		WegFilteren van de prefix van de subroutine op basis van een variabele die gekend is met bij regex \D+(SiSTSP) en vervangen door niks
+		Vullen veld procesdeel
 		Vullen van filepath
+		Vullen van metadata
 		
 	#tag EndNote
 
