@@ -97,7 +97,11 @@ Inherits SQLiteDatabase
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return  App.ExecutableFile.parent.parent.Child("RegelingenDataBase.db")
+			  
+			  dim pathFinder as new JVPathFinder
+			  dim dataBaseFile as folderItem = pathFinder.findFile("RegelingenDataBase.db")
+			  
+			  Return  dataBaseFile
 			  
 			End Get
 		#tag EndGetter

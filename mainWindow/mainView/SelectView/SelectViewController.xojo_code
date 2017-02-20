@@ -34,7 +34,7 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT regelingID,  filePath , t.regelingTypeID,  t.procesDeel, (SELECT COUNT(regelingTypeID) FROM Regelingen a WHERE a.regelingTypeID = b.regelingTypeID) AS timesUsed, t.originalCode, t.cleanedUpCode  FROM Regelingen b  NATURAL JOIN RegelingTypes t  WHERE filepath LIKE ? ORDER BY timesUsed DESC , regelingTypeID"))
+		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'Types En Regelingen' WHERE filepath LIKE ? ORDER BY timesUsed DESC , regelingTypeID"))
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -82,17 +82,52 @@ Inherits NSViewController
 		Sub syncInterface(up as Boolean)
 		  if up then
 		    
+		    
 		    dim leftFilterValue as Variant ="%"+selectview.TextFieldFilterLeft.Text+"%"
 		    selectData.BindType(array(leftFilterValue))
 		    selectData.Bind(array(leftFilterValue))
 		    dim dataLeft as Recordset = selectData.SQLSelect
+		    
+		    dim previousType as String
+		    previousType  = ""
+		    
+		    If dataLeft <> Nil Then
+		        While Not dataLeft.EOF
+		        
+		        dim currentType as String = dataLeft.IdxField(5)
+		        
+		        If currentType <>  previousType then
+		          selectView.ListViewLeft.AddFolder(currentType)
+		        end if
+		        
+		            dataLeft.MoveNext
+		        Wend
+		        dataLeft.Close
+		    End If
+		    
 		    
 		    dim rightFilterValue as Variant ="%"+selectview.TextFieldFilterRight.Text+"%"
 		    selectData.BindType(array(rightFilterValue))
 		    selectData.Bind(array(rightFilterValue))
 		    dim dataRight as Recordset = selectData.SQLSelect
 		    
-		    system.DebugLog("Einde update")
+		    previousType  = ""
+		    
+		    If dataRight <> Nil Then
+		        While Not dataRight.EOF
+		        
+		        dim currentType as String = dataRight.IdxField(5)
+		        
+		        If currentType <>  previousType then
+		          selectView.ListViewLeft.AddFolder(currentType)
+		        end if
+		        
+		            dataRight.MoveNext
+		        Wend
+		        dataRight.Close
+		    End If
+		    
+		    
 		    
 		  else
 		    
