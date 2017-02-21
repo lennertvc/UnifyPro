@@ -30,9 +30,9 @@ Begin NSView SelectView
       AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   2
+      ColumnCount     =   4
       ColumnsResizable=   False
-      ColumnWidths    =   "34%,67%"
+      ColumnWidths    =   "27%,25%,25%,25%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -80,9 +80,9 @@ Begin NSView SelectView
       AutoHideScrollbars=   False
       Bold            =   False
       Border          =   True
-      ColumnCount     =   2
+      ColumnCount     =   4
       ColumnsResizable=   False
-      ColumnWidths    =   "34%,67%"
+      ColumnWidths    =   "27%,25%,25%,25%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -265,6 +265,20 @@ End
 		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
 		  SelectViewController.SelectType(me, row)
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events TextFieldFilterLeft
+	#tag Event
+		Sub TextChange()
+		  selectViewController.syncInterface(TRUE)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events TextFieldFilterRight
+	#tag Event
+		Sub TextChange()
+		  selectViewController.syncInterface(TRUE)
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

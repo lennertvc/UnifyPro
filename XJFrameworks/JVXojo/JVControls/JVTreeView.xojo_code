@@ -30,6 +30,7 @@ Inherits Listbox
 		    AddRow(rowText)
 		  next
 		  
+		  
 		End Sub
 	#tag EndMethod
 
