@@ -32,7 +32,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   False
-      ColumnWidths    =   "27%,25%,25%,25%"
+      ColumnWidths    =   "27%,25%,20%,30%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -48,7 +48,7 @@ Begin NSView SelectView
       Hierarchical    =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   "Type	Regeling"
+      InitialValue    =   "Type>Regeling	Installatie	Kostenplaats	Filepath"
       Italic          =   False
       Left            =   20
       LockBottom      =   True
@@ -82,7 +82,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   False
-      ColumnWidths    =   "27%,25%,25%,25%"
+      ColumnWidths    =   "27%,25%,20%,30%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -98,7 +98,7 @@ Begin NSView SelectView
       Hierarchical    =   True
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   "Type	Regeling"
+      InitialValue    =   "Type>Regeling	Installatie	Kostenplaats	Filepath"
       Italic          =   False
       Left            =   336
       LockBottom      =   True

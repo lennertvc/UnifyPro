@@ -101,6 +101,7 @@ Inherits NSViewController
 		      dim procesDeel as String
 		      dim numberOfChildren as Integer
 		      
+		      dim regelingNaam as String
 		      dim installatie as String
 		      dim kostenPlaats as String
 		      dim filePath as String
@@ -112,6 +113,7 @@ Inherits NSViewController
 		        procesDeel = dataLeft.IdxField(2).stringvalue
 		        numberOfChildren = dataLeft.IdxField(3).IntegerValue
 		        
+		        regelingNaam = "Regeling "+dataLeft.IdxField(6).stringvalue
 		        installatie = dataLeft.IdxField(7).stringvalue
 		        kostenPlaats = dataLeft.IdxField(8).stringvalue
 		        filePath = dataLeft.IdxField(9).stringvalue
@@ -131,7 +133,7 @@ Inherits NSViewController
 		            redim children(numberOfRows,numberOfColumns+1)
 		            for rowNumber as Integer = 0 to numberOfRows
 		              for columnNumber as Integer = 0 to numberOfColumns
-		                children(rowNumber,columnNumber+1)=regelingen(rowNumber,columnNumber)
+		                children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
 		              next
 		            next
 		            
@@ -147,10 +149,10 @@ Inherits NSViewController
 		          
 		        end if
 		        
-		        regelingen(regelingCounter, 0) = installatie
-		        regelingen(regelingCounter, 1) = kostenPlaats
-		        regelingen(regelingCounter, 2) = filePath
-		        
+		        regelingen(regelingCounter, 0) = regelingNaam
+		        regelingen(regelingCounter, 1) = installatie
+		        regelingen(regelingCounter, 2) = kostenPlaats
+		        regelingen(regelingCounter, 3) = filePath
 		        
 		        previousTypeID = currentTypeID
 		        regelingCounter = regelingCounter+1
@@ -183,6 +185,7 @@ Inherits NSViewController
 		      dim procesDeel as String
 		      dim numberOfChildren as Integer
 		      
+		      dim regelingNaam as String
 		      dim installatie as String
 		      dim kostenPlaats as String
 		      dim filePath as String
@@ -196,6 +199,7 @@ Inherits NSViewController
 		        procesDeel = dataright.IdxField(2).stringvalue
 		        numberOfChildren = dataright.IdxField(3).IntegerValue
 		        
+		        regelingNaam = "Regeling "+dataright.IdxField(6).stringvalue
 		        installatie = dataright.IdxField(7).stringvalue
 		        kostenPlaats = dataright.IdxField(8).stringvalue
 		        filePath = dataright.IdxField(9).stringvalue
@@ -215,7 +219,7 @@ Inherits NSViewController
 		            redim children(numberOfRows,numberOfColumns+1)
 		            for rowNumber as Integer = 0 to numberOfRows
 		              for columnNumber as Integer = 0 to numberOfColumns
-		                children(rowNumber,columnNumber+1)=regelingen(rowNumber,columnNumber)
+		                children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
 		              next
 		            next
 		            
@@ -231,9 +235,10 @@ Inherits NSViewController
 		          
 		        end if
 		        
-		        regelingen(regelingCounter, 0) = installatie
-		        regelingen(regelingCounter, 1) = kostenPlaats
-		        regelingen(regelingCounter, 2) = filePath
+		        regelingen(regelingCounter, 0) = regelingNaam
+		        regelingen(regelingCounter, 1) = installatie
+		        regelingen(regelingCounter, 2) = kostenPlaats
+		        regelingen(regelingCounter, 3) = filePath
 		        
 		        
 		        previousTypeID = currentTypeID
