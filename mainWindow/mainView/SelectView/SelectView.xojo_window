@@ -227,12 +227,11 @@ End
 
 #tag Events ListViewLeft
 	#tag Event
-		Sub Open()
-		  Me.ColumnType(0) = Listbox.TypeCheckbox
-		End Sub
-	#tag EndEvent
-	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if (column = 0) and (me.RowIsFolder(row)) then
+		    me.CellType(row,0) = Listbox.TypeCheckbox
+		  end if
+		  
 		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		    g.ForeColor = &c0DCC0
 		    g.FillRect(0, 0, g.Width, g.Height)
@@ -240,43 +239,44 @@ End
 		End Function
 	#tag EndEvent
 	#tag Event
-		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
-		  SelectViewController.SelectType(me, row)
+		Sub Change()
+		  selectViewController.selectedTypeLeft = SelectViewController.SelectType(me)
 		  
-		End Function
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events ListViewRight
 	#tag Event
-		Sub Open()
-		  Me.ColumnType(0) = Listbox.TypeCheckbox
-		End Sub
-	#tag EndEvent
-	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if (column = 0) and (me.RowIsFolder(row)) then
+		    me.CellType(row,0) = Listbox.TypeCheckbox
+		  end if
+		  
 		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		    g.ForeColor = &C70000
 		    g.FillRect(0, 0, g.Width, g.Height)
 		  End If
 		  
+		  
 		End Function
 	#tag EndEvent
 	#tag Event
-		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
-		  SelectViewController.SelectType(me, row)
-		End Function
+		Sub Change()
+		  selectViewController.selectedTypeRight = SelectViewController.SelectType(me)
+		  
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events TextFieldFilterLeft
 	#tag Event
-		Sub TextChange()
+		Sub LostFocus()
 		  selectViewController.syncInterface(TRUE)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events TextFieldFilterRight
 	#tag Event
-		Sub TextChange()
+		Sub LostFocus()
 		  selectViewController.syncInterface(TRUE)
 		End Sub
 	#tag EndEvent

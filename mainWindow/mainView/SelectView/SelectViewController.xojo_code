@@ -34,7 +34,7 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE filepath LIKE ? ORDER BY timesUsed DESC , regelingTypeID"))
+		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Filepath LIKE ?"))
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -45,11 +45,15 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h0
 		Sub exportSelected()
-		  // if selectedLeft and selectedRight then
-		  // 
-		  // 
-		  // 
-		  // end if
+		  if (selectedTypeLeft <> -1) and  (selectedTypeRight<> -1)  then
+		    
+		    dim selectedCleanCodeLeft as String //= recordsLeft.
+		    dim selectedCleanCodeRight as String //= recordsLeft.
+		    
+		    
+		    
+		    
+		  end if
 		  
 		End Sub
 	#tag EndMethod
@@ -68,14 +72,107 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub selectType(list as listbox, selectedRow as integer)
+		Function selectType(list as listbox) As integer
+		  dim parentFolderRow as Integer
+		  dim selectedParentFolder as Integer = -1
 		  
 		  for rowNumber as Integer =  0 to list.ListCount-1
-		    list.CellState(rownumber, 0) = CheckBox.CheckedStates.Unchecked
+		    
+		    // Unchek all the parentfolders
+		    if list.RowIsFolder(rownumber) then
+		      parentFolderRow = rowNumber
+		      list.CellState(rowNumber, 0) = CheckBox.CheckedStates.UnChecked
+		    end if
+		    
+		    if list.Selected(rowNumber) then
+		      selectedParentFolder = parentFolderRow // Butn remember the seleted parentfolder
+		    end if
 		  next
 		  
-		  list.CellState(selectedRow, 0) = CheckBox.CheckedStates.Checked
+		  // And reselect it afterwards
+		  list.CellState(selectedParentFolder, 0) = CheckBox.CheckedStates.Checked
 		  
+		  return selectedParentFolder
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub showList(view as JVTreeView, data as recordset)
+		  If data <> Nil Then
+		    
+		    dim regelingen(-1,-1) as String
+		    dim regelingCounter as Integer = 0
+		    
+		    dim previousTypeID as String = ""
+		    
+		    dim currentTypeID as String
+		    dim procesDeel as String
+		    dim numberOfChildren as Integer
+		    
+		    dim regelingNaam as String
+		    dim installatie as String
+		    dim kostenPlaats as String
+		    dim filePath as String
+		    
+		    
+		    While Not data.EOF
+		      
+		      currentTypeID = data.field("regelingTypeID").stringvalue
+		      procesDeel = data.field("procesDeel").stringvalue
+		      numberOfChildren = data.field("timesUsed").IntegerValue
+		      
+		      regelingNaam = data.field("naam").stringvalue
+		      installatie = data.field("installatie").stringvalue
+		      kostenPlaats = data.field("kostenPlaats").stringvalue
+		      filePath = data.field("filePath").stringvalue
+		      
+		      
+		      currentTypeID = data.IdxField(1).StringValue
+		      
+		      If currentTypeID <>  previousTypeID then
+		        
+		        dim previousRowNumber as integer = view.LastIndex
+		        if previousRowNumber >=0 then
+		          
+		          //Deep Copy Array--Refactor this!!! with extends if possible on Array!!
+		          dim children(-1,-1) as String
+		          dim numberOfRows as Integer=ubound(regelingen, 1)
+		          dim numberOfColumns as Integer=ubound(regelingen, 2)
+		          redim children(numberOfRows,numberOfColumns+1)
+		          for rowNumber as Integer = 0 to numberOfRows
+		            for columnNumber as Integer = 0 to numberOfColumns
+		              children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
+		            next
+		          next
+		          
+		          view.RowTag(previousRowNumber) = children
+		        end if
+		        
+		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
+		        view.AddFolder(regelingDescription)
+		        
+		        dim numberOfColumns as Integer = view.ColumnCount
+		        redim regelingen(numberOfChildren, numberOfColumns-1)
+		        regelingCounter = 0
+		        
+		      end if
+		      
+		      regelingen(regelingCounter, 0) = regelingNaam
+		      regelingen(regelingCounter, 1) = installatie
+		      regelingen(regelingCounter, 2) = kostenPlaats
+		      regelingen(regelingCounter, 3) = filePath
+		      
+		      
+		      previousTypeID = currentTypeID
+		      regelingCounter = regelingCounter+1
+		      
+		      data.MoveNext
+		      
+		    Wend
+		    
+		    data.Close
+		    
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -84,185 +181,29 @@ Inherits NSViewController
 		  if up then
 		    
 		    // Fill the lefthand TreeView
+		    dim filterValue as Variant
 		    
-		    dim leftFilterValue as Variant ="%"+selectview.TextFieldFilterLeft.Text+"%"
-		    selectData.BindType(array(leftFilterValue))
-		    selectData.Bind(array(leftFilterValue))
-		    dim dataLeft as Recordset = selectData.SQLSelect
+		    filterValue ="%"+selectview.TextFieldFilterLeft.Text+"%"
+		    selectData.BindType(array(filterValue))
+		    selectData.Bind(array(filterValue))
+		    recordsLeft = selectData.SQLSelect
 		    
-		    If dataLeft <> Nil Then
-		      
-		      dim regelingen(-1,-1) as String
-		      dim regelingCounter as Integer = 0
-		      
-		      dim previousTypeID as String = ""
-		      
-		      dim currentTypeID as String
-		      dim procesDeel as String
-		      dim numberOfChildren as Integer
-		      
-		      dim regelingNaam as String
-		      dim installatie as String
-		      dim kostenPlaats as String
-		      dim filePath as String
-		      
-		      
-		      While Not dataLeft.EOF
-		        
-		        currentTypeID = dataLeft.IdxField(1).stringvalue
-		        procesDeel = dataLeft.IdxField(2).stringvalue
-		        numberOfChildren = dataLeft.IdxField(3).IntegerValue
-		        
-		        regelingNaam = "Regeling "+dataLeft.IdxField(6).stringvalue
-		        installatie = dataLeft.IdxField(7).stringvalue
-		        kostenPlaats = dataLeft.IdxField(8).stringvalue
-		        filePath = dataLeft.IdxField(9).stringvalue
-		        
-		        
-		        currentTypeID = dataLeft.IdxField(1).StringValue
-		        
-		        If currentTypeID <>  previousTypeID then
-		          
-		          dim previousRowNumber as integer = selectView.ListViewLeft.LastIndex
-		          if previousRowNumber >=0 then
-		            
-		            //Deep Copy Array--Refactor this!!! with extends if possible on Array!!
-		            dim children(-1,-1) as String
-		            dim numberOfRows as Integer=ubound(regelingen, 1)
-		            dim numberOfColumns as Integer=ubound(regelingen, 2)
-		            redim children(numberOfRows,numberOfColumns+1)
-		            for rowNumber as Integer = 0 to numberOfRows
-		              for columnNumber as Integer = 0 to numberOfColumns
-		                children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
-		              next
-		            next
-		            
-		            selectView.ListViewLeft.RowTag(previousRowNumber) = children
-		          end if
-		          
-		          dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
-		          selectView.ListViewLeft.AddFolder(regelingDescription)
-		          
-		          dim numberOfColumns as Integer = selectView.ListViewLeft.ColumnCount
-		          redim regelingen(numberOfChildren, numberOfColumns-1)
-		          regelingCounter = 0
-		          
-		        end if
-		        
-		        regelingen(regelingCounter, 0) = regelingNaam
-		        regelingen(regelingCounter, 1) = installatie
-		        regelingen(regelingCounter, 2) = kostenPlaats
-		        regelingen(regelingCounter, 3) = filePath
-		        
-		        previousTypeID = currentTypeID
-		        regelingCounter = regelingCounter+1
-		        
-		        dataLeft.MoveNext
-		        
-		      Wend
-		      
-		      dataLeft.Close
-		      
-		    end if
-		    
-		    
+		    showList(selectView.ListViewLeft, recordsLeft)
 		    
 		    // Fill the righthand TreeView
+		    filterValue ="%"+selectview.TextFieldFilterRight.Text+"%"
+		    selectData.BindType(array(filterValue))
+		    selectData.Bind(array(filterValue))
+		    recordsRight = selectData.SQLSelect
 		    
-		    dim rightFilterValue as Variant ="%"+selectview.TextFieldFilterright.Text+"%"
-		    selectData.BindType(array(rightFilterValue))
-		    selectData.Bind(array(rightFilterValue))
-		    dim dataright as Recordset = selectData.SQLSelect
-		    
-		    If dataright <> Nil Then
-		      
-		      dim regelingen(-1,-1) as String
-		      dim regelingCounter as Integer = 0
-		      
-		      dim previousTypeID as String = ""
-		      
-		      dim currentTypeID as String
-		      dim procesDeel as String
-		      dim numberOfChildren as Integer
-		      
-		      dim regelingNaam as String
-		      dim installatie as String
-		      dim kostenPlaats as String
-		      dim filePath as String
-		      
-		      
-		      
-		      
-		      While Not dataright.EOF
-		        
-		        currentTypeID = dataright.IdxField(1).stringvalue
-		        procesDeel = dataright.IdxField(2).stringvalue
-		        numberOfChildren = dataright.IdxField(3).IntegerValue
-		        
-		        regelingNaam = "Regeling "+dataright.IdxField(6).stringvalue
-		        installatie = dataright.IdxField(7).stringvalue
-		        kostenPlaats = dataright.IdxField(8).stringvalue
-		        filePath = dataright.IdxField(9).stringvalue
-		        
-		        
-		        currentTypeID = dataright.IdxField(1).StringValue
-		        
-		        If currentTypeID <>  previousTypeID then
-		          
-		          dim previousRowNumber as integer = selectView.ListViewright.LastIndex
-		          if previousRowNumber >=0 then
-		            
-		            //Deep Copy Array--Refactor this!!! with extends if possible on Array!!
-		            dim children(-1,-1) as String
-		            dim numberOfRows as Integer=ubound(regelingen, 1)
-		            dim numberOfColumns as Integer=ubound(regelingen, 2)
-		            redim children(numberOfRows,numberOfColumns+1)
-		            for rowNumber as Integer = 0 to numberOfRows
-		              for columnNumber as Integer = 0 to numberOfColumns
-		                children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
-		              next
-		            next
-		            
-		            selectView.ListViewright.RowTag(previousRowNumber) = children
-		          end if
-		          
-		          dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
-		          selectView.ListViewright.AddFolder(regelingDescription)
-		          
-		          dim numberOfColumns as Integer = selectView.ListViewright.ColumnCount
-		          redim regelingen(numberOfChildren, numberOfColumns-1)
-		          regelingCounter = 0
-		          
-		        end if
-		        
-		        regelingen(regelingCounter, 0) = regelingNaam
-		        regelingen(regelingCounter, 1) = installatie
-		        regelingen(regelingCounter, 2) = kostenPlaats
-		        regelingen(regelingCounter, 3) = filePath
-		        
-		        
-		        previousTypeID = currentTypeID
-		        regelingCounter = regelingCounter+1
-		        
-		        dataright.MoveNext
-		        
-		      Wend
-		      
-		      dataright.Close
-		      
-		    end if
+		    showList(selectView.ListViewRight, recordsRight)
 		    
 		    
 		  else
 		    
 		    
 		    
-		    
-		    
-		    
-		    
 		  end if
-		  
 		  
 		  
 		  
@@ -275,6 +216,14 @@ Inherits NSViewController
 		exportFolder As FolderItem
 	#tag EndProperty
 
+	#tag Property, Flags = &h0
+		recordsLeft As RecordSet
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		recordsRight As RecordSet
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -285,11 +234,11 @@ Inherits NSViewController
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		selectedLeft As Integer
+		selectedTypeLeft As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		selectedRight As Integer
+		selectedTypeRight As Integer
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -328,12 +277,12 @@ Inherits NSViewController
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedLeft"
+			Name="selectedTypeLeft"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedRight"
+			Name="selectedTypeRight"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
