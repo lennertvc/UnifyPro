@@ -32,7 +32,7 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h0
 		Sub compare(leftFile as folderItem, rightFile as FolderItem)
-		  // Execute Compare it trough the CLI
+		  // Execute Compare it trough the CLI of Compare-it when on the right platform
 		  
 		  #if TargetWindows then
 		    dim compareShellController as new JVTerminalViewController
@@ -41,7 +41,7 @@ Inherits NSViewController
 		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe,"+leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
 		  #endif
 		  
-		  showReport
+		  showReport // On Mac OSX the last report created under Windows will be shown
 		End Sub
 	#tag EndMethod
 

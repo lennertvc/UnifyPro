@@ -242,7 +242,7 @@ End
 		Sub Change()
 		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.recordsLeft)
 		  refresh
-		  
+		  selectViewController.exportAndCompare
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -265,6 +265,8 @@ End
 		Sub Change()
 		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.recordsRight)
 		  refresh
+		  selectViewController.exportAndCompare
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

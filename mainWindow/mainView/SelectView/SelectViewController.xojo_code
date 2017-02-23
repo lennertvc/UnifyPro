@@ -40,18 +40,34 @@ Inherits NSViewController
 		  if  not exportFolder.Exists then
 		    exportFolder.CreateAsFolder
 		  end if
+		  
+		  sourceFileLeft = exportFolder.Child("sourceLeft.txt")
+		  sourceFileRight = exportFolder.Child("sourceRight.txt")
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub exportSelected()
+		Sub exportAndCompare()
 		  if (selectedCodeLeft <> "") and  (selectedCodeRight<> "")  then
 		    
+		    exportAsTextFile(sourceFileLeft,selectedCodeLeft)
+		    exportAsTextFile(sourceFileRight, selectedCodeRight)
 		    
-		    
+		    app.mainWindowController.compareViewController.compare(sourceFileLeft, sourceFileRight)
 		    
 		  end if
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub exportAsTextFile(file as FolderItem, contents as String)
+		  Dim tos As TextOutputStream
+		  If file <> Nil Then
+		      tos = TextOutputStream.Create(file)
+		      tos.WriteLine(contents)
+		      tos.Close
+		  End If
 		End Sub
 	#tag EndMethod
 
@@ -273,6 +289,14 @@ Inherits NSViewController
 		selectView As SelectView
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h0
+		sourceFileLeft As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		sourceFileRight As FolderItem
+	#tag EndProperty
+
 
 	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"5", Scope = Public
 	#tag EndConstant
@@ -302,12 +326,14 @@ Inherits NSViewController
 		#tag ViewProperty
 			Name="selectedCodeLeft"
 			Group="Behavior"
-			Type="Integer"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="selectedCodeRight"
 			Group="Behavior"
-			Type="Integer"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
