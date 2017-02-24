@@ -48,13 +48,18 @@ Inherits NSApplicationDelegate
 
 
 	#tag Note, Name = ToDo Jan
-		View aanmaken met count van related records regelingen 
-		
-		Dataset/PreparedSQLStatement uitwerken voor verschillende viewcontrollers.
+		Testen CLI CompareViewre-it onder Windows
 		
 		Filterveld voorzien voor project
 		
+		Zorgen dat dbase mee wordt opgenomen in build en testen met huidige defaultmap van pathfinder
 		
+		
+		Mergen met Masterversie en branch Lennert
+		
+		Count Types voor regelingen voorzien
+		
+		Children count types controleren op kleine groepen (off by one)
 	#tag EndNote
 
 	#tag Note, Name = ToDo Lennert
