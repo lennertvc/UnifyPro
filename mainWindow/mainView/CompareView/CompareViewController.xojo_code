@@ -38,7 +38,7 @@ Inherits NSViewController
 		    dim compareShellController as new JVTerminalViewController
 		    compareShellController.view = JVTerminalViewController.MainTerminalView
 		    
-		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe,"+leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
+		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
 		  #endif
 		  
 		  showReport // On Mac OSX the last report created under Windows will be shown
@@ -52,6 +52,8 @@ Inherits NSViewController
 		  
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
+		  system.debuglog(reportFolder.absolutePath)
+		  
 		  dim reportName  as String
 		  #if TargetWindows then
 		    reportName = "CompareItReport.html"

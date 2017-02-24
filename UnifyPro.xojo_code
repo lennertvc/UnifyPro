@@ -14,7 +14,7 @@ Inherits NSApplicationDelegate
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Update Projects",  NSButton.action(addressof testRoutineUpdateProjects))
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineFillDatabase))
 		    
-		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Lees listings",  NSButton.action(addressof testRoutineLeestListings))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Lees Multiline",  NSButton.action(addressof testRoutineMultiLine))
 		    
 		  #endif
 		End Sub
@@ -35,8 +35,10 @@ Inherits NSApplicationDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub testRoutineLeestListings(sender as NSButton)
-		  mainWindowController.selectViewController.syncInterface(TRUE)
+		Sub testRoutineMultiLine(sender as NSButton)
+		  dim  exampleOfCleanCode as String ="<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>"+CHR(10)+"<STExchangeFile>"
+		  dim test as RecordSet = app.dataModel.SQLSelect("Select * FROM regelingTypes WHERE originalCode ='"+exampleOfCleanCode+"'")
+		  MsgBox(str(test.RecordCount))
 		End Sub
 	#tag EndMethod
 
@@ -47,35 +49,34 @@ Inherits NSApplicationDelegate
 	#tag EndMethod
 
 
+	#tag Note, Name = ToDo Jan v2.0
+		Extra windows voorzien voor tonen original code
+		
+	#tag EndNote
+
 	#tag Note, Name = ToDo Jan
-		Testen CLI CompareViewre-it onder Windows
-		
 		Filterveld voorzien voor project
-		
-		Zorgen dat dbase mee wordt opgenomen in build en testen met huidige defaultmap van pathfinder
-		
-		
-		Mergen met Masterversie en branch Lennert
-		
 		Count Types voor regelingen voorzien
 		
-		Children count types controleren op kleine groepen (off by one)
+		
+		Repaint in kleur
+		Mergen met Masterversie en branch Lennert
+		aanpassingen JVTreeView, Terminalviewcontroller.execute en SQLIteDbase(extensions) ...... naar echt framework
 	#tag EndNote
 
 	#tag Note, Name = ToDo Lennert
-		
-		Review eigen code na consolidatie (nu grotendeels onder preProcessing)!!!
-		
+		Vullen veld procesdeel
+		Vullen veld Installatie
+		Vullen veld Kostenplaats
+		Vullen veld filepath met correcte data
+		WegFilteren van de prefix van de subroutine op basis van een variabele die gekend is met bij regex \D+(SiSTSP) en vervangen door xx
 		
 		Private methods als dusdanig aanduiden
-		
 		Wegwerken defaultvalues in arrays door gebruik van append inplaats van item(i)
-		
 		For next loops indien mogelijk voorzien van fast enumaration
 		
-		WegFilteren van de prefix van de subroutine op basis van een variabele die gekend is met bij regex \D+(SiSTSP) en vervangen door niks
-		Vullen veld procesdeel
-		Vullen van filepath
+		
+		
 		Vullen van metadata
 		
 	#tag EndNote

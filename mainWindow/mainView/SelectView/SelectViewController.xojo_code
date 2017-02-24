@@ -64,9 +64,9 @@ Inherits NSViewController
 		Private Sub exportAsTextFile(file as FolderItem, contents as String)
 		  Dim tos As TextOutputStream
 		  If file <> Nil Then
-		      tos = TextOutputStream.Create(file)
-		      tos.WriteLine(contents)
-		      tos.Close
+		    tos = TextOutputStream.Create(file)
+		    tos.WriteLine(contents)
+		    tos.Close
 		  End If
 		End Sub
 	#tag EndMethod
@@ -171,12 +171,12 @@ Inherits NSViewController
 		      
 		      currentTypeID = data.IdxField(1).StringValue
 		      
-		      If currentTypeID <>  previousTypeID then
+		      If (currentTypeID <>  previousTypeID) then
 		        
 		        dim previousRowNumber as integer = list.LastIndex
 		        if previousRowNumber >=0 then
 		          
-		          //Deep Copy Array--Refactor this!!! with extends if possible on Array!!
+		          // Copy Array
 		          dim children(-1,-1) as String
 		          dim numberOfRows as Integer=ubound(regelingen, 1)
 		          dim numberOfColumns as Integer=ubound(regelingen, 2)
@@ -194,7 +194,7 @@ Inherits NSViewController
 		        list.AddFolder(regelingDescription)
 		        
 		        dim numberOfColumns as Integer = list.ColumnCount
-		        redim regelingen(numberOfChildren, numberOfColumns-1)
+		        redim regelingen(numberOfChildren-1, numberOfColumns-1)
 		        regelingCounter = 0
 		        
 		      end if
@@ -209,8 +209,25 @@ Inherits NSViewController
 		      regelingCounter = regelingCounter+1
 		      
 		      data.MoveNext
-		      
 		    Wend
+		    
+		    
+		    dim previousRowNumber as integer = list.LastIndex
+		    if previousRowNumber >=0 then
+		      
+		      // Copy Array
+		      dim children(-1,-1) as String
+		      dim numberOfRows as Integer=ubound(regelingen, 1)
+		      dim numberOfColumns as Integer=ubound(regelingen, 2)
+		      redim children(numberOfRows,numberOfColumns+1)
+		      for rowNumber as Integer = 0 to numberOfRows
+		        for columnNumber as Integer = 0 to numberOfColumns
+		          children(rowNumber,columnNumber)=regelingen(rowNumber,columnNumber)
+		        next
+		      next
+		      
+		      list.RowTag(previousRowNumber) = children
+		    end if
 		    
 		  end if
 		End Sub

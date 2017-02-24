@@ -56,7 +56,7 @@ Begin NSView SelectView
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      RequiresSelection=   False
+      RequiresSelection=   True
       Scope           =   0
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
@@ -106,7 +106,7 @@ Begin NSView SelectView
       LockLeft        =   False
       LockRight       =   True
       LockTop         =   True
-      RequiresSelection=   False
+      RequiresSelection=   True
       Scope           =   0
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
@@ -228,20 +228,27 @@ End
 #tag Events ListViewLeft
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  if (column = 0) and (me.RowIsFolder(row)) then
-		    me.CellType(row,0) = Listbox.TypeCheckbox
+		  g.ForeColor = &cFFFFFF
+		  
+		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
+		    if (column = 0) then
+		      me.CellType(row,0) = Listbox.TypeCheckbox
+		    end if
+		    
+		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      g.ForeColor = &c00FF00
+		    End If
+		    
 		  end if
 		  
-		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
-		    g.ForeColor = &c0DCC0
-		    g.FillRect(0, 0, g.Width, g.Height)
-		  End If
+		  g.FillRect(0, 0, g.Width, g.Height)
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  me.ActiveCell.BackColor = &c00FF00
 		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.recordsLeft)
-		  refresh
+		  Refresh
 		  selectViewController.exportAndCompare
 		End Sub
 	#tag EndEvent
@@ -249,20 +256,29 @@ End
 #tag Events ListViewRight
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  if (column = 0) and (me.RowIsFolder(row)) then
-		    me.CellType(row,0) = Listbox.TypeCheckbox
+		  g.ForeColor = &cFFFFFF
+		  
+		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
+		    if (column = 0) then
+		      me.CellType(row,0) = Listbox.TypeCheckbox
+		    end if
+		    
+		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      g.ForeColor = &cFF0000
+		    End If
+		    
 		  end if
 		  
-		  If (row < me.ListCount) and (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
-		    g.ForeColor = &C70000
-		    g.FillRect(0, 0, g.Width, g.Height)
-		  End If
+		  
+		  g.FillRect(0, 0, g.Width, g.Height)
 		  
 		  
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  me.ActiveCell.BackColor = &cFF0000
+		  
 		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.recordsRight)
 		  refresh
 		  selectViewController.exportAndCompare
