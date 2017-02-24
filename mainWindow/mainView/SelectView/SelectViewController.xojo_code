@@ -10,7 +10,8 @@ Inherits NSViewController
 		  
 		  dim extraRoomForListBoxHeader as Integer= 10
 		  Dim extraRoomForFilterFields as Integer = 22
-		  Dim usefulHeight as Integer = selectView.height-extraRoomForListBoxHeader-extraRoomForFilterFields
+		  dim extraRoomForCountlabels as Integer = 20
+		  Dim usefulHeight as Integer = selectView.height-extraRoomForListBoxHeader-extraRoomForFilterFields-extraRoomForCountlabels
 		  
 		  selectView.TextFieldFilterLeft.top= 0+margins
 		  selectView.TextFieldFilterLeft.left= 0+margins
@@ -20,6 +21,12 @@ Inherits NSViewController
 		  selectView.ListViewLeft.Width = selectView.width*0.5-margins*1.5
 		  selectView.ListViewLeft.Height = usefulHeight-margins*1.5
 		  
+		  selectView.LabelCountLeft.top = selectView.ListViewLeft.top+selectView.ListViewLeft.height+2
+		  selectView.LabelCountLeft.left = selectView.ListViewLeft.left
+		  selectView.LabelCountLeft.width = 200
+		  selectView.LabelCountLeft.height = 20
+		  
+		  
 		  selectView.TextFieldFilterRight.top = 0+margins
 		  selectView.TextFieldFilterRight.left = selectView.width*0.5+margins*0.5
 		  
@@ -28,13 +35,18 @@ Inherits NSViewController
 		  selectView.ListViewRight.Width = selectView.width*0.5-margins*1.5
 		  selectView.ListViewRight.Height = usefulHeight-margins*1.5
 		  
+		  
+		  selectView.LabelCountRight.top = selectView.ListViewRight.top+selectView.ListViewRight.height+2
+		  selectView.LabelCountRight.left = selectView.ListViewRight.left
+		  selectView.LabelCountRight.width = 200
+		  selectView.LabelCountRight.height = 20
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Filepath LIKE ?"))
+		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE filepath LIKE ?"))
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -140,6 +152,9 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h21
 		Private Sub showList(list as JVTreeView, data as recordset)
+		  
+		  list.DeleteAllRows
+		  
 		  If data <> Nil Then
 		    
 		    dim regelingen(-1,-1) as String
@@ -238,22 +253,21 @@ Inherits NSViewController
 		  if up then
 		    
 		    // Fill the lefthand TreeView
-		    dim filterValue as Variant
 		    
-		    filterValue ="%"+selectview.TextFieldFilterLeft.Text+"%"
-		    selectData.BindType(array(filterValue))
-		    selectData.Bind(array(filterValue))
+		    selectData.BindType(array(filterExpressionLeft))
+		    selectData.Bind(array(filterExpressionLeft))
 		    recordsLeft = selectData.SQLSelect
-		    
 		    showList(selectView.ListViewLeft, recordsLeft)
 		    
-		    // Fill the righthand TreeView
-		    filterValue ="%"+selectview.TextFieldFilterRight.Text+"%"
-		    selectData.BindType(array(filterValue))
-		    selectData.Bind(array(filterValue))
-		    recordsRight = selectData.SQLSelect
+		    selectView.LabelCountLeft.Text = leftCount
 		    
+		    // Fill the righthand TreeView
+		    selectData.BindType(array(filterExpressionRight))
+		    selectData.Bind(array(filterExpressionright))
+		    recordsRight = selectData.SQLSelect
 		    showList(selectView.ListViewRight, recordsRight)
+		    
+		    selectView.LabelCountRight.Text = rightCount
 		    
 		  else
 		    
@@ -272,6 +286,45 @@ Inherits NSViewController
 		exportFolder As FolderItem
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterLeft.Text+"%"
+			  Return filterExpression
+			End Get
+		#tag EndGetter
+		filterExpressionLeft As Variant
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterRight.Text+"%"
+			  Return filterExpression
+			End Get
+		#tag EndGetter
+		filterExpressionRight As Variant
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
+			  typesSearch.BindType(array(filterExpressionLeft))
+			  typesSearch.Bind(array(filterExpressionLeft))
+			  
+			  dim types as recordset = typesSearch.SQLSelect
+			  
+			  dim numberOfTypes as String = Str(types.RecordCount)
+			  
+			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
+			  
+			  Return numberOfTypes +" types op "+numberOfRegelingen
+			End Get
+		#tag EndGetter
+		leftCount As String
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h0
 		recordsLeft As RecordSet
 	#tag EndProperty
@@ -279,6 +332,25 @@ Inherits NSViewController
 	#tag Property, Flags = &h0
 		recordsRight As RecordSet
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
+			  typesSearch.BindType(array(filterExpressionright))
+			  typesSearch.Bind(array(filterExpressionright))
+			  
+			  dim types as recordset = typesSearch.SQLSelect
+			  
+			  dim numberOfTypes as String = Str(types.RecordCount)
+			  
+			  dim numberOfRegelingen as String = Str(recordsright.RecordCount)
+			  
+			  Return numberOfTypes +" types op "+numberOfRegelingen
+			End Get
+		#tag EndGetter
+		rightCount As String
+	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

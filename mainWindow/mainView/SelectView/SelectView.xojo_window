@@ -43,7 +43,7 @@ Begin NSView SelectView
       GridLinesVertical=   2
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   381
+      Height          =   355
       HelpTag         =   ""
       Hierarchical    =   True
       Index           =   -2147483648
@@ -93,7 +93,7 @@ Begin NSView SelectView
       GridLinesVertical=   2
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   381
+      Height          =   355
       HelpTag         =   ""
       Hierarchical    =   True
       Index           =   -2147483648
@@ -208,6 +208,74 @@ Begin NSView SelectView
       UseFocusRing    =   True
       Visible         =   True
       Width           =   138
+   End
+   Begin Label LabelCountLeft
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      Text            =   "Untitled"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   414
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   100
+   End
+   Begin Label LabelCountRight
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   336
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      Text            =   "Untitled"
+      TextAlign       =   0
+      TextColor       =   &c00000000
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   414
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   100
    End
 End
 #tag EndWindow
