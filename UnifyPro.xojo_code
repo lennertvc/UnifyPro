@@ -55,12 +55,8 @@ Inherits NSApplicationDelegate
 	#tag EndNote
 
 	#tag Note, Name = ToDo Jan
-		
-		Children records worden altijd allemaal getoond ipv gefilterd
-		Collapse van type na selectie regeling veroorzaakt OutOfBoundsException
 		Repaint in kleur
 		Mergen met Masterversie en branch Lennert
-		aanpassingen JVTreeView, Terminalviewcontroller.execute en SQLIteDbase(extensions) ...... naar echt framework
 	#tag EndNote
 
 	#tag Note, Name = ToDo Lennert

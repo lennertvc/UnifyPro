@@ -143,7 +143,9 @@ Inherits NSViewController
 		  next
 		  
 		  // Reselect the parent type afterwords
-		  list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
+		  if selectedParentRow >=0 then
+		    list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
+		  end if
 		  
 		  // and return the code
 		  return selectedParentCode
@@ -208,12 +210,12 @@ Inherits NSViewController
 		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
 		        list.AddFolder(regelingDescription)
 		        
-		        dim numberOfColumns as Integer = list.ColumnCount
-		        redim regelingen(numberOfChildren-1, numberOfColumns-1)
+		        redim regelingen(numberOfChildren-1, list.ColumnCount-1)
 		        regelingCounter = 0
 		        
 		      end if
 		      
+		      redim regelingen(regelingCounter, list.ColumnCount-1)
 		      regelingen(regelingCounter, 0) = regelingNaam
 		      regelingen(regelingCounter, 1) = installatie
 		      regelingen(regelingCounter, 2) = kostenPlaats
@@ -407,9 +409,19 @@ Inherits NSViewController
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="leftCount"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="rightCount"
+			Group="Behavior"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
