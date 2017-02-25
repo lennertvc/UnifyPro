@@ -45,10 +45,7 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h0
 		Sub exportSelected()
-		  if (selectedTypeLeft <> -1) and  (selectedTypeRight<> -1)  then
-		    
-		    dim selectedCleanCodeLeft as String //= recordsLeft.
-		    dim selectedCleanCodeRight as String //= recordsLeft.
+		  if (selectedCodeLeft <> "") and  (selectedCodeRight<> "")  then
 		    
 		    
 		    
@@ -72,32 +69,61 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function selectType(list as listbox) As integer
-		  dim parentFolderRow as Integer
-		  dim selectedParentFolder as Integer = -1
+		Function selectType(list as JVTreeView, data as RecordSet) As String
+		  // Start with no record selected in the dataset
+		  data.MoveFirst
+		  data.MovePrevious
 		  
-		  for rowNumber as Integer =  0 to list.ListCount-1
+		  dim currentParrentRow as Integer = 0
+		  dim selectedParentRow as Integer = -1
+		  
+		  dim currentParentCode as String
+		  dim selectedParentCode as String = ""
+		  
+		  for rowNumber as Integer =  0 to list.listcount-1
+		    
+		    data.MoveNext
 		    
 		    // Unchek all the parentfolders
 		    if list.RowIsFolder(rownumber) then
-		      parentFolderRow = rowNumber
-		      list.CellState(rowNumber, 0) = CheckBox.CheckedStates.UnChecked
+		      
+		      currentParrentRow = rowNumber
+		      currentParentCode = data.Field("cleanedUpcode").StringValue
+		      list.CellState(currentParrentRow, 0) = CheckBox.CheckedStates.UnChecked
+		      
+		      //  It's a closed parentrow, skip over the extra invisible rows
+		      if (list.Expanded(currentParrentRow) = FALSE) And (list.RowTag(rowNumber) <> nil ) then
+		        dim closedRows(-1,-1) as String = list.RowTag(rowNumber)
+		        for closedRow as Integer = 1 to ubound(closedRows)
+		          data.MoveNext
+		        next
+		      end if
+		      
 		    end if
 		    
 		    if list.Selected(rowNumber) then
-		      selectedParentFolder = parentFolderRow // Butn remember the seleted parentfolder
+		      // Remember the selections parent and its code
+		      selectedParentRow = currentParrentRow
+		      selectedParentCode = currentParentCode
+		      // Report the selected row while developing
+		      #if DebugBuild then
+		        dim installatie as String =data.Field("installatie").StringValue
+		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
+		        System.DebugLog(installatie+", " +kostenplaats+" Selected")
+		      #endif
 		    end if
 		  next
 		  
-		  // And reselect it afterwards
-		  list.CellState(selectedParentFolder, 0) = CheckBox.CheckedStates.Checked
+		  // Reselect the parent type afterwords
+		  list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
 		  
-		  return selectedParentFolder
+		  // and return the code
+		  return selectedParentCode
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub showList(view as JVTreeView, data as recordset)
+		Private Sub showList(list as JVTreeView, data as recordset)
 		  If data <> Nil Then
 		    
 		    dim regelingen(-1,-1) as String
@@ -131,7 +157,7 @@ Inherits NSViewController
 		      
 		      If currentTypeID <>  previousTypeID then
 		        
-		        dim previousRowNumber as integer = view.LastIndex
+		        dim previousRowNumber as integer = list.LastIndex
 		        if previousRowNumber >=0 then
 		          
 		          //Deep Copy Array--Refactor this!!! with extends if possible on Array!!
@@ -145,13 +171,13 @@ Inherits NSViewController
 		            next
 		          next
 		          
-		          view.RowTag(previousRowNumber) = children
+		          list.RowTag(previousRowNumber) = children
 		        end if
 		        
 		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
-		        view.AddFolder(regelingDescription)
+		        list.AddFolder(regelingDescription)
 		        
-		        dim numberOfColumns as Integer = view.ColumnCount
+		        dim numberOfColumns as Integer = list.ColumnCount
 		        redim regelingen(numberOfChildren, numberOfColumns-1)
 		        regelingCounter = 0
 		        
@@ -169,8 +195,6 @@ Inherits NSViewController
 		      data.MoveNext
 		      
 		    Wend
-		    
-		    data.Close
 		    
 		  end if
 		End Sub
@@ -197,7 +221,6 @@ Inherits NSViewController
 		    recordsRight = selectData.SQLSelect
 		    
 		    showList(selectView.ListViewRight, recordsRight)
-		    
 		    
 		  else
 		    
@@ -234,11 +257,11 @@ Inherits NSViewController
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		selectedTypeLeft As Integer
+		selectedCodeLeft As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		selectedTypeRight As Integer
+		selectedCodeRight As String
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -277,12 +300,12 @@ Inherits NSViewController
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedTypeLeft"
+			Name="selectedCodeLeft"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedTypeRight"
+			Name="selectedCodeRight"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty

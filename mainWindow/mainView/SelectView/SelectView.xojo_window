@@ -240,7 +240,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  selectViewController.selectedTypeLeft = SelectViewController.SelectType(me)
+		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.recordsLeft)
+		  refresh
 		  
 		End Sub
 	#tag EndEvent
@@ -262,8 +263,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  selectViewController.selectedTypeRight = SelectViewController.SelectType(me)
-		  
+		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.recordsRight)
+		  refresh
 		End Sub
 	#tag EndEvent
 #tag EndEvents
