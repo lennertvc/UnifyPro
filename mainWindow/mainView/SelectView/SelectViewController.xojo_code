@@ -46,7 +46,7 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE filepath LIKE ?"))
+		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -256,16 +256,16 @@ Inherits NSViewController
 		    
 		    // Fill the lefthand TreeView
 		    
-		    selectData.BindType(array(filterExpressionLeft))
-		    selectData.Bind(array(filterExpressionLeft))
+		    selectData.BindType(array(filterExpressionLeft, filterExpressionLeft))
+		    selectData.Bind(array(filterExpressionLeft, filterExpressionLeft))
 		    recordsLeft = selectData.SQLSelect
 		    showList(selectView.ListViewLeft, recordsLeft)
 		    
 		    selectView.LabelCountLeft.Text = leftCount
 		    
 		    // Fill the righthand TreeView
-		    selectData.BindType(array(filterExpressionRight))
-		    selectData.Bind(array(filterExpressionright))
+		    selectData.BindType(array(filterExpressionRight, filterExpressionLeft))
+		    selectData.Bind(array(filterExpressionright, filterExpressionLeft))
 		    recordsRight = selectData.SQLSelect
 		    showList(selectView.ListViewRight, recordsRight)
 		    
