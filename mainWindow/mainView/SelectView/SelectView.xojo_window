@@ -322,7 +322,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub CellAction(row As Integer, column As Integer)
-		  if me.RowIsFolder(row) and column = 0 then
+		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
 		End Sub
@@ -362,7 +362,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub CellAction(row As Integer, column As Integer)
-		  if me.RowIsFolder(row) and column = 0 then
+		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
 		End Sub

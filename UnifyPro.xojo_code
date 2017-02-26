@@ -55,7 +55,7 @@ Inherits NSApplicationDelegate
 	#tag EndNote
 
 	#tag Note, Name = ToDo Jan
-		Repaint in kleur
+		
 		Mergen met Masterversie en branch Lennert
 	#tag EndNote
 
