@@ -231,6 +231,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -265,6 +266,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -360,12 +362,26 @@ End
 		  selectViewController.syncInterface(TRUE)
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Function KeyDown(Key As String) As Boolean
+		  if Key = CHR(13) or Key = CHR(10) then
+		    selectViewController.syncInterface(TRUE)
+		  end if
+		End Function
+	#tag EndEvent
 #tag EndEvents
 #tag Events TextFieldFilterRight
 	#tag Event
 		Sub LostFocus()
 		  selectViewController.syncInterface(TRUE)
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function KeyDown(Key As String) As Boolean
+		  if Key = CHR(13) or Key = CHR(10) then
+		    selectViewController.syncInterface(TRUE)
+		  end if
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior
