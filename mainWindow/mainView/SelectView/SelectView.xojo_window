@@ -27,12 +27,12 @@ Begin NSView SelectView
    Width           =   656
    Begin JVTreeview ListViewLeft
       AutoDeactivate  =   True
-      AutoHideScrollbars=   False
+      AutoHideScrollbars=   True
       Bold            =   False
       Border          =   True
       ColumnCount     =   4
-      ColumnsResizable=   False
-      ColumnWidths    =   "27%,25%,20%,30%"
+      ColumnsResizable=   True
+      ColumnWidths    =   "20%,20%,10%,50%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -77,12 +77,12 @@ Begin NSView SelectView
    End
    Begin JVTreeview ListViewRight
       AutoDeactivate  =   True
-      AutoHideScrollbars=   False
+      AutoHideScrollbars=   True
       Bold            =   False
       Border          =   True
       ColumnCount     =   4
-      ColumnsResizable=   False
-      ColumnWidths    =   "27%,25%,20%,30%"
+      ColumnsResizable=   True
+      ColumnWidths    =   "20%,20%,10%,50%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
