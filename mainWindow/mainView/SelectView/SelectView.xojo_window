@@ -231,7 +231,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -266,7 +265,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -322,6 +320,13 @@ End
 		  selectViewController.exportAndCompare
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub CellAction(row As Integer, column As Integer)
+		  if me.RowIsFolder(row) and column = 0 then
+		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
+		  end if
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag Events ListViewRight
 	#tag Event
@@ -353,6 +358,13 @@ End
 		  refresh
 		  selectViewController.exportAndCompare
 		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub CellAction(row As Integer, column As Integer)
+		  if me.RowIsFolder(row) and column = 0 then
+		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
+		  end if
 		End Sub
 	#tag EndEvent
 #tag EndEvents
