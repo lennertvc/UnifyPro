@@ -412,7 +412,6 @@ Inherits NSViewController
 			Name="leftCount"
 			Group="Behavior"
 			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -424,7 +423,6 @@ Inherits NSViewController
 			Name="rightCount"
 			Group="Behavior"
 			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="selectedCodeLeft"
