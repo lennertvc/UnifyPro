@@ -97,9 +97,11 @@ Inherits SQLiteDatabase
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  dim fileName as String = "RegelingenDataBase.db"
 			  
 			  dim pathFinder as new JVPathFinder
-			  dim dataBaseFile as folderItem = pathFinder.findFile("RegelingenDataBase.db")
+			  dim dataBaseFile as folderItem = pathFinder.findFile(fileName)
+			  system.debuglog("Database is located at "+dataBaseFile.NativePath+" for this platform")
 			  
 			  Return  dataBaseFile
 			  

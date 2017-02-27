@@ -3,6 +3,11 @@ Protected Class UnifyPro
 Inherits NSApplicationDelegate
 	#tag Event
 		Sub Open()
+		  #if not (TargetWindows or DebugBuild) then
+		    MsgBox("this program is Windows-only")
+		    quit
+		  #endif
+		  
 		  datamodel = RegelingenDataBase.open
 		  
 		  preProcessor = new PreProcessor
