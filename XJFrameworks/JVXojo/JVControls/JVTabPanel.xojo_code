@@ -2,7 +2,7 @@
 Protected Class JVTabPanel
 Inherits TabPanel
 	#tag Method, Flags = &h0
-		Sub append(view as NSView, TabName as String)
+		Sub append(view as ContainerControl, TabName as String)
 		  
 		  
 		  dim subViewsLeft as Integer = 0
@@ -12,8 +12,9 @@ Inherits TabPanel
 		  
 		  me.append(TabName)
 		  
-		  view.Show
 		  view.EmbedWithinPanel(me,panelcount-1, subViewsLeft, subViewsTop, subViewsWidth, subViewsHeight)
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -130,7 +131,7 @@ Inherits TabPanel
 		#tag ViewProperty
 			Name="TabDefinition"
 			Group="Appearance"
-			InitialValue="Tab 0\\\\rTab 1"
+			InitialValue="Tab 0\\\\\\\\rTab 1"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty

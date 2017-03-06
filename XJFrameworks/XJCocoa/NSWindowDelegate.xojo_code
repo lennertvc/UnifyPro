@@ -25,6 +25,18 @@ Protected Interface NSWindowDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowMaximize(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowMinimize(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onWindowOpen(sender as NSWindow)
 		  
 		End Sub
@@ -32,6 +44,18 @@ Protected Interface NSWindowDelegate
 
 	#tag Method, Flags = &h0
 		Sub onWindowPaint(sender as NSWindow, g as Graphics, areas() as REALbasic.Rect)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowResized(sender as NSWindow)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onWindowResizing(sender as NSWindow)
 		  
 		End Sub
 	#tag EndMethod

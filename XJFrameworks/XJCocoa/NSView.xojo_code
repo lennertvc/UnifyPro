@@ -54,6 +54,8 @@ Inherits ContainerControl
 			    RemoveHandler activate, AddressOf mviewDelegate.onViewActivate
 			    RemoveHandler close, AddressOf mviewDelegate.onviewClose
 			    RemoveHandler contentsChanged, AddressOf mviewDelegate.onviewContentsChanged
+			    RemoveHandler resizing, AddressOf mviewDelegate.onViewResizing
+			    RemoveHandler resized, AddressOf mviewDelegate.onViewResized
 			    
 			    
 			  end if
@@ -68,6 +70,8 @@ Inherits ContainerControl
 			    AddHandler activate, AddressOf mviewDelegate.onViewActivate
 			    AddHandler close, AddressOf mviewDelegate.onViewClose
 			    AddHandler contentsChanged, AddressOf mviewDelegate.onviewContentsChanged
+			    AddHandler resizing, AddressOf mviewDelegate.onviewResizing
+			    AddHandler resized, AddressOf mviewDelegate.onviewResized
 			    
 			  end if
 			  

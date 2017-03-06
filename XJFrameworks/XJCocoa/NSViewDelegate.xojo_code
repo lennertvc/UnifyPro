@@ -24,6 +24,18 @@ Protected Interface NSViewDelegate
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub onViewResized(sender as NSView)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onViewResizing(sender as NSView)
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Note, Name = Protocol description
 		Defines the protocol all NSView-delegates must conform to
