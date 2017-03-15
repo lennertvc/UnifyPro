@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cE5E5E500
+      BackColor       =   &cE5E500E5
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -172,7 +172,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cE5E5E500
+      BackColor       =   &cE5E500E5
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -231,6 +231,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -265,6 +266,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000

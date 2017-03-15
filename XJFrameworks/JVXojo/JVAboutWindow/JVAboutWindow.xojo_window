@@ -48,6 +48,7 @@ Begin NSWIndow JVAboutWindow
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -82,6 +83,7 @@ Begin NSWIndow JVAboutWindow
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "version"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -144,6 +146,7 @@ Begin NSWIndow JVAboutWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "developer"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -178,6 +181,7 @@ Begin NSWIndow JVAboutWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "betatesting"
       TextAlign       =   0
       TextColor       =   &c00000000

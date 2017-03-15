@@ -10,7 +10,8 @@ Inherits NSApplicationDelegate
 		  
 		  datamodel = RegelingenDataBase.open
 		  
-		  preProcessor = new PreProcessor
+		  'preProcessor = new PreProcessor
+		  
 		  mainController = new mainWindowController
 		  
 		  
@@ -29,13 +30,19 @@ Inherits NSApplicationDelegate
 	#tag Method, Flags = &h0
 		Sub testRoutinecollectProjects(sender as NSButton)
 		  
-		  preProcessor.collectProjects
+		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub testRoutineFillDatabase(sender as NSButton)
-		  preProcessor.fillDatabase
+		  dim preprocess as new PreProcessor
+		  //collect all stu files
+		  a= preProcess.collectProjects
+		  //update all stu files
+		  call preProcess.updateProjects
+		  versionUpdateWindow.show
+		  
 		End Sub
 	#tag EndMethod
 
@@ -49,7 +56,7 @@ Inherits NSApplicationDelegate
 
 	#tag Method, Flags = &h0
 		Sub testRoutineUpdateprojects(sender as NSButton)
-		  preProcessor.updateProjects
+		  preProcess.updateProjects
 		End Sub
 	#tag EndMethod
 
@@ -94,10 +101,6 @@ Inherits NSApplicationDelegate
 		#tag EndGetter
 		mainWindowController As mainWindowController
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		preProcessor As PreProcessor
-	#tag EndProperty
 
 
 	#tag Constant, Name = Developer, Type = String, Dynamic = False, Default = \"Lennert Van Campenhout\nJan Verrept", Scope = Public

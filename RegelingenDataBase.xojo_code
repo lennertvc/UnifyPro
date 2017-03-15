@@ -2,11 +2,13 @@
 Protected Class RegelingenDataBase
 Inherits SQLiteDatabase
 	#tag Method, Flags = &h0
-		Function addCodeToDB(originalcode as string,cleanedupcode as String) As Boolean
+		Function addCodeToDB(originalcode as string,cleanedupcode as String,metadata as string,procesPart as string) As Boolean
 		  Dim record As New DatabaseRecord
 		  // ID will be added automatically
 		  record.Column("OriginalCode") = originalcode
 		  record.Column("CleanedUpCode") = cleanedupcode
+		  record.Column("metaData") = metadata
+		  record.Column("procesDeel") = procesPart
 		  
 		  InsertRecord("RegelingTypes", record)
 		  
@@ -20,10 +22,13 @@ Inherits SQLiteDatabase
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function addFilePath(filePath as string = "",foreignkey as integer) As Boolean
+		Function addFilePath(filePath as string,installation as string,KP as string,name as string,foreignkey as integer) As Boolean
 		  Dim record As New DatabaseRecord
 		  // ID will be added automatically
 		  record.Column("FilePath") = filepath
+		  record.Column("Installatie") = installation
+		  record.Column("kostenPlaats") = KP
+		  record.Column("naam") = name
 		  
 		  // Foreign keys
 		  record.IntegerColumn("RegelingTypeID") = foreignkey
@@ -104,6 +109,7 @@ Inherits SQLiteDatabase
 			  system.debuglog("Database is located at "+dataBaseFile.NativePath+" for this platform")
 			  
 			  Return  dataBaseFile
+			  
 			  
 			End Get
 		#tag EndGetter
