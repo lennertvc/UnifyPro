@@ -6,74 +6,43 @@ Protected Class FillDatabase
 		  Unitypro.quitall
 		  
 		  
-		  
 		  dim b() as Dictionary
 		  dim c() as Dictionary
 		  dim array0() as string
-		  dim te as string
-		  dim je as integer = 0
 		  
 		  
-		  
-		  
-		  
-		  
-		  
-		  if  conversionComplete then
+		  for j as integer = 0 to a.Ubound
 		    
-		    //return all stu files to original location
-		    while je <500
-		      for i as integer = 1 to SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").count
-		        dim s as string = SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").item(i).name
-		        for j as integer = 0 to a.Ubound
-		          te=a(j).value("file_name")
-		          if s= te then
-		            dim t as FolderItem
-		            t=new folderitem(a(j).value("file_path"),FolderItem.PathTypeNative)
-		            t.delete
-		            SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").item(i).movefileto t
-		            exit for
-		          end if
-		        next
-		      next
-		      je=je+1
-		    wend
+		    dim tt as folderitem =a(j).value("file_folderitem")
 		    
+		    //starup project + retrieve sectionnames
+		    b=preprocessor.retrievesectionnames( a(j).value("file_folderitem") )
 		    
+		    //extract original code (destination table = regelingtypes, column = originalcode)
+		    array0=preprocessor.extractoriginalcode
 		    
-		    for j as integer = 0 to a.Ubound
+		    //convert original code (destination table = regelingtypes, column = cleanedupcode)
+		    c=preprocessor.convertCode(array0)
+		    
+		    //write to DB (table = RegelingTypes)
+		    
+		    for i as integer =0 to c.ubound
 		      
-		      dim tt as folderitem =a(j).value("file_folderitem")
+		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
+		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") , datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")))
+		      end if
+		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
+		        call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , " " , c(i).value("proces"))
+		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"))
+		      end if
 		      
-		      //starup project + retrieve sectionnames
-		      b=preprocessor.retrievesectionnames( a(j).value("file_folderitem") )
 		      
-		      //extract original code (destination table = regelingtypes, column = originalcode)
-		      array0=preprocessor.extractoriginalcode
-		      
-		      //convert original code (destination table = regelingtypes, column = cleanedupcode)
-		      c=preprocessor.convertCode(array0)
-		      
-		      //write to DB (table = RegelingTypes)
-		      
-		      for i as integer =0 to c.ubound
-		        
-		        if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
-		          call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") , datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")))
-		        end if
-		        if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
-		          call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , " " , c(i).value("proces"))
-		          call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"))
-		        end if
-		        
-		        
-		      next
-		      
-		      // Quit Unity if it's still running
-		      Unitypro.quitall
 		    next
 		    
-		  end if
+		    // Quit Unity if it's still running
+		    Unitypro.quitall
+		  next
+		  
 		End Sub
 	#tag EndMethod
 

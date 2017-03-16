@@ -10,7 +10,7 @@ Protected Class PreProcessor
 		  
 		  If rootFolder<> Nil Then
 		    dim oPathFinder as new LVCPathFinder
-		    dim oProgramFinder as new JVPathFinder1
+		    dim oProgramFinder as new JVPathFind
 		    dim aResult() as FolderItem
 		    dim aBackupFile() as FolderItem
 		    
@@ -50,22 +50,28 @@ Protected Class PreProcessor
 
 	#tag Method, Flags = &h0
 		Sub constructor()
+		  
+		  dim deleter as new DeleteFolderContent
+		  
 		  dim sourceFolderParent as folderitem =  SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  sourceFolderParent = nil or not sourceFolderParent.Exists then
 		    sourceFolderParent.CreateAsFolder
 		  end if
 		  
 		  sourceFolder =  SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects")
+		  call deleter.DeleteEntireFolder(sourcefolder)
 		  if  sourceFolder = nil or not sourceFolder.Exists then
 		    sourceFolder.CreateAsFolder
 		  end if
 		  
 		  exportedSectionsFolder =  SpecialFolder.ApplicationData.child("UnifyPro").Child("UnitySectionsExport")
+		  call deleter.DeleteEntireFolder(exportedSectionsFolder)
 		  if  exportedSectionsFolder = nil or not exportedSectionsFolder.Exists then
 		    exportedSectionsFolder.CreateAsFolder
 		  end if
 		  
 		  versionFolder =  SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityVersion")
+		  call deleter.DeleteEntireFolder(versionFolder)
 		  if  versionFolder = nil or not versionFolder.Exists then
 		    versionFolder.CreateAsFolder
 		  end if
@@ -700,15 +706,6 @@ Protected Class PreProcessor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub fillDatabase()
-		  
-		  
-		  
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function listProjectFiles() As FolderItem()
 		  dim allProjectFiles() as FolderItem
 		  
@@ -810,6 +807,36 @@ Protected Class PreProcessor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub returnPrograms()
+		  // Quit Unity if it's still running
+		  Unitypro.quitall
+		  
+		  dim te as string
+		  dim je as integer = 0
+		  
+		  
+		  
+		  //return all stu files to original location
+		  while je <500
+		    for i as integer = 1 to SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").count
+		      dim s as string = SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").item(i).name
+		      for j as integer = 0 to a.Ubound
+		        te=a(j).value("file_name")
+		        if s= te then
+		          dim t as FolderItem
+		          t=new folderitem(a(j).value("file_path"),FolderItem.PathTypeNative)
+		          t.delete
+		          SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects").item(i).movefileto t
+		          exit for
+		        end if
+		      next
+		    next
+		    je=je+1
+		  wend
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub updateProjects()
 		  //   Insert Lennerts Update-code here (Conversie naar laatste versie)
 		  
@@ -820,6 +847,10 @@ Protected Class PreProcessor
 		  for index as integer = 1 to versionFolder.count
 		    aFiles.append(versionFolder.item(index))
 		  next
+		  
+		  
+		  
+		  
 		  
 		  
 		  

@@ -27,7 +27,6 @@ Begin Window versionUpdateWindow
    Visible         =   True
    Width           =   600
    Begin Timer Timer1
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -36,7 +35,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer2
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -45,7 +43,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer3
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -54,7 +51,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer_0
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -63,7 +59,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer4
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -72,7 +67,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer5
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -81,7 +75,6 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer6
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -210,11 +203,6 @@ End
 		    if index > aFiles.ubound +1  then
 		      conversionComplete=True
 		      versionUpdateWindow.Close
-		      dim filler as new FillDatabase
-		      dim preprocess as new PreProcessor
-		      dim datamodel as new RegelingenDataBase
-		      datamodel = RegelingenDataBase.open
-		      filler.addData(preprocess,datamodel,a)
 		    end if
 		    
 		  end if
