@@ -42,7 +42,7 @@ Inherits UnityProServer.Project
 		    
 		    // Export it to a temp file
 		    dim section as UnityProServer.Section = item
-		    section.Export(section.name, Integer(exportOption))
+		    section.Export(SpecialFolder.ApplicationData.child("UnifyPro").Child("UnitySectionsExport").NativePath+section.name+".xst", Integer(exportOption))
 		    
 		  elseif item isa UnityProServer.Sr then 
 		    
@@ -101,7 +101,7 @@ Inherits UnityProServer.Project
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function sectionsWithPrefix(tagPrefix as String) As UnityProServer.Section()
+		Function sectionsWithPrefix() As UnityProServer.Section()
 		  dim sectionList() as UnityProServer.Section
 		  
 		  dim sections as UnityProServer.Sections  =  mastTask.Sections
@@ -110,14 +110,14 @@ Inherits UnityProServer.Project
 		  
 		  for sectionNumber = 0 to numberOfSections-1
 		    dim section as UnityProServer.Section = sections.JVItem(sectionNumber)
-		    dim sectionPrefix as String = Uppercase(left(Trim(section.name),Len(tagPrefix)))
-		    if (sectionPrefix = upperCase(tagPrefix))  then 
+		    dim sectionPrefix as String =section.name.left(2)
+		    
+		    if (sectionPrefix = "R_")  OR  (sectionPrefix = "D_") OR  (sectionPrefix = "R0") OR  (sectionPrefix = "R1") OR  (sectionPrefix = "R2") OR  (sectionPrefix = "R3") OR  (sectionPrefix = "R4") OR  (sectionPrefix = "R5") OR  (sectionPrefix = "R-") OR  (sectionPrefix = "D-")  then 
 		      sectionList.Append(section)
 		    end if
 		  next
 		  
 		  return sectionList
-		  
 		End Function
 	#tag EndMethod
 

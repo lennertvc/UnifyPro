@@ -1,29 +1,28 @@
 #tag Window
 Begin NSView JVDevelopmentView
+   AcceptFocus     =   False
+   AcceptTabs      =   True
+   AutoDeactivate  =   True
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
-   CloseButton     =   True
    Compatibility   =   ""
-   Composite       =   False
-   Frame           =   0
-   FullScreen      =   False
-   FullScreenButton=   False
+   Enabled         =   True
+   EraseBackground =   True
    HasBackColor    =   False
    Height          =   280
-   ImplicitInstance=   True
-   LiveResize      =   True
-   MacProcID       =   0
-   MaxHeight       =   32000
-   MaximizeButton  =   True
-   MaxWidth        =   32000
-   MenuBar         =   0
-   MenuBarVisible  =   True
-   MinHeight       =   64
-   MinimizeButton  =   True
-   MinWidth        =   64
-   Placement       =   0
-   Resizeable      =   True
-   Title           =   "Untitled"
+   HelpTag         =   ""
+   InitialParent   =   ""
+   Left            =   0
+   LockBottom      =   False
+   LockLeft        =   False
+   LockRight       =   False
+   LockTop         =   False
+   TabIndex        =   0
+   TabPanelIndex   =   0
+   TabStop         =   True
+   Top             =   0
+   Transparent     =   True
+   UseFocusRing    =   False
    Visible         =   True
    Width           =   514
 End

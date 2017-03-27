@@ -1,78 +1,99 @@
 #tag Window
-Begin NSWIndow JVAboutWindow
+Begin Window versionUpdateWindow
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   True
    Compatibility   =   ""
    Composite       =   False
-   Frame           =   6
+   Frame           =   0
    FullScreen      =   False
    FullScreenButton=   False
-   HasBackColor    =   True
-   Height          =   350
-   ImplicitInstance=   False
-   LiveResize      =   False
+   HasBackColor    =   False
+   Height          =   400
+   ImplicitInstance=   True
+   LiveResize      =   True
    MacProcID       =   0
-   MaxHeight       =   350
-   MaximizeButton  =   False
-   MaxWidth        =   600
+   MaxHeight       =   32000
+   MaximizeButton  =   True
+   MaxWidth        =   32000
    MenuBar         =   0
    MenuBarVisible  =   True
-   MinHeight       =   350
+   MinHeight       =   64
    MinimizeButton  =   True
-   MinWidth        =   600
+   MinWidth        =   64
    Placement       =   0
-   Resizeable      =   False
-   Title           =   "About this app"
-   Visible         =   False
+   Resizeable      =   True
+   Title           =   "AUTOMATIC VERSION UPDATE"
+   Visible         =   True
    Width           =   600
-   Begin Label AppNameLabel
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   150
-      HelpTag         =   ""
+   Begin Timer Timer1
       Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   132
-      LockBottom      =   True
       LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   True
-      Multiline       =   True
+      Mode            =   2
+      Period          =   1000
       Scope           =   0
-      Selectable      =   False
-      TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   "Untitled"
-      TextAlign       =   0
-      TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   32.0
-      TextUnit        =   0
-      Top             =   20
-      Transparent     =   True
-      Underline       =   False
-      Visible         =   True
-      Width           =   448
    End
-   Begin Label appVersionLabel
+   Begin Timer Timer2
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   6000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer Timer3
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   20000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer Timer_0
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   1000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer Timer4
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   15000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer Timer5
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   3000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer Timer6
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   45000
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Label Label1
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Height          =   72
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   20
+      Left            =   210
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -81,168 +102,183 @@ Begin NSWIndow JVAboutWindow
       Multiline       =   False
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   2
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   "version"
+      Text            =   "DO NOT CLOSE THIS WINDOW"
       TextAlign       =   0
       TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   14.0
+      TextSize        =   0.0
       TextUnit        =   0
-      Top             =   140
+      Top             =   125
       Transparent     =   True
       Underline       =   False
       Visible         =   True
-      Width           =   312
-   End
-   Begin Canvas iconBox
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
-      Backdrop        =   0
-      DoubleBuffer    =   False
-      Enabled         =   True
-      EraseBackground =   True
-      Height          =   100
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   3
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   20
-      Transparent     =   True
-      UseFocusRing    =   True
-      Visible         =   True
-      Width           =   100
-   End
-   Begin Label developerLabel
-      AutoDeactivate  =   True
-      Bold            =   True
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   76
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   True
-      Scope           =   0
-      Selectable      =   False
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   "developer"
-      TextAlign       =   0
-      TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   14.0
-      TextUnit        =   0
-      Top             =   172
-      Transparent     =   True
-      Underline       =   False
-      Visible         =   True
-      Width           =   560
-   End
-   Begin Label betaTestingLabel
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   70
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   True
-      Scope           =   0
-      Selectable      =   False
-      TabIndex        =   5
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   "betatesting"
-      TextAlign       =   0
-      TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   14.0
-      TextUnit        =   0
-      Top             =   260
-      Transparent     =   True
-      Underline       =   False
-      Visible         =   True
-      Width           =   560
+      Width           =   176
    End
 End
 #tag EndWindow
 
 #tag WindowCode
-	#tag ComputedProperty, Flags = &h21
-		#tag Getter
-			Get
-			  return JVAboutWindowController(owner)
-			End Get
-		#tag EndGetter
-		Private aboutWindowController As JVAboutWindowController
-	#tag EndComputedProperty
-
-
 #tag EndWindowCode
 
+#tag Events Timer1
+	#tag Event
+		Sub Action()
+		  if bool then
+		    dim scriptEngine as new OLEObject("WScript.Shell")
+		    scriptEngine.Sendkeys("^s")
+		    timer1.Enabled=false
+		    timer2.Enabled=true
+		    system.DebugLog("CTRL S!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer2
+	#tag Event
+		Sub Action()
+		  if bool then
+		    dim scriptEngine as new OLEObject("WScript.Shell")
+		    scriptEngine.Sendkeys("{ENTER}")
+		    timer2.Enabled=false
+		    timer3.Enabled=true
+		    system.DebugLog("ENTER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer3
+	#tag Event
+		Sub Action()
+		  if bool then
+		    dim scriptEngine as new OLEObject("WScript.Shell")
+		    unitypro.QuitAll
+		    timer3.Enabled=false
+		    IsComplete=true
+		    System.DebugLog("QUIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		  end if
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer_0
+	#tag Event
+		Sub Action()
+		  file = new FolderItem 
+		  file = SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityVersion")
+		  
+		  
+		  
+		  If index <= aFiles.ubound+1 and index<>backupindex and not conversionComplete then
+		    timer1.Enabled=false
+		    timer2.Enabled=false
+		    timer3.Enabled=false
+		    timer4.Enabled=true
+		    timer5.Enabled=true
+		    timer6.Enabled=true
+		    backupindex=index
+		    
+		    afiles(index-1).Launch
+		    
+		  end if
+		  
+		  bool=IsRunning and IsOpen
+		  
+		  
+		  if IsComplete and not isrunning then
+		    
+		    system.DebugLog(cutstring+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????????????????????????????????")
+		    for i as integer = 1 to file.count
+		      if file.item(i).name.right(4)=".stu"then
+		        file.item(i).MoveFileTo SpecialFolder.ApplicationData.child("UnifyPro").Child("UnityProjects")
+		      end if
+		    next
+		    index=index+1
+		    IsComplete=false
+		    timer4.Enabled=true
+		    
+		    
+		    if index > aFiles.ubound +1  then
+		      conversionComplete=True
+		      versionUpdateWindow.Close
+		    end if
+		    
+		  end if
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer4
+	#tag Event
+		Sub Action()
+		  if not bool then
+		    dim scriptEngine as new OLEObject("WScript.Shell")
+		    scriptEngine.Sendkeys("{ENTER}")
+		    timer4.enabled=false
+		    system.DebugLog("FIRST ENTER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer5
+	#tag Event
+		Sub Action()
+		  if bool then
+		    timer5.Enabled=false
+		    timer1.Enabled=true
+		    system.DebugLog("PAUZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer6
+	#tag Event
+		Sub Action()
+		  if not bool then
+		    dim scriptEngine as new OLEObject("WScript.Shell")
+		    scriptEngine.Sendkeys("{ENTER}")
+		    system.DebugLog("SECOND ENTER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		    timer6.Enabled=false
+		  end if
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="BackColor"
 		Visible=true
-		Group="Appearance"
+		Group="Background"
 		InitialValue="&hFFFFFF"
 		Type="Color"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Backdrop"
 		Visible=true
-		Group="Appearance"
+		Group="Background"
 		Type="Picture"
 		EditorType="Picture"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="CloseButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Composite"
-		Group="Appearance"
+		Group="OS X (Carbon)"
 		InitialValue="False"
 		Type="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Frame"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="0"
 		Type="Integer"
 		EditorType="Enum"
@@ -262,7 +298,7 @@ End
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="FullScreen"
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -270,7 +306,7 @@ End
 	#tag ViewProperty
 		Name="FullScreenButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="False"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -278,21 +314,21 @@ End
 	#tag ViewProperty
 		Name="HasBackColor"
 		Visible=true
-		Group="Appearance"
+		Group="Background"
 		InitialValue="False"
 		Type="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Height"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="400"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="ImplicitInstance"
 		Visible=true
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -307,28 +343,28 @@ End
 	#tag ViewProperty
 		Name="LiveResize"
 		Visible=true
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MacProcID"
-		Group="Appearance"
+		Group="OS X (Carbon)"
 		InitialValue="0"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MaxHeight"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="32000"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MaximizeButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -336,20 +372,20 @@ End
 	#tag ViewProperty
 		Name="MaxWidth"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="32000"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MenuBar"
 		Visible=true
-		Group="Appearance"
+		Group="Menus"
 		Type="MenuBar"
 		EditorType="MenuBar"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MenuBarVisible"
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -357,14 +393,14 @@ End
 	#tag ViewProperty
 		Name="MinHeight"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="64"
 		Type="Integer"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="MinimizeButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -372,7 +408,7 @@ End
 	#tag ViewProperty
 		Name="MinWidth"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="64"
 		Type="Integer"
 	#tag EndViewProperty
@@ -386,7 +422,7 @@ End
 	#tag ViewProperty
 		Name="Placement"
 		Visible=true
-		Group="Position"
+		Group="Behavior"
 		InitialValue="0"
 		Type="Integer"
 		EditorType="Enum"
@@ -401,7 +437,7 @@ End
 	#tag ViewProperty
 		Name="Resizeable"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -416,14 +452,14 @@ End
 	#tag ViewProperty
 		Name="Title"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="Untitled"
 		Type="String"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Visible"
 		Visible=true
-		Group="Appearance"
+		Group="Behavior"
 		InitialValue="True"
 		Type="Boolean"
 		EditorType="Boolean"
@@ -431,7 +467,7 @@ End
 	#tag ViewProperty
 		Name="Width"
 		Visible=true
-		Group="Position"
+		Group="Size"
 		InitialValue="600"
 		Type="Integer"
 	#tag EndViewProperty
