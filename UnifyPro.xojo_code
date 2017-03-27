@@ -8,15 +8,19 @@ Inherits NSApplicationDelegate
 		    quit
 		  #endif
 		  
+		  Unitypro.QuitAll
+		  
 		  datamodel = RegelingenDataBase.open
 		  
-		  preProcessor = new PreProcessor
+		  preProcess= new PreProcessor
+		  
 		  mainController = new mainWindowController
 		  
 		  
 		  #if DebugBuild then
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Collect Projects",  NSButton.action(addressof  testRoutineCollectProjects))
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Update Projects",  NSButton.action(addressof testRoutineUpdateProjects))
+		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Return to original",  NSButton.action(addressof testRoutineReturntoOriginal))
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Fill database",  NSButton.action(addressof testRoutineFillDatabase))
 		    
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Lees Multiline",  NSButton.action(addressof testRoutineMultiLine))
@@ -28,14 +32,19 @@ Inherits NSApplicationDelegate
 
 	#tag Method, Flags = &h0
 		Sub testRoutinecollectProjects(sender as NSButton)
-		  
-		  preProcessor.collectProjects
+		  //collect all stu files
+		  a= preProcess.collectProjects
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub testRoutineFillDatabase(sender as NSButton)
-		  preProcessor.fillDatabase
+		  dim filler as new FillDatabase
+		  dim datamodel as new RegelingenDataBase
+		  
+		  datamodel = RegelingenDataBase.open
+		  filler.addData(preprocess,datamodel,a)
+		  
 		End Sub
 	#tag EndMethod
 
@@ -48,8 +57,17 @@ Inherits NSApplicationDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub testRoutineReturntoOriginal(sender as NSButton)
+		  //collect all stu files
+		  call preProcess.returnPrograms
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub testRoutineUpdateprojects(sender as NSButton)
-		  preProcessor.updateProjects
+		  //update all stu files
+		  call preProcess.updateProjects
+		  versionUpdateWindow.show
 		End Sub
 	#tag EndMethod
 
@@ -96,7 +114,7 @@ Inherits NSApplicationDelegate
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		preProcessor As PreProcessor
+		preprocess As PreProcessor
 	#tag EndProperty
 
 
