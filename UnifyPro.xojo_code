@@ -8,6 +8,8 @@ Inherits NSApplicationDelegate
 		    quit
 		  #endif
 		  
+		  Unitypro.QuitAll
+		  
 		  datamodel = RegelingenDataBase.open
 		  
 		  preProcess= new PreProcessor

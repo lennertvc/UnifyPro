@@ -2,13 +2,15 @@
 Protected Class RegelingenDataBase
 Inherits SQLiteDatabase
 	#tag Method, Flags = &h0
-		Function addCodeToDB(originalcode as string,cleanedupcode as String,metadata as string,procesPart as string) As Boolean
+		Function addCodeToDB(originalcode as string,cleanedupcode as String,procesPart as string,metadata as integer) As Boolean
 		  Dim record As New DatabaseRecord
 		  // ID will be added automatically
 		  record.Column("OriginalCode") = originalcode
 		  record.Column("CleanedUpCode") = cleanedupcode
-		  record.Column("metaData") = metadata
 		  record.Column("procesDeel") = procesPart
+		  
+		  // Foreign keys
+		  record.IntegerColumn("metaData") = metadata
 		  
 		  InsertRecord("RegelingTypes", record)
 		  
@@ -22,18 +24,40 @@ Inherits SQLiteDatabase
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function addFilePath(filePath as string,installation as string,KP as string,name as string,foreignkey as integer) As Boolean
+		Function addFilePath(filePath as string,installation as string,KP as string,name as string,foreignkey as integer,FM as string) As Boolean
 		  Dim record As New DatabaseRecord
 		  // ID will be added automatically
 		  record.Column("FilePath") = filepath
 		  record.Column("Installatie") = installation
 		  record.Column("kostenPlaats") = KP
 		  record.Column("naam") = name
+		  record.Column("FM") = FM
 		  
 		  // Foreign keys
 		  record.IntegerColumn("RegelingTypeID") = foreignkey
 		  
 		  InsertRecord("Regelingen", record)
+		  
+		  If Error Then
+		    MsgBox("DB Error: " + ErrorMessage)
+		    Return False
+		  End If
+		  
+		  Return True
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function addMetaData(Number0 as integer,Number1 as integer,Number2 as integer,Number3 as string,Number4 as string) As Boolean
+		  Dim record As New DatabaseRecord
+		  // ID will be added automatically
+		  record.Column("NumberW") =str( Number0)
+		  record.Column("NumberM") = str(Number1)
+		  record.Column("NumberV") = str(Number2)
+		  record.Column("Config") = Number3
+		  record.Column("PIDControl") = Number4
+		  
+		  InsertRecord("Metadata", record)
 		  
 		  If Error Then
 		    MsgBox("DB Error: " + ErrorMessage)
@@ -53,6 +77,22 @@ Inherits SQLiteDatabase
 		    system.DebugLog("ident")
 		    previousRecords.MoveFirst 
 		    number=previousRecords.Field("regelingTypeID").IntegerValue
+		    return number
+		  end if
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function lookupRecordMeta(lookupValue0 as string,lookupValue1 as string,lookupValue2 as string,lookupValue3 as string,lookupValue4 as string) As integer
+		  dim number as integer =0
+		  'dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From "+lookupTable+" WHERE "+lookupField+" = '"+lookupValue+"'")
+		  dim previousRecords as Recordset = SQLSelect("Select metaDataID From metaData where numberW= "+"'"+lookupValue0+"'"+" and numberM= "+"'"+lookupValue1+"'"+" and numberV= "+"'"+lookupValue2+"'"+" and Config= "+"'"+lookupValue3+"'"+" and PIDControl= "+"'"+lookupValue4+"'")
+		  if previousrecords.fieldcount>=1 then
+		    system.DebugLog("ident")
+		    previousRecords.MoveFirst 
+		    number=previousRecords.Field("MetaDataID").IntegerValue
 		    return number
 		  end if
 		  

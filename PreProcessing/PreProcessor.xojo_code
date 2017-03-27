@@ -13,6 +13,7 @@ Protected Class PreProcessor
 		    dim oProgramFinder as new JVPathFind
 		    dim aResult() as FolderItem
 		    dim aBackupFile() as FolderItem
+		    dim aCompare() as string
 		    
 		    oPathFinder.basefolder = rootFolder
 		    aResult=oPathFinder.findFile("huidig")
@@ -20,26 +21,32 @@ Protected Class PreProcessor
 		    for index10 as integer = 0 to aResult.Ubound
 		      oProgramFinder.baseFolder=aResult(index10)
 		      aBackupfile=oProgramFinder.findFile("stu")
+		      
 		      for index11 as integer=0 to aBackupFile.Ubound
-		        aBackupFile(index11).copyfileto  versionFolder
-		        aFilePath.append(aBackupFile(index11).NativePath)
+		        if aCompare.IndexOf(aBackupFile(index11).Name) =-1 then
+		          
+		          aBackupFile(index11).copyfileto  versionFolder
+		          aFilePath.append(aBackupFile(index11).NativePath)
+		          dim myDictionary as new Dictionary
+		          myDictionary.value("file_path")=aBackupFile(index11).NativePath
+		          myDictionary.value("file_name")=aBackupFile(index11).Name
+		          
+		          Dim re As New RegEx
+		          dim match as RegExMatch
+		          dim matchString as string
+		          re.SearchPattern = "([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+) - [0-9]{4}"
+		          match = re.Search(aFilepath(aFilepath.Ubound))
+		          matchString=match.SubExpressionString(0)
+		          Dim value As String = matchString
+		          
+		          myDictionary.value("file_KP")=value.Right(4)
+		          myDictionary.value("file_RWZI")=value.Replace(value.Right(7),"")
+		          myDictionary.value("file_folderitem")=aBackupFile(index11)
+		          aMyDictionary.append(myDictionary)
+		        end if 
 		        
-		        dim myDictionary as new Dictionary
-		        myDictionary.value("file_path")=aBackupFile(index11).NativePath
-		        myDictionary.value("file_name")=aBackupFile(index11).Name
+		        aCompare.Append(aBackupFile(index11).name)
 		        
-		        Dim re As New RegEx
-		        dim match as RegExMatch
-		        dim matchString as string
-		        re.SearchPattern = "([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+) - [0-9]{4}"
-		        match = re.Search(aFilepath(aFilepath.Ubound))
-		        matchString=match.SubExpressionString(0)
-		        Dim value As String = matchString
-		        
-		        myDictionary.value("file_KP")=value.Right(4)
-		        myDictionary.value("file_RWZI")=value.Replace(value.Right(7),"")
-		        myDictionary.value("file_folderitem")=aBackupFile(index11)
-		        aMyDictionary.append(myDictionary)
 		      next
 		    next
 		  End If
@@ -91,6 +98,67 @@ Protected Class PreProcessor
 		    hulp=arrayOriginalCode(i)
 		    Dim re As New RegEx
 		    dim hulpkarakter as new RegExMatch
+		    dim myDictionary as new Dictionary ("proces":"onbekend")
+		    
+		    // extra info uit oproeproutine halen
+		    dim matchbel as new RegExMatch
+		    re.SearchPattern = "Bbdeni\s*:=\s*%MW"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      myDictionary.value("proces")="subregeling beluchting"
+		    end if
+		    
+		    re.SearchPattern = "Bbnpr"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      myDictionary.value("proces")="beluchting - one sensor"
+		    end if
+		    
+		    re.SearchPattern = "Bbcyc1"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      myDictionary.value("proces")="beluchting - two sensor"
+		    end if
+		    
+		    re.SearchPattern = "BbselNPR"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      myDictionary.value("proces")="beluchting (combi)"
+		    end if
+		    
+		    re.SearchPattern = "Bbpara"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      myDictionary.value("proces")="master/slave beluchting"
+		    end if
+		    
+		    re.SearchPattern = "BbselNPR\s*:=\s*true"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      if  myDictionary.value("proces")="onbekend" or myDictionary.value("proces")="beluchting regeling (combi)" or myDictionary.value("proces")="one sensor beluchting" or myDictionary.value("proces")="two sensor beluchting"then
+		        myDictionary.value("proces")="one sensor beluchting (combi)"
+		      else
+		        myDictionary.value("proces")=myDictionary.value("proces")+" - one sensor"
+		      end if
+		    end if
+		    
+		    re.SearchPattern = "BbselNiAm\s*:=\s*true"
+		    matchbel = re.Search(hulp)
+		    if matchbel <> nil then
+		      if  myDictionary.value("proces")="onbekend" or myDictionary.value("proces")="beluchting regeling (combi)" or myDictionary.value("proces")="one sensor beluchting" or myDictionary.value("proces")="two sensor beluchting"then
+		        myDictionary.value("proces")="two sensor beluchting (combi)"
+		      else
+		        myDictionary.value("proces")=myDictionary.value("proces")+" - two sensor"
+		      end if
+		    end if
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
 		    
 		    re.SearchPattern = "\t"
 		    re.ReplacementPattern = " "
@@ -162,8 +230,18 @@ Protected Class PreProcessor
 		    re.Options.ReplaceAllMatches = True
 		    hulp=re.Replace(hulp)
 		    
+		    re.SearchPattern = "DEC\("
+		    re.ReplacementPattern = "DEC ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
 		    re.SearchPattern = "INC_INT\("
 		    re.ReplacementPattern = "INC_INT ("
+		    re.Options.ReplaceAllMatches = True
+		    hulp=re.Replace(hulp)
+		    
+		    re.SearchPattern = "INC\("
+		    re.ReplacementPattern = "INC ("
 		    re.Options.ReplaceAllMatches = True
 		    hulp=re.Replace(hulp)
 		    
@@ -561,105 +639,267 @@ Protected Class PreProcessor
 		    
 		    ArrayCleanedUpCode.append(hulp)
 		    
-		    dim myDictionary as new Dictionary
+		    
 		    myDictionary.value("cleanedUpCode")=arrayCleanedUpCode(i)
 		    Select Case regelingIndex
 		    Case "og"
-		        myDictionary.value("proces")="influent"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "in"
-		        myDictionary.value("proces")="monstername"
+		      myDictionary.value("proces")="monstername"
 		    Case "mn"
-		        myDictionary.value("proces")="monstername"
+		      myDictionary.value("proces")="monstername"
 		    Case "ri"
-		        myDictionary.value("proces")="roostergemaal"
+		      myDictionary.value("proces")="roosterinstallatie"
 		    Case "tu"
-		        myDictionary.value("proces")="turbiditeit"
+		      myDictionary.value("proces")="turbiditeit"
 		    Case "tp"
-		        myDictionary.value("proces")="regenwaterput"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "ca"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "cd"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "se"
-		        myDictionary.value("proces")="selector"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "pp"
-		        myDictionary.value("proces")="defosfatatie"
+		      myDictionary.value("proces")="defosfatatie"
 		    Case "pd"
-		        myDictionary.value("proces")="polymeerdosering"
+		      myDictionary.value("proces")="polymeerdosering"
 		    Case "sb"
-		        myDictionary.value("proces")="slibstokkage"
+		      myDictionary.value("proces")="slibstokkage"
 		    Case "ss"
-		        myDictionary.value("proces")="slibstokkage"
+		      myDictionary.value("proces")="slibstokkage"
 		    Case "vs"
-		        myDictionary.value("proces")="voortstuwing"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "vm"
-		        myDictionary.value("proces")="voortstuwing"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "ns"
-		        myDictionary.value("proces")="influentverdeling"
+		      myDictionary.value("proces")="influentverdeling"
 		    Case "sr"
-		        myDictionary.value("proces")="slibrecirculatie"
+		      myDictionary.value("proces")="slibrecirculatie"
 		    Case "bb"
+		      if myDictionary.value("proces")="onbekend" then
 		        myDictionary.value("proces")="beluchting"
+		      end if
 		    Case "fr"
-		        myDictionary.value("proces")="Krüger"
+		      myDictionary.value("proces")="Krüger"
 		    Case "sw"
-		        myDictionary.value("proces")="slibontwatering"
+		      myDictionary.value("proces")="slibontwatering"
 		    Case "st"
-		        myDictionary.value("proces")="slibtransport"
+		      myDictionary.value("proces")="slibtransport"
 		    Case "sv"
-		        myDictionary.value("proces")="slibrecirculatie verdeling"
+		      myDictionary.value("proces")="slibrecirculatie verdeling"
 		    Case "zv"
-		        myDictionary.value("proces")="zandvang"
+		      myDictionary.value("proces")="zandvang"
 		    Case "qb"
-		        myDictionary.value("proces")="debietbewaking"
+		      myDictionary.value("proces")="debietbewaking"
 		    Case "cv"
-		        myDictionary.value("proces")="condensventielen"
+		      myDictionary.value("proces")="condensventielen"
 		    Case "sb"
-		        myDictionary.value("proces")="mixing"
+		      myDictionary.value("proces")="mixing"
 		    Case "so"
-		        myDictionary.value("proces")="slibopstart"
+		      myDictionary.value("proces")="slibopstart"
 		    Case "dl"
-		        myDictionary.value("proces")="drijflaag"
+		      myDictionary.value("proces")="drijflaag"
 		    Case "rb"
-		        myDictionary.value("proces")="regenbezinking"
+		      myDictionary.value("proces")="regenbezinking"
 		    Case "mt"
-		        myDictionary.value("proces")="slibaanvoer MBR"
+		      myDictionary.value("proces")="slibaanvoer MBR"
 		    Case "mp"
-		        myDictionary.value("proces")="permeaatonttrekking MBR"
+		      myDictionary.value("proces")="permeaatonttrekking MBR"
 		    Case "pm"
-		        myDictionary.value("proces")="permeaatonttrekking MBR"
+		      myDictionary.value("proces")="permeaatonttrekking MBR"
 		    Case "mc"
-		        myDictionary.value("proces")="maintenance cleaning MBR"
+		      myDictionary.value("proces")="maintenance cleaning MBR"
 		    Case "ml"
-		        myDictionary.value("proces")="luchtaanvoer MBR"
+		      myDictionary.value("proces")="luchtaanvoer MBR"
 		    Case "mb"
-		        myDictionary.value("proces")="luchtaanvoer MBR"
+		      myDictionary.value("proces")="luchtaanvoer MBR"
 		    Case "tg"
-		        myDictionary.value("proces")="terreinriolering"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "sa"
-		        myDictionary.value("proces")="slibaanvoer"
+		      myDictionary.value("proces")="slibaanvoer"
 		    Case "sc"
-		        myDictionary.value("proces")="slibconditionering"
+		      myDictionary.value("proces")="slibconditionering"
 		    Case "bl"
-		        myDictionary.value("proces")="beluchting"
+		      myDictionary.value("proces")="beluchting"
+		    Case "ba"
+		      myDictionary.value("proces")="beluchting"
 		    Case "ve"
-		        myDictionary.value("proces")="ontwatering blowers"
+		      myDictionary.value("proces")="ontwatering blowers"
 		    Case "ef"
-		        myDictionary.value("proces")="effluent"
+		      myDictionary.value("proces")="effluent"
 		    Case "so"
-		        myDictionary.value("proces")="slibopstart"
+		      myDictionary.value("proces")="slibopstart"
 		    Case "ol"
-		        myDictionary.value("proces")="ontluchting"
+		      myDictionary.value("proces")="ontluchting"
 		    Case "sk"
-		        myDictionary.value("proces")="container dosering"
-		        
+		      myDictionary.value("proces")="container dosering"
+		    Case "dr"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
+		    Case "um"
+		      myDictionary.value("proces")="unitank"
+		    Case "ba"
+		      myDictionary.value("proces")="batchsturing"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "si"
+		      myDictionary.value("proces")="secundair spui"
+		    Case "cm"
+		      myDictionary.value("proces")="koolstofdosering"
+		    Case "cs"
+		      myDictionary.value("proces")="koolstofdosering"
+		    Case "vb"
+		      myDictionary.value("proces")="looptijd/stoptijd"
+		    Case "sp"
+		      myDictionary.value("proces")="spui"
+		    Case "cf"
+		      myDictionary.value("proces")="slibafvoer"
+		    Case "cw"
+		      myDictionary.value("proces")="centrifuge"
+		    Case "ni"
+		      myDictionary.value("proces")="niveausturing"
+		    Case "rp"
+		      myDictionary.value("proces")="filterpers"  
+		    Case "fd"
+		      myDictionary.value("proces")="dosering filterpers"
+		    Case "dp"
+		      myDictionary.value("proces")="drijflaagpomp"
+		    Case "es"
+		      myDictionary.value("proces")="roosterinstallatie"
+		    Case "fb"
+		      myDictionary.value("proces")="Krüger"
+		    Case "os"
+		      myDictionary.value("proces")="overstort"
+		    Case "bp"
+		      myDictionary.value("proces")="backpuls MBR"
+		    Case "ro"
+		      myDictionary.value("proces")="roosterinstallatie"
+		    Case "ms"
+		      myDictionary.value("proces")="slibaanvoer MBR"
+		    Case "an"
+		      myDictionary.value("proces")="looptijd/stoptijd"
+		    Case "no"
+		      myDictionary.value("proces")="noodkoeling"
+		    Case "as"
+		      myDictionary.value("proces")="anit-schuim"
+		    Case "ww"
+		      myDictionary.value("proces")="warmtewisseling"
+		    Case "su"
+		      myDictionary.value("proces")="septische unit"
+		    Case "vd"
+		      myDictionary.value("proces")="voeding zandfilter"
+		    Case "db"
+		      myDictionary.value("proces")="koolstofdosering zandfilter"
+		    Case "pc"
+		      myDictionary.value("proces")="koolstofdosering"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "or"
+		      myDictionary.value("proces")="slibrecirculatie"
+		    Case "rv"
+		      myDictionary.value("proces")="slibrecirculatieverdeling"
+		    Case "sg"
+		      myDictionary.value("proces")="stormgemaal"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "vz"
+		      myDictionary.value("proces")="voeding zandfilter"
+		    Case "lz"
+		      myDictionary.value("proces")="lucht zandfilter"
+		    Case "cz"
+		      myDictionary.value("proces")="koolstofdosering zandfilter"
+		    Case "eg"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "al"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
+		    Case "ps"
+		      myDictionary.value("proces")="effluentgemaal"
+		    Case "tw"
+		      myDictionary.value("proces")="Krüger"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "sl"
+		      myDictionary.value("proces")="slibtransport"
+		    Case "iv"
+		      myDictionary.value("proces")="influentverdeling"
+		    Case "re"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
+		    Case "rf"
+		      myDictionary.value("proces")="reflux MBR"
+		    Case "gc"
+		      myDictionary.value("proces")="looptijd/stoptijd"
+		    Case "ov"
+		      myDictionary.value("proces")="hoofdregeling MBR"
+		    Case "ps"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "ts"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "bx"
+		      myDictionary.value("proces")="subregeling beluchting"
+		    Case "rr"
+		      myDictionary.value("proces")="regenbezinking"
+		    Case "ep"
+		      myDictionary.value("proces")="slibrecirculatie"
+		    Case "br"
+		      myDictionary.value("proces")="Krüger"
+		    Case "vu"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
+		    Case "tr"
+		      myDictionary.value("proces")="slibstockage"
+		    Case "on"
+		      myDictionary.value("proces")="opvoergemaal"
+		    Case "bi"
+		      myDictionary.value("proces")="bufferwerking industrie"
+		    Case "ts"
+		      myDictionary.value("proces")="master-slave beluchting"
+		    Case "bm"
+		      myDictionary.value("proces")="subregeling beluchting"
+		    Case "bs"
+		      myDictionary.value("proces")="subregeling beluchting"
+		    Case "nr"
+		      myDictionary.value("proces")="nitraatretour"
+		    Case "pa"
+		      myDictionary.value("proces")="slibconditionering"
+		    Case "lm"
+		      myDictionary.value("proces")="leeglaat"
+		    Case "af"
+		      myDictionary.value("proces")="afvlakbuffer"
+		    Case "eg"
+		      myDictionary.value("proces")="effluent goot"
+		    Case "ex"
+		      myDictionary.value("proces")="extern slib"
+		    Case "si"
+		      myDictionary.value("proces")="slibsilo"
+		    Case "pr"
+		      myDictionary.value("proces")="primaire spui"
+		    Case "sy"
+		      myDictionary.value("proces")="sifon"
+		    Case "gv"
+		      myDictionary.value("proces")="gasverwerking"
+		    Case "ce"
+		      myDictionary.value("proces")="centraat"
+		    Case "se"
+		      myDictionary.value("proces")="extern slib"
+		    Case "tb"
+		      myDictionary.value("proces")="tussenbuffer"
+		    Case "ve"
+		      myDictionary.value("proces")="ventilator"
+		      
+		      
+		      
+		      
+		      
+		      
+		      
 		    Else
-		        myDictionary.value("proces")= "ONBEKEND"
+		      myDictionary.value("proces")= "ONBEKEND"
 		    End Select
 		    aMyDictionary.append(myDictionary)
 		  next
 		  
-		   return aMyDictionary()
+		  return aMyDictionary()
 		  
 		  
 		  
@@ -669,140 +909,286 @@ Protected Class PreProcessor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function extractOriginalCode() As string()
-		   dim arrayOriginalCode() as string 
-		   
-		   //open files and fill array
-		   Dim t As TextinputStream
-		   dim textarea1 as new textarea
-		   dim index as integer = 0
-		   
-		   dim folder as  folderitem =exportedSectionsFolder
-		   for i as integer = 1 to folder.count
-		    if folder.item(i).name.right(4)=".xst" then
-		      t = TextinputStream.open(folder.item(i))
-		      textarea1.text= t.ReadAll()
-		      arrayOriginalCode.append(TextArea1.text)
-		       index=index+1
-		       t.close
-		     end if
-		   next
+		Function extractOriginalCode(storedFiles() as FolderItem) As string()
+		  dim arrayOriginalCode() as string 
 		  
-		  //delete files
-		  dim j as integer = 0
-		  while j<=30
-		    for i as integer = 1 to folder.count
-		      if folder.item(i).name.right(4)=".xst" then
-		        folder.item(i).delete
-		      end if
-		    next
-		    j=j+1
-		  wend
-		   
-		   
-		   return arrayOriginalCode()
+		  //open files and fill array
+		  Dim t As TextinputStream
+		  dim textarea1 as new textarea
+		  dim index as integer = 0
 		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function listProjectFiles() As FolderItem()
-		  dim allProjectFiles() as FolderItem
-		  
-		  for i as integer = 1 to sourceFolder.Count
-		    allProjectFiles.Append(sourceFolder.item(i))
+		  dim folder as  folderitem =exportedSectionsFolder
+		  for i as integer = 0 to storedFiles.ubound 
+		    t = TextinputStream.open(storedFiles(i))
+		    textarea1.text= t.ReadAll()
+		    arrayOriginalCode.append(TextArea1.text)
+		    index=index+1
+		    t.close
 		  next
 		  
-		  return allProjectFiles
+		  //delete all files
+		  dim deleter as new DeleteFolderContent
+		  call deleter.DeleteEntireFolder(exportedSectionsFolder)
+		  
+		  
+		  return arrayOriginalCode()
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FindMetaData(CleanedUpCode as string) As Dictionary
+		  
+		  
+		  dim match as RegExMatch
+		  dim re as new regex
+		  dim myDictionary as new dictionary  
+		  
+		  
+		  //find number of werktuigen
+		  dim aResultW() as string
+		  
+		  re.SearchPattern = "augvw[0-9]"
+		  match = re.Search(CleanedUpCode)
+		  Do
+		    If match <> Nil Then
+		      if aResultW.IndexOf(match.SubExpressionString(0))=-1 then
+		        aresultW.append(match.SubExpressionString(0))
+		      end if
+		    end if   
+		    match=re.search
+		  Loop Until match Is Nil
+		  
+		  if aResultW.Ubound<>-1 then
+		    myDictionary.value("NumberW")=aResultW.Ubound+1
+		  else
+		    myDictionary.value("NumberW")=0
+		  end if
+		  
+		  
+		  
+		  //find number of metingen
+		  dim aResultM() as string
+		  
+		  re.SearchPattern = "m[0-9]sm"
+		  match = re.Search(CleanedUpCode)
+		  Do
+		    If match <> Nil Then
+		      if aResultM.IndexOf(match.SubExpressionString(0))=-1 then
+		        aresultM.append(match.SubExpressionString(0))
+		      end if
+		    end if   
+		    match=re.search
+		  Loop Until match Is Nil
+		  
+		  if aResultM.Ubound<>-1 then
+		    myDictionary.value("NumberM")=aResultM.Ubound+1
+		  else
+		    myDictionary.value("NumberM")=0
+		  end if
+		  
+		  
+		  
+		  //find number of vlotters
+		  dim aResultV() as string
+		  
+		  re.SearchPattern = "v[0-9lh]p"
+		  match = re.Search(CleanedUpCode)
+		  Do
+		    If match <> Nil Then
+		      if aResultV.IndexOf(match.SubExpressionString(0))=-1 then
+		        aresultV.append(match.SubExpressionString(0))
+		      end if
+		    end if   
+		    match=re.search
+		  Loop Until match Is Nil
+		  
+		  if aResultV.Ubound<>-1 then
+		    myDictionary.value("NumberV")=aResultV.Ubound+1
+		  else
+		    myDictionary.value("NumberV")=0
+		  end if
+		  
+		  
+		  
+		  //find PID controller
+		  
+		  re.SearchPattern = "set pidauto"
+		  match = re.Search(CleanedUpCode)
+		  if match <> nil then
+		    myDictionary.value("PIDControl")="aanwezig"
+		  else
+		    myDictionary.value("PIDControl")="niet aanwezig"
+		  end if
+		  
+		  
+		  //find opstelling
+		  dim resultString as string
+		  dim level() as integer = array(0,0,0,0,0)
+		  dim highlevel() as Integer = array(0,0,0,0)
+		  
+		  re.SearchPattern = "\(te(rangorde)?[0-9]=[0-9] and ni[0-9]\)( or \(te(rangorde)?[0-9]=[0-9] and ni[0-9]\))?( or \(te(rangorde)?[0-9]=[0-9] and ni[0-9]\))?( or \(te(rangorde)?[0-9]=[0-9] and ni[0-9]\))?( or \(?ni[0-9]\)?)?"
+		  match = re.Search(CleanedUpCode)
+		  if match = nil then
+		    myDictionary.value("Config")="NVT"
+		  else
+		    resultString=match.SubExpressionString(0)
+		    level(0)=resultString.InStr("te1")
+		    level(1)=resultString.InStr("te2")
+		    level(2)=resultString.InStr("te3")
+		    level(3)=resultString.InStr("te4")
+		    level(4)=resultString.InStr("te5")
+		    if level(0)=0 and level(1)=0 and level(2)=0 and level(3)=0 and level(4)=0 then
+		      level(0)=resultString.InStr("terangorde1")
+		      level(1)=resultString.InStr("terangorde2")
+		      level(2)=resultString.InStr("terangorde3")
+		      level(2)=resultString.InStr("terangorde4")
+		      level(4)=resultString.InStr("terangorde5")
+		    end if
+		    highlevel(0)=resultString.instr("or ni2")
+		    highlevel(1)=resultString.instr("or ni3")
+		    highlevel(2)=resultString.instr("or ni4")
+		    highlevel(3)=resultString.instr("or ni5")
+		    if highlevel(0)=0 and highlevel(1)=0 and highlevel(2)=0 and highlevel(3)=0 then
+		      highlevel(0)=resultString.instr("or (ni2)")
+		      highlevel(1)=resultString.instr("or (ni3)")
+		      highlevel(2)=resultString.instr("or (ni4)")
+		      highlevel(3)=resultString.instr("or (ni5)")
+		    end if
+		    
+		    dim maxlevel as integer=0
+		    for index as integer = 0 to 4
+		      if level(index)<>0 then
+		        maxlevel=maxlevel+1
+		      end if
+		    next
+		    
+		    dim maxlevelhigh as integer=0
+		    for index as integer = 0 to 3
+		      if highlevel(index)<>0 then
+		        maxlevelhigh=maxlevelhigh+1
+		      end if
+		    next
+		    
+		    myDictionary.value("Config")= str(maxlevel+maxlevelhigh)+" + "+str(myDictionary.value("NumberW")- maxlevel-maxlevelhigh)
+		  end if
+		  
+		  return myDictionary
+		  
+		  
+		  
+		  
+		  
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function retrieveSectionNames(projectFile as FolderItem) As Dictionary()
-		   //create and open a unity project
-		   dim oProject as new unitypro(projectfile)
-		   dim arraySectionNames() as string 
+		  //create and open a unity project
+		  dim oProject as new unitypro(projectfile)
+		  dim arraySectionNames() as FolderItem
 		  
-		   //export sections
-		   dim oUnityproject as unityproject = oProject.project
-		   dim aSection() as Unityproserver.section 
-		   aSection=oUnityproject.sectionswithprefix
-		   for index1 as integer = 0 to aSection.ubound 
-		     oUnityproject.ExportasTempfile(aSection(index1))
-		   next
+		  //export sections
+		  dim oUnityproject as unityproject = oProject.project
+		  dim aSection() as Unityproserver.section 
+		  aSection=oUnityproject.sectionswithprefix
+		  for index1 as integer = 0 to aSection.ubound 
+		    oUnityproject.ExportasTempfile(aSection(index1))
+		  next
 		  
-		   //fill array with section names
-		   dim folder as  folderitem=exportedSectionsFolder
-		   dim j as integer =0
-		   for i as integer = 1 to folder.count
-		     if folder.item(i).name.right(4)=".xst" then
-		       arraySectionNames.append(folder.item(i).name)
-		       j=j+1
-		     end if
-		   next
+		  
+		  
+		  
+		  Dim aMyDictionary() As Dictionary
+		  
 		  
 		  //export functional modules in array
-		  'dim oFctModules  as UnityProServer.FctModules = oUnityproject.FctModules
-		  'dim aModule() as UnityProServer.FctModule
-		  'dim EmptyString as string
-		  'dim z as integer  =0
-		  'while z < oFctModules.count*4
-		  'aModule.append(oFctModules.item(emptystring,z))
-		  'z=z+4
-		  'wend
+		  dim oFctModules  as unityproserver.FctModules=oUnityproject.FctModules
+		  dim oFctModule as variant
+		  dim aModule() as string
+		  for i as integer = 2 to 32767
+		    oFctModule=oFctModules.item("",i)
+		    if oFctModule <>nil then
+		      aModule.append(oFctModules.item("",i).Name)
+		    end if
+		  next
 		  
 		  
 		  
 		  //find the exported sections in the exported funcional modules 
-		  'dim oProgFctModule as new UnityProServer.ProgFctModule
-		  'dim aMatchModule() as string
-		  'dim vUnKnown as variant
-		  
-		  'for i as integer = 0 to aSection.Ubound
-		  'dim match as boolean = false
-		  
-		  'for k as integer = 0 to aModule.Ubound
-		  'oProgFctModule=aModule(k).ProgFctModule
-		  'vUnKnown=oProgFctModule.GetListOfSectionsAttached
-		  'dim aVariant() as integer =vUnKnown
-		  
-		  'if not vUnKnown.isnull then
-		  'dim h as integer =0
-		  'while aVariant(h)<>0 
-		  'if  aVariant(h)=aSection(i).id then
-		  'match=true
-		  'aMatchModule.append(aModule(k).name)
-		  'exit While
-		  'end if
-		  'h=h+1
-		  'wend
-		  'end if
-		  
-		  'next
-		  
-		  //indien match
-		  'if match then
-		  'exit For
-		  'end if
-		  // indien geen match 
-		  'if not match then
-		  'aMatchModule.append("-1")
-		  'end if
-		  
-		  'next
+		  dim oProgFctModule as new UnityProServer.ProgFctModule
+		  dim aMatchModule() as string
+		  dim vUnKnown as variant
 		  
 		  
-		  Dim aMyDictionary() As Dictionary
-		  for l as integer = 0 to aSection.ubound 
-		    dim myDictionary as new Dictionary
-		    myDictionary.value("section_name")=arraySectionNames(l)
-		    'myDictionary.value("section_FM")=aMatchModule(l)
-		    aMyDictionary.append(myDictionary)
+		  for i as integer = 0 to aSection.Ubound
+		    dim match as boolean = false
+		    
+		    for kk as integer = 0 to aModule.Ubound
+		      
+		      oProgFctModule=oFctModules.item(aModule(kk)).ProgFctModule
+		      
+		      if oProgFctModule.GetListOfSectionsAttached<>nil then
+		        
+		        vUnKnown=oProgFctModule.GetListOfSectionsAttached
+		        dim aVariant() as variant =vUnKnown
+		        if not vUnKnown.isnull then
+		          
+		          for teller as integer =0 to aVariant.Ubound
+		            if  aVariant(teller)=aSection(i).id then
+		              match=true
+		              aMatchModule.append(oFctModules.item(aModule(kk)).name)
+		              dim myDictionary as new Dictionary
+		              myDictionary.value("section_name")=aSection(i).name
+		              myDictionary.value("section_FM")=oFctModules.item(aModule(kk)).name
+		              //fill array with section names
+		              dim folder as  folderitem=exportedSectionsFolder
+		              for j as integer = 1 to folder.count
+		                if folder.item(j).name=aSection(i).name+".xst" then
+		                  arraySectionNames.append(folder.item(j))
+		                end if
+		              next
+		              myDictionary.value("fileAsFolderItem")=arraySectionNames(i)
+		              aMyDictionary.append(myDictionary)
+		              exit for
+		            end if
+		          next
+		        end if
+		        //indien match
+		        if match then
+		          exit For
+		        end if
+		        
+		      end if
+		      
+		    next
+		    
+		    // indien geen match 
+		    if not match then
+		      dim myDictionary as new Dictionary
+		      myDictionary.value("section_name")=aSection(i).name
+		      myDictionary.value("section_FM")="niet aanwezig"
+		      //fill array with section names
+		      dim folder as  folderitem=exportedSectionsFolder
+		      for j as integer = 1 to folder.count
+		        if folder.item(j).name=aSection(i).name+".xst" then
+		          arraySectionNames.append(folder.item(j))
+		        end if
+		      next
+		      myDictionary.value("fileAsFolderItem")=arraySectionNames(i)
+		      aMyDictionary.append(myDictionary)
+		    end if
+		    
+		    
 		  next
 		  
 		  
-		   
-		   return aMyDictionary()
+		  
+		  
+		  
+		  
+		  return aMyDictionary()
 		End Function
 	#tag EndMethod
 

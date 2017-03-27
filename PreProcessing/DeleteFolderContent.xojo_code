@@ -57,7 +57,11 @@ Protected Class DeleteFolderContent
 		  
 		  if returnCode = 0 then
 		    // We‘re done without error, so the folder should be empty and we can delete it.
+<<<<<<< HEAD
 		    theFolder.Delete
+=======
+		    'theFolder.Delete
+>>>>>>> master
 		    returnCode = theFolder.LastErrorCode
 		  end if
 		  
