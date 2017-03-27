@@ -123,7 +123,7 @@ Protected Class PreProcessor
 		    re.SearchPattern = "BbselNPR"
 		    matchbel = re.Search(hulp)
 		    if matchbel <> nil then
-		       myDictionary.value("proces")="beluchting (combi)"
+		      myDictionary.value("proces")="beluchting (combi)"
 		    end if
 		    
 		    re.SearchPattern = "Bbpara"
@@ -643,249 +643,249 @@ Protected Class PreProcessor
 		    myDictionary.value("cleanedUpCode")=arrayCleanedUpCode(i)
 		    Select Case regelingIndex
 		    Case "og"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "in"
-		        myDictionary.value("proces")="monstername"
+		      myDictionary.value("proces")="monstername"
 		    Case "mn"
-		        myDictionary.value("proces")="monstername"
+		      myDictionary.value("proces")="monstername"
 		    Case "ri"
-		        myDictionary.value("proces")="roosterinstallatie"
+		      myDictionary.value("proces")="roosterinstallatie"
 		    Case "tu"
-		        myDictionary.value("proces")="turbiditeit"
+		      myDictionary.value("proces")="turbiditeit"
 		    Case "tp"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "ca"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "cd"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "se"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "pp"
-		        myDictionary.value("proces")="defosfatatie"
+		      myDictionary.value("proces")="defosfatatie"
 		    Case "pd"
-		        myDictionary.value("proces")="polymeerdosering"
+		      myDictionary.value("proces")="polymeerdosering"
 		    Case "sb"
-		        myDictionary.value("proces")="slibstokkage"
+		      myDictionary.value("proces")="slibstokkage"
 		    Case "ss"
-		        myDictionary.value("proces")="slibstokkage"
+		      myDictionary.value("proces")="slibstokkage"
 		    Case "vs"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "vm"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "ns"
-		        myDictionary.value("proces")="influentverdeling"
+		      myDictionary.value("proces")="influentverdeling"
 		    Case "sr"
-		        myDictionary.value("proces")="slibrecirculatie"
+		      myDictionary.value("proces")="slibrecirculatie"
 		    Case "bb"
 		      if myDictionary.value("proces")="onbekend" then
-		          myDictionary.value("proces")="beluchting"
+		        myDictionary.value("proces")="beluchting"
 		      end if
 		    Case "fr"
-		        myDictionary.value("proces")="Krüger"
+		      myDictionary.value("proces")="Krüger"
 		    Case "sw"
-		        myDictionary.value("proces")="slibontwatering"
+		      myDictionary.value("proces")="slibontwatering"
 		    Case "st"
-		        myDictionary.value("proces")="slibtransport"
+		      myDictionary.value("proces")="slibtransport"
 		    Case "sv"
-		        myDictionary.value("proces")="slibrecirculatie verdeling"
+		      myDictionary.value("proces")="slibrecirculatie verdeling"
 		    Case "zv"
-		        myDictionary.value("proces")="zandvang"
+		      myDictionary.value("proces")="zandvang"
 		    Case "qb"
-		        myDictionary.value("proces")="debietbewaking"
+		      myDictionary.value("proces")="debietbewaking"
 		    Case "cv"
-		        myDictionary.value("proces")="condensventielen"
+		      myDictionary.value("proces")="condensventielen"
 		    Case "sb"
-		        myDictionary.value("proces")="mixing"
+		      myDictionary.value("proces")="mixing"
 		    Case "so"
-		        myDictionary.value("proces")="slibopstart"
+		      myDictionary.value("proces")="slibopstart"
 		    Case "dl"
-		        myDictionary.value("proces")="drijflaag"
+		      myDictionary.value("proces")="drijflaag"
 		    Case "rb"
-		        myDictionary.value("proces")="regenbezinking"
+		      myDictionary.value("proces")="regenbezinking"
 		    Case "mt"
-		        myDictionary.value("proces")="slibaanvoer MBR"
+		      myDictionary.value("proces")="slibaanvoer MBR"
 		    Case "mp"
-		        myDictionary.value("proces")="permeaatonttrekking MBR"
+		      myDictionary.value("proces")="permeaatonttrekking MBR"
 		    Case "pm"
-		        myDictionary.value("proces")="permeaatonttrekking MBR"
+		      myDictionary.value("proces")="permeaatonttrekking MBR"
 		    Case "mc"
-		        myDictionary.value("proces")="maintenance cleaning MBR"
+		      myDictionary.value("proces")="maintenance cleaning MBR"
 		    Case "ml"
-		        myDictionary.value("proces")="luchtaanvoer MBR"
+		      myDictionary.value("proces")="luchtaanvoer MBR"
 		    Case "mb"
-		        myDictionary.value("proces")="luchtaanvoer MBR"
+		      myDictionary.value("proces")="luchtaanvoer MBR"
 		    Case "tg"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "sa"
-		        myDictionary.value("proces")="slibaanvoer"
+		      myDictionary.value("proces")="slibaanvoer"
 		    Case "sc"
-		        myDictionary.value("proces")="slibconditionering"
+		      myDictionary.value("proces")="slibconditionering"
 		    Case "bl"
-		        myDictionary.value("proces")="beluchting"
+		      myDictionary.value("proces")="beluchting"
 		    Case "ba"
-		        myDictionary.value("proces")="beluchting"
+		      myDictionary.value("proces")="beluchting"
 		    Case "ve"
-		        myDictionary.value("proces")="ontwatering blowers"
+		      myDictionary.value("proces")="ontwatering blowers"
 		    Case "ef"
-		        myDictionary.value("proces")="effluent"
+		      myDictionary.value("proces")="effluent"
 		    Case "so"
-		        myDictionary.value("proces")="slibopstart"
+		      myDictionary.value("proces")="slibopstart"
 		    Case "ol"
-		        myDictionary.value("proces")="ontluchting"
+		      myDictionary.value("proces")="ontluchting"
 		    Case "sk"
-		        myDictionary.value("proces")="container dosering"
+		      myDictionary.value("proces")="container dosering"
 		    Case "dr"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "um"
-		        myDictionary.value("proces")="unitank"
+		      myDictionary.value("proces")="unitank"
 		    Case "ba"
-		        myDictionary.value("proces")="batchsturing"
+		      myDictionary.value("proces")="batchsturing"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "si"
-		        myDictionary.value("proces")="secundair spui"
+		      myDictionary.value("proces")="secundair spui"
 		    Case "cm"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "cs"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "vb"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "sp"
-		        myDictionary.value("proces")="spui"
+		      myDictionary.value("proces")="spui"
 		    Case "cf"
-		        myDictionary.value("proces")="slibafvoer"
+		      myDictionary.value("proces")="slibafvoer"
 		    Case "cw"
-		        myDictionary.value("proces")="centrifuge"
+		      myDictionary.value("proces")="centrifuge"
 		    Case "ni"
-		        myDictionary.value("proces")="niveausturing"
+		      myDictionary.value("proces")="niveausturing"
 		    Case "rp"
-		        myDictionary.value("proces")="filterpers"  
+		      myDictionary.value("proces")="filterpers"  
 		    Case "fd"
-		        myDictionary.value("proces")="dosering filterpers"
+		      myDictionary.value("proces")="dosering filterpers"
 		    Case "dp"
-		        myDictionary.value("proces")="drijflaagpomp"
+		      myDictionary.value("proces")="drijflaagpomp"
 		    Case "es"
-		        myDictionary.value("proces")="roosterinstallatie"
+		      myDictionary.value("proces")="roosterinstallatie"
 		    Case "fb"
-		        myDictionary.value("proces")="Krüger"
+		      myDictionary.value("proces")="Krüger"
 		    Case "os"
-		        myDictionary.value("proces")="overstort"
+		      myDictionary.value("proces")="overstort"
 		    Case "bp"
-		        myDictionary.value("proces")="backpuls MBR"
+		      myDictionary.value("proces")="backpuls MBR"
 		    Case "ro"
-		        myDictionary.value("proces")="roosterinstallatie"
+		      myDictionary.value("proces")="roosterinstallatie"
 		    Case "ms"
-		        myDictionary.value("proces")="slibaanvoer MBR"
+		      myDictionary.value("proces")="slibaanvoer MBR"
 		    Case "an"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "no"
-		        myDictionary.value("proces")="noodkoeling"
+		      myDictionary.value("proces")="noodkoeling"
 		    Case "as"
-		        myDictionary.value("proces")="anit-schuim"
+		      myDictionary.value("proces")="anit-schuim"
 		    Case "ww"
-		        myDictionary.value("proces")="warmtewisseling"
+		      myDictionary.value("proces")="warmtewisseling"
 		    Case "su"
-		        myDictionary.value("proces")="septische unit"
+		      myDictionary.value("proces")="septische unit"
 		    Case "vd"
-		        myDictionary.value("proces")="voeding zandfilter"
+		      myDictionary.value("proces")="voeding zandfilter"
 		    Case "db"
-		        myDictionary.value("proces")="koolstofdosering zandfilter"
+		      myDictionary.value("proces")="koolstofdosering zandfilter"
 		    Case "pc"
-		        myDictionary.value("proces")="koolstofdosering"
+		      myDictionary.value("proces")="koolstofdosering"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "or"
-		        myDictionary.value("proces")="slibrecirculatie"
+		      myDictionary.value("proces")="slibrecirculatie"
 		    Case "rv"
-		        myDictionary.value("proces")="slibrecirculatieverdeling"
+		      myDictionary.value("proces")="slibrecirculatieverdeling"
 		    Case "sg"
-		        myDictionary.value("proces")="stormgemaal"
+		      myDictionary.value("proces")="stormgemaal"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "vz"
-		        myDictionary.value("proces")="voeding zandfilter"
+		      myDictionary.value("proces")="voeding zandfilter"
 		    Case "lz"
-		        myDictionary.value("proces")="lucht zandfilter"
+		      myDictionary.value("proces")="lucht zandfilter"
 		    Case "cz"
-		        myDictionary.value("proces")="koolstofdosering zandfilter"
+		      myDictionary.value("proces")="koolstofdosering zandfilter"
 		    Case "eg"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "al"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "ps"
-		        myDictionary.value("proces")="effluentgemaal"
+		      myDictionary.value("proces")="effluentgemaal"
 		    Case "tw"
-		        myDictionary.value("proces")="Krüger"
+		      myDictionary.value("proces")="Krüger"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "sl"
-		        myDictionary.value("proces")="slibtransport"
+		      myDictionary.value("proces")="slibtransport"
 		    Case "iv"
-		        myDictionary.value("proces")="influentverdeling"
+		      myDictionary.value("proces")="influentverdeling"
 		    Case "re"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "rf"
-		        myDictionary.value("proces")="reflux MBR"
+		      myDictionary.value("proces")="reflux MBR"
 		    Case "gc"
-		        myDictionary.value("proces")="looptijd/stoptijd"
+		      myDictionary.value("proces")="looptijd/stoptijd"
 		    Case "ov"
-		        myDictionary.value("proces")="hoofdregeling MBR"
+		      myDictionary.value("proces")="hoofdregeling MBR"
 		    Case "ps"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "ts"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "bx"
-		        myDictionary.value("proces")="subregeling beluchting"
+		      myDictionary.value("proces")="subregeling beluchting"
 		    Case "rr"
-		        myDictionary.value("proces")="regenbezinking"
+		      myDictionary.value("proces")="regenbezinking"
 		    Case "ep"
-		        myDictionary.value("proces")="slibrecirculatie"
+		      myDictionary.value("proces")="slibrecirculatie"
 		    Case "br"
-		        myDictionary.value("proces")="Krüger"
+		      myDictionary.value("proces")="Krüger"
 		    Case "vu"
-		        myDictionary.value("proces")="terreinriolering/vuilwater"
+		      myDictionary.value("proces")="terreinriolering/vuilwater"
 		    Case "tr"
-		        myDictionary.value("proces")="slibstockage"
+		      myDictionary.value("proces")="slibstockage"
 		    Case "on"
-		        myDictionary.value("proces")="opvoergemaal"
+		      myDictionary.value("proces")="opvoergemaal"
 		    Case "bi"
-		        myDictionary.value("proces")="bufferwerking industrie"
+		      myDictionary.value("proces")="bufferwerking industrie"
 		    Case "ts"
-		        myDictionary.value("proces")="master-slave beluchting"
+		      myDictionary.value("proces")="master-slave beluchting"
 		    Case "bm"
-		        myDictionary.value("proces")="subregeling beluchting"
+		      myDictionary.value("proces")="subregeling beluchting"
 		    Case "bs"
-		        myDictionary.value("proces")="subregeling beluchting"
+		      myDictionary.value("proces")="subregeling beluchting"
 		    Case "nr"
-		        myDictionary.value("proces")="nitraatretour"
+		      myDictionary.value("proces")="nitraatretour"
 		    Case "pa"
-		        myDictionary.value("proces")="slibconditionering"
+		      myDictionary.value("proces")="slibconditionering"
 		    Case "lm"
-		        myDictionary.value("proces")="leeglaat"
+		      myDictionary.value("proces")="leeglaat"
 		    Case "af"
-		        myDictionary.value("proces")="afvlakbuffer"
+		      myDictionary.value("proces")="afvlakbuffer"
 		    Case "eg"
-		        myDictionary.value("proces")="effluent goot"
+		      myDictionary.value("proces")="effluent goot"
 		    Case "ex"
-		        myDictionary.value("proces")="extern slib"
+		      myDictionary.value("proces")="extern slib"
 		    Case "si"
-		        myDictionary.value("proces")="slibsilo"
+		      myDictionary.value("proces")="slibsilo"
 		    Case "pr"
-		        myDictionary.value("proces")="primaire spui"
+		      myDictionary.value("proces")="primaire spui"
 		    Case "sy"
-		        myDictionary.value("proces")="sifon"
+		      myDictionary.value("proces")="sifon"
 		    Case "gv"
-		        myDictionary.value("proces")="gasverwerking"
+		      myDictionary.value("proces")="gasverwerking"
 		    Case "ce"
-		        myDictionary.value("proces")="centraat"
+		      myDictionary.value("proces")="centraat"
 		    Case "se"
-		        myDictionary.value("proces")="extern slib"
+		      myDictionary.value("proces")="extern slib"
 		    Case "tb"
-		        myDictionary.value("proces")="tussenbuffer"
+		      myDictionary.value("proces")="tussenbuffer"
 		    Case "ve"
-		        myDictionary.value("proces")="ventilator"
+		      myDictionary.value("proces")="ventilator"
 		      
 		      
 		      
@@ -894,12 +894,12 @@ Protected Class PreProcessor
 		      
 		      
 		    Else
-		        myDictionary.value("proces")= "ONBEKEND"
+		      myDictionary.value("proces")= "ONBEKEND"
 		    End Select
 		    aMyDictionary.append(myDictionary)
 		  next
 		  
-		   return aMyDictionary()
+		  return aMyDictionary()
 		  
 		  
 		  
@@ -910,28 +910,28 @@ Protected Class PreProcessor
 
 	#tag Method, Flags = &h0
 		Function extractOriginalCode(storedFiles() as FolderItem) As string()
-		   dim arrayOriginalCode() as string 
-		   
-		   //open files and fill array
-		   Dim t As TextinputStream
-		   dim textarea1 as new textarea
-		   dim index as integer = 0
-		   
+		  dim arrayOriginalCode() as string 
+		  
+		  //open files and fill array
+		  Dim t As TextinputStream
+		  dim textarea1 as new textarea
+		  dim index as integer = 0
+		  
 		  dim folder as  folderitem =exportedSectionsFolder
-		   for i as integer = 0 to storedFiles.ubound 
+		  for i as integer = 0 to storedFiles.ubound 
 		    t = TextinputStream.open(storedFiles(i))
 		    textarea1.text= t.ReadAll()
 		    arrayOriginalCode.append(TextArea1.text)
-		     index=index+1
-		     t.close
-		   next
+		    index=index+1
+		    t.close
+		  next
 		  
 		  //delete all files
 		  dim deleter as new DeleteFolderContent
 		  call deleter.DeleteEntireFolder(exportedSectionsFolder)
 		  
-		   
-		   return arrayOriginalCode()
+		  
+		  return arrayOriginalCode()
 		  
 		End Function
 	#tag EndMethod
@@ -1085,17 +1085,17 @@ Protected Class PreProcessor
 
 	#tag Method, Flags = &h0
 		Function retrieveSectionNames(projectFile as FolderItem) As Dictionary()
-		   //create and open a unity project
-		   dim oProject as new unitypro(projectfile)
-		   dim arraySectionNames() as FolderItem
+		  //create and open a unity project
+		  dim oProject as new unitypro(projectfile)
+		  dim arraySectionNames() as FolderItem
 		  
-		   //export sections
-		   dim oUnityproject as unityproject = oProject.project
-		   dim aSection() as Unityproserver.section 
-		   aSection=oUnityproject.sectionswithprefix
-		   for index1 as integer = 0 to aSection.ubound 
-		     oUnityproject.ExportasTempfile(aSection(index1))
-		   next
+		  //export sections
+		  dim oUnityproject as unityproject = oProject.project
+		  dim aSection() as Unityproserver.section 
+		  aSection=oUnityproject.sectionswithprefix
+		  for index1 as integer = 0 to aSection.ubound 
+		    oUnityproject.ExportasTempfile(aSection(index1))
+		  next
 		  
 		  
 		  
@@ -1142,13 +1142,13 @@ Protected Class PreProcessor
 		              dim myDictionary as new Dictionary
 		              myDictionary.value("section_name")=aSection(i).name
 		              myDictionary.value("section_FM")=oFctModules.item(aModule(kk)).name
-		               //fill array with section names
-		               dim folder as  folderitem=exportedSectionsFolder
-		               for j as integer = 1 to folder.count
-		                 if folder.item(j).name=aSection(i).name+".xst" then
-		                   arraySectionNames.append(folder.item(j))
-		                 end if
-		               next
+		              //fill array with section names
+		              dim folder as  folderitem=exportedSectionsFolder
+		              for j as integer = 1 to folder.count
+		                if folder.item(j).name=aSection(i).name+".xst" then
+		                  arraySectionNames.append(folder.item(j))
+		                end if
+		              next
 		              myDictionary.value("fileAsFolderItem")=arraySectionNames(i)
 		              aMyDictionary.append(myDictionary)
 		              exit for
@@ -1169,13 +1169,13 @@ Protected Class PreProcessor
 		      dim myDictionary as new Dictionary
 		      myDictionary.value("section_name")=aSection(i).name
 		      myDictionary.value("section_FM")="niet aanwezig"
-		       //fill array with section names
-		       dim folder as  folderitem=exportedSectionsFolder
-		       for j as integer = 1 to folder.count
-		         if folder.item(j).name=aSection(i).name+".xst" then
-		           arraySectionNames.append(folder.item(j))
-		         end if
-		       next
+		      //fill array with section names
+		      dim folder as  folderitem=exportedSectionsFolder
+		      for j as integer = 1 to folder.count
+		        if folder.item(j).name=aSection(i).name+".xst" then
+		          arraySectionNames.append(folder.item(j))
+		        end if
+		      next
 		      myDictionary.value("fileAsFolderItem")=arraySectionNames(i)
 		      aMyDictionary.append(myDictionary)
 		    end if
@@ -1187,8 +1187,8 @@ Protected Class PreProcessor
 		  
 		  
 		  
-		   
-		   return aMyDictionary()
+		  
+		  return aMyDictionary()
 		End Function
 	#tag EndMethod
 
