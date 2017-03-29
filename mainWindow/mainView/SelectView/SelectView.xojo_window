@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cE5E500E5
+      BackColor       =   &cFFFFFF00
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -172,7 +172,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cE5E500E5
+      BackColor       =   &cFFFFFF00
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -231,7 +231,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -266,7 +265,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Untitled"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -278,6 +276,14 @@ Begin NSView SelectView
       Underline       =   False
       Visible         =   True
       Width           =   100
+   End
+   Begin Timer timerUpdateUI
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   1000
+      Scope           =   0
+      TabPanelIndex   =   0
    End
 End
 #tag EndWindow
@@ -373,13 +379,17 @@ End
 #tag Events TextFieldFilterLeft
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.syncInterface(TRUE)
+		  dim filterValue as variant = selectViewController.filterExpressionLeft
+		  selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		  selectViewController.leftDataFilter.Run
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.syncInterface(TRUE)
+		    selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		    selectViewController.leftDataFilter.Run
 		  end if
 		End Function
 	#tag EndEvent
@@ -387,15 +397,25 @@ End
 #tag Events TextFieldFilterRight
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.syncInterface(TRUE)
+		  selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		  selectViewController.rightDataFilter.Run
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.syncInterface(TRUE)
+		    selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		    selectViewController.rightDataFilter.Run
 		  end if
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events timerUpdateUI
+	#tag Event
+		Sub Action()
+		  selectViewController.syncInterface(TRUE)
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

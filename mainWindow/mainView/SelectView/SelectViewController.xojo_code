@@ -48,6 +48,14 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
 		  
+		  leftDataFilter = new fastDataFilter(selectData)
+		  leftDataFilter.bindVariables(array(filterExpressionLeft, filterExpressionLeft))
+		  leftDataFilter.Run
+		  
+		  rightDataFilter = new fastDataFilter(selectData)
+		  rightDataFilter.bindVariables(array(filterExpressionRight, filterExpressionRight))
+		  rightDataFilter.Run
+		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
 		    exportFolder.CreateAsFolder
@@ -155,9 +163,9 @@ Inherits NSViewController
 	#tag Method, Flags = &h21
 		Private Sub showList(list as JVTreeView, data as recordset)
 		  
-		  list.DeleteAllRows
-		  
-		  If data <> Nil Then
+		  If data <> Nil and data.RecordCount > 0  and not Data.EOF Then
+		    
+		    list.DeleteAllRows
 		    
 		    dim regelingen(-1,-1) as String
 		    dim regelingCounter as Integer = 0
@@ -254,31 +262,28 @@ Inherits NSViewController
 		Sub syncInterface(up as Boolean)
 		  if up then
 		    
-		    // Fill the lefthand TreeView
 		    
-		    selectData.BindType(array(filterExpressionLeft, filterExpressionLeft))
-		    selectData.Bind(array(filterExpressionLeft, filterExpressionLeft))
-		    recordsLeft = selectData.SQLSelect
-		    showList(selectView.ListViewLeft, recordsLeft)
+		    // Update the filtered result whenever the left filter is no longer running
+		     if  leftDataFilter.State = Thread.NotRunning then
+		      recordsLeft = leftDataFilter.foundRecords
+		      showList(selectView.ListViewLeft, recordsLeft)
+		      selectView.LabelCountLeft.Text = leftCount
+		    end if
 		    
-		    selectView.LabelCountLeft.Text = leftCount
 		    
-		    // Fill the righthand TreeView
-		    selectData.BindType(array(filterExpressionRight, filterExpressionRight))
-		    selectData.Bind(array(filterExpressionRight, filterExpressionRight))
-		    recordsRight = selectData.SQLSelect
-		    showList(selectView.ListViewRight, recordsRight)
-		    
-		    selectView.LabelCountRight.Text = rightCount
+		    // Update the filtered result whenever the right filter is no longer running
+		    if rightDataFilter.State = Thread.NotRunning then
+		      recordsright = rightDataFilter.foundRecords
+		      showList(selectView.ListViewRight, recordsright)
+		      selectView.LabelCountRight.Text = rightCount
+		    end if
 		    
 		  else
 		    
 		    
-		    
 		  end if
 		  
-		  
-		  
+		  system.DebugLog("Links "+str(recordsleft.RecordCount)+" & Rechts " + str(recordsright.RecordCount))
 		  
 		End Sub
 	#tag EndMethod
@@ -311,9 +316,9 @@ Inherits NSViewController
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
-			  typesSearch.BindType(array(filterExpressionLeft))
-			  typesSearch.Bind(array(filterExpressionLeft))
+			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+			  typesSearch.BindType(array(filterExpressionLeft, filterExpressionLeft))
+			  typesSearch.Bind(array(filterExpressionLeft, filterExpressionLeft))
 			  
 			  dim types as recordset = typesSearch.SQLSelect
 			  
@@ -328,6 +333,13 @@ Inherits NSViewController
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
+		#tag Note
+			_
+		#tag EndNote
+		leftDataFilter As fastDataFilter
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		recordsLeft As RecordSet
 	#tag EndProperty
 
@@ -338,9 +350,9 @@ Inherits NSViewController
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
-			  typesSearch.BindType(array(filterExpressionright))
-			  typesSearch.Bind(array(filterExpressionright))
+			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+			  typesSearch.BindType(array(filterExpressionright,filterExpressionright))
+			  typesSearch.Bind(array(filterExpressionright, filterExpressionright))
 			  
 			  dim types as recordset = typesSearch.SQLSelect
 			  
@@ -353,6 +365,13 @@ Inherits NSViewController
 		#tag EndGetter
 		rightCount As String
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		#tag Note
+			_
+		#tag EndNote
+		rightDataFilter As fastDataFilter
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

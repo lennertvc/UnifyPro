@@ -132,6 +132,7 @@ Class=UnifyPro;UnifyPro.xojo_code;&h48C737FF;&h0;false
 Folder=PreProcessing;PreProcessing;&h48CF27FF;&h0;false
 Folder=VersionUpdate;PreProcessing/VersionUpdate;&h1A564FFF;&h48CF27FF;false
 Class=RegelingenDataBase;RegelingenDataBase.xojo_code;&h3DD8F7FF;&h0;false
+Class=fastDataFilter;fastDataFilter.xojo_code;&h8689FFF;&h0;false
 Class=JVPathFind;PreProcessing/JVPathFind.xojo_code;&h2606AFFF;&h48CF27FF;false
 Class=LVCPathFinder;PreProcessing/LVCPathFinder.xojo_code;&h45F87FFF;&h48CF27FF;false
 Class=UnityPro;PreProcessing/UnityPro.xojo_code;&h63D167FF;&h48CF27FF;false
