@@ -281,7 +281,7 @@ Begin NSView SelectView
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
-      Period          =   1000
+      Period          =   500
       Scope           =   0
       TabPanelIndex   =   0
    End
@@ -323,7 +323,7 @@ End
 	#tag Event
 		Sub Change()
 		  me.ActiveCell.BackColor = &c00FF00
-		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.recordsLeft)
+		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  Refresh
 		  selectViewController.exportAndCompare
 		End Sub
@@ -362,7 +362,7 @@ End
 		Sub Change()
 		  me.ActiveCell.BackColor = &cFF0000
 		  
-		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.recordsRight)
+		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  refresh
 		  selectViewController.exportAndCompare
 		  
@@ -379,9 +379,12 @@ End
 #tag Events TextFieldFilterLeft
 	#tag Event
 		Sub LostFocus()
-		  dim filterValue as variant = selectViewController.filterExpressionLeft
 		  selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
 		  selectViewController.leftDataFilter.Run
+		  
+		  selectViewController.leftTypesCounter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		  selectViewController.leftTypesCounter.Run
+		  
 		  
 		End Sub
 	#tag EndEvent
@@ -390,6 +393,9 @@ End
 		  if Key = CHR(13) or Key = CHR(10) then
 		    selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
 		    selectViewController.leftDataFilter.Run
+		    
+		    selectViewController.leftTypesCounter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		    selectViewController.leftTypesCounter.Run
 		  end if
 		End Function
 	#tag EndEvent
@@ -400,6 +406,9 @@ End
 		  selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
 		  selectViewController.rightDataFilter.Run
 		  
+		  selectViewController.rightTypesCounter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		  selectViewController.rightTypesCounter.Run
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -407,6 +416,9 @@ End
 		  if Key = CHR(13) or Key = CHR(10) then
 		    selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
 		    selectViewController.rightDataFilter.Run
+		    
+		    selectViewController.rightTypesCounter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		    selectViewController.rightTypesCounter.Run
 		  end if
 		End Function
 	#tag EndEvent

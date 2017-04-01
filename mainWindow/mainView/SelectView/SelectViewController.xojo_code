@@ -48,13 +48,21 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
 		  
-		  leftDataFilter = new fastDataFilter(selectData)
+		  leftDataFilter = new JVbackGroundQuery(selectData)
 		  leftDataFilter.bindVariables(array(filterExpressionLeft, filterExpressionLeft))
 		  leftDataFilter.Run
 		  
-		  rightDataFilter = new fastDataFilter(selectData)
+		  rightDataFilter = new JVbackGroundQuery(selectData)
 		  rightDataFilter.bindVariables(array(filterExpressionRight, filterExpressionRight))
 		  rightDataFilter.Run
+		  
+		  leftTypesCounter = new JVbackGroundQuery(app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
+		  leftTypesCounter.bindVariables(array(filterExpressionLeft, filterExpressionLeft))
+		  leftTypesCounter.Run
+		  
+		  rightTypesCounter = new JVbackGroundQuery(app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
+		  rightTypesCounter.bindVariables(array(filterExpressionRight, filterExpressionRight))
+		  rightTypesCounter.Run
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -254,17 +262,23 @@ Inherits NSViewController
 		    
 		    // Update the filtered result whenever the left filter is no longer running
 		    if  leftDataFilter.State = Thread.NotRunning then
-		      recordsLeft = leftDataFilter.foundRecords
-		      showList(selectView.ListViewLeft, recordsLeft)
-		      selectView.LabelCountLeft.Text = leftCount
+		      leftRecords = leftDataFilter.foundRecords
+		      showList(selectView.ListViewLeft, leftRecords)
+		    end if
+		    
+		    if leftTypesCounter.State = Thread.NotRunning then
+		      selectView.LabelCountLeft.Text = Str(leftTypesCounter.RecordCount) +" types op "+Str(leftDataFilter.recordCount)
 		    end if
 		    
 		    
 		    // Update the filtered result whenever the right filter is no longer running
 		    if rightDataFilter.State = Thread.NotRunning then
-		      recordsright = rightDataFilter.foundRecords
-		      showList(selectView.ListViewRight, recordsright)
-		      selectView.LabelCountRight.Text = rightCount
+		      rightRecords = rightDataFilter.foundRecords
+		      showList(selectView.ListViewRight, rightRecords)
+		    end if
+		    
+		    if rightTypesCounter.State = Thread.NotRunning then
+		      selectView.LabelCountRight.Text =  Str(rightTypesCounter.RecordCount) +" types op "+Str(rightDataFilter.recordCount)
 		    end if
 		    
 		  else
@@ -300,61 +314,34 @@ Inherits NSViewController
 		filterExpressionRight As Variant
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
-			  dim typeCount as new fastDataFilter(typesSearch)
-			  
-			  typeCount.bindVariables(array(filterExpressionLeft, filterExpressionLeft))
-			  typeCount.run
-			  
-			  dim numberOfTypes as String = Str(typeCount.foundRecords.RecordCount)
-			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
-			  
-			  Return numberOfTypes +" types op "+numberOfRegelingen
-			End Get
-		#tag EndGetter
-		leftCount As String
-	#tag EndComputedProperty
+	#tag Property, Flags = &h0
+		#tag Note
+			_
+		#tag EndNote
+		leftDataFilter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftRecords As RecordSet
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftTypesCounter As JVbackGroundQuery
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		#tag Note
 			_
 		#tag EndNote
-		leftDataFilter As fastDataFilter
+		rightDataFilter As JVbackGroundQuery
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		recordsLeft As RecordSet
+		rightRecords As RecordSet
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		recordsRight As RecordSet
-	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
-			  dim typeCount as new fastDataFilter(typesSearch)
-			  
-			  typeCount.bindVariables(array(filterExpressionRight, filterExpressionRight))
-			  typeCount.run
-			  
-			  dim numberOfTypes as String = Str(typeCount.foundRecords.RecordCount)
-			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
-			  Return numberOfTypes +" types op "+numberOfRegelingen
-			End Get
-		#tag EndGetter
-		rightCount As String
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		#tag Note
-			_
-		#tag EndNote
-		rightDataFilter As fastDataFilter
+		rightTypesCounter As JVbackGroundQuery
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0

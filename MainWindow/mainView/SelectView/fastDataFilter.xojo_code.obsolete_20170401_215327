@@ -10,9 +10,7 @@ Inherits Thread
 
 	#tag Method, Flags = &h0
 		Sub bindVariables(variables() as Variant)
-		  preparedStatement.BindType(variables)
-		  preparedStatement.Bind(variables)
-		  
+		  preparedStatement.bindVariables(variables)
 		End Sub
 	#tag EndMethod
 

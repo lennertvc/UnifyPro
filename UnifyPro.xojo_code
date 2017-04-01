@@ -75,6 +75,8 @@ Inherits NSApplicationDelegate
 	#tag Note, Name = ToDo Jan v2.0
 		Extra windows voorzien voor tonen original code
 		
+		
+		
 	#tag EndNote
 
 	#tag Note, Name = ToDo Lennert
