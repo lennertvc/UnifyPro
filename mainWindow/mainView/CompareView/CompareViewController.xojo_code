@@ -31,7 +31,7 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub compare(leftFile as folderItem, rightFile as FolderItem)
+		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
 		  // Execute Compare it trough the CLI of Compare-it when on the right platform
 		  
 		  #if TargetWindows then

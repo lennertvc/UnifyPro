@@ -77,25 +77,8 @@ Inherits NSApplicationDelegate
 		
 	#tag EndNote
 
-	#tag Note, Name = ToDo Jan
-		
-		Mergen met Masterversie en branch Lennert
-	#tag EndNote
-
 	#tag Note, Name = ToDo Lennert
-		Vullen veld procesdeel
-		Vullen veld Installatie
-		Vullen veld Kostenplaats
-		Vullen veld filepath met correcte data
-		WegFilteren van de prefix van de subroutine op basis van een variabele die gekend is met bij regex \D+(SiSTSP) en vervangen door xx
 		
-		Private methods als dusdanig aanduiden
-		Wegwerken defaultvalues in arrays door gebruik van append inplaats van item(i)
-		For next loops indien mogelijk voorzien van fast enumaration
-		
-		
-		
-		Vullen van metadata
 		
 	#tag EndNote
 

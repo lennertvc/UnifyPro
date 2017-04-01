@@ -61,8 +61,8 @@ Inherits NSViewController
 		    exportFolder.CreateAsFolder
 		  end if
 		  
-		  sourceFileLeft = exportFolder.Child("sourceLeft.txt")
-		  sourceFileRight = exportFolder.Child("sourceRight.txt")
+		  sourceFileLeft = new JVTextFile(exportFolder.Child("sourceLeft.txt"))
+		  sourceFileRight = new JVTextFile(exportFolder.Child("sourceRight.txt"))
 		End Sub
 	#tag EndMethod
 
@@ -70,8 +70,8 @@ Inherits NSViewController
 		Sub exportAndCompare()
 		  if (selectedCodeLeft <> "") and  (selectedCodeRight<> "")  then
 		    
-		    exportAsTextFile(sourceFileLeft,selectedCodeLeft)
-		    exportAsTextFile(sourceFileRight, selectedCodeRight)
+		    sourceFileLeft.Write(selectedCodeLeft)
+		    sourceFileRight.Write(selectedCodeRight)
 		    
 		    app.mainWindowController.compareViewController.compare(sourceFileLeft, sourceFileRight)
 		    
@@ -80,21 +80,10 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub exportAsTextFile(file as FolderItem, contents as String)
-		  Dim tos As TextOutputStream
-		  If file <> Nil Then
-		    tos = TextOutputStream.Create(file)
-		    tos.WriteLine(contents)
-		    tos.Close
-		  End If
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Sub onviewActivate(sender as nsview)
 		  autoLayout
-		  syncInterface(TRUE)
+		  
 		End Sub
 	#tag EndMethod
 
@@ -264,7 +253,7 @@ Inherits NSViewController
 		    
 		    
 		    // Update the filtered result whenever the left filter is no longer running
-		     if  leftDataFilter.State = Thread.NotRunning then
+		    if  leftDataFilter.State = Thread.NotRunning then
 		      recordsLeft = leftDataFilter.foundRecords
 		      showList(selectView.ListViewLeft, recordsLeft)
 		      selectView.LabelCountLeft.Text = leftCount
@@ -282,8 +271,6 @@ Inherits NSViewController
 		    
 		    
 		  end if
-		  
-		  system.DebugLog("Links "+str(recordsleft.RecordCount)+" & Rechts " + str(recordsright.RecordCount))
 		  
 		End Sub
 	#tag EndMethod
@@ -317,13 +304,12 @@ Inherits NSViewController
 		#tag Getter
 			Get
 			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
-			  typesSearch.BindType(array(filterExpressionLeft, filterExpressionLeft))
-			  typesSearch.Bind(array(filterExpressionLeft, filterExpressionLeft))
+			  dim typeCount as new fastDataFilter(typesSearch)
 			  
-			  dim types as recordset = typesSearch.SQLSelect
+			  typeCount.bindVariables(array(filterExpressionLeft, filterExpressionLeft))
+			  typeCount.run
 			  
-			  dim numberOfTypes as String = Str(types.RecordCount)
-			  
+			  dim numberOfTypes as String = Str(typeCount.foundRecords.RecordCount)
 			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
 			  
 			  Return numberOfTypes +" types op "+numberOfRegelingen
@@ -351,15 +337,13 @@ Inherits NSViewController
 		#tag Getter
 			Get
 			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
-			  typesSearch.BindType(array(filterExpressionright,filterExpressionright))
-			  typesSearch.Bind(array(filterExpressionright, filterExpressionright))
+			  dim typeCount as new fastDataFilter(typesSearch)
 			  
-			  dim types as recordset = typesSearch.SQLSelect
+			  typeCount.bindVariables(array(filterExpressionRight, filterExpressionRight))
+			  typeCount.run
 			  
-			  dim numberOfTypes as String = Str(types.RecordCount)
-			  
-			  dim numberOfRegelingen as String = Str(recordsright.RecordCount)
-			  
+			  dim numberOfTypes as String = Str(typeCount.foundRecords.RecordCount)
+			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
 			  Return numberOfTypes +" types op "+numberOfRegelingen
 			End Get
 		#tag EndGetter
@@ -400,11 +384,11 @@ Inherits NSViewController
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		sourceFileLeft As FolderItem
+		sourceFileLeft As JVTextFile
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		sourceFileRight As FolderItem
+		sourceFileRight As JVTextFile
 	#tag EndProperty
 
 
