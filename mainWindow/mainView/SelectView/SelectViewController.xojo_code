@@ -102,63 +102,6 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function selectRow(list as JVTreeView, data as RecordSet) As String
-		  // Start with no record selected in the dataset
-		  data.MoveFirst
-		  data.MovePrevious
-		  
-		  dim currentParrentRow as Integer = 0
-		  dim selectedParentRow as Integer = -1
-		  
-		  dim currentParentCode as String
-		  dim selectedParentCode as String = ""
-		  
-		  for rowNumber as Integer =  0 to list.listcount-1
-		    
-		    data.MoveNext
-		    
-		    // Unchek all the parentfolders
-		    if list.RowIsFolder(rownumber) then
-		      
-		      currentParrentRow = rowNumber
-		      currentParentCode = data.Field("cleanedUpcode").StringValue
-		      list.CellState(currentParrentRow, 0) = CheckBox.CheckedStates.UnChecked
-		      
-		      //  It's a closed parentrow, skip over the extra invisible rows
-		      if (list.Expanded(currentParrentRow) = FALSE) And (list.RowTag(rowNumber) <> nil ) then
-		        dim closedRows(-1,-1) as String = list.RowTag(rowNumber)
-		        for closedRow as Integer = 1 to ubound(closedRows)
-		          data.MoveNext
-		        next
-		      end if
-		      
-		    end if
-		    
-		    if list.Selected(rowNumber) then
-		      // Remember the selections parent and its code
-		      selectedParentRow = currentParrentRow
-		      selectedParentCode = currentParentCode
-		      // Report the selected row while developing
-		      #if DebugBuild then
-		        dim installatie as String =data.Field("installatie").StringValue
-		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
-		        System.DebugLog(installatie+", " +kostenplaats+" Selected")
-		      #endif
-		      exit
-		    end if
-		  next
-		  
-		  // Reselect the parent type afterwords
-		  if selectedParentRow >=0 then
-		    list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
-		  end if
-		  
-		  // and return the code
-		  return selectedParentCode
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function selectType(list as JVTreeView, data as RecordSet) As String
 		  // Start with no record selected in the dataset
 		  data.MoveFirst
@@ -201,7 +144,6 @@ Inherits NSViewController
 		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
 		        System.DebugLog(installatie+", " +kostenplaats+" Selected")
 		      #endif
-		      exit
 		    end if
 		  next
 		  
@@ -465,22 +407,30 @@ Inherits NSViewController
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="leftSelectedCode"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="leftselectedType"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedCodeLeft"
+			Name="rightSelectedCode"
 			Group="Behavior"
 			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="selectedCodeRight"
+			Name="rightSelectedType"
 			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

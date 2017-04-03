@@ -317,12 +317,11 @@ End
 		    
 		  end if
 		  
-		  g.FillRect(0, 0, g.Width, g.Height)
+		  g.FillRect(0, 0, me.Width,me.RowHeight)
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  me.ActiveCell.BackColor = &c00FF00
 		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  Refresh
 		  selectViewController.exportAndCompare
@@ -353,14 +352,12 @@ End
 		  end if
 		  
 		  
-		  g.FillRect(0, 0, g.Width, g.Height)
-		  
+		  g.FillRect(0, 0, me.Width,me.RowHeight)
 		  
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  me.ActiveCell.BackColor = &cFF0000
 		  
 		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  refresh
