@@ -50,6 +50,13 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new CompareView, nil)
 		  
+		  dim leftMetaFilter as new JVbackGroundQuery(app.datamodel.Prepare("SELECT* FROM metaData WHERE regelingTypeID = ?"))
+		  leftMetaFilter.bindVariables(array(leftTypeSelected))
+		  leftMetaFilter.Run
+		  
+		  dim righMetaFilter as new JVbackGroundQuery(app.datamodel.Prepare("SELECT* FROM metaData WHERE regelingTypeID = ?"))
+		  righMetaFilter.bindVariables(array(leftTypeSelected))
+		  righMetaFilter.Run
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  system.debuglog(reportFolder.absolutePath)
@@ -77,11 +84,61 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub showList(list as JVTreeView, data as recordset)
+		  
+		  If data <> Nil and data.RecordCount > 0  and not Data.EOF Then
+		    
+		    list.DeleteAllRows
+		    
+		    dim key as String
+		    dim value as String
+		    
+		    While Not data.EOF
+		      
+		      key = data.field("key").stringvalue
+		      value = data.field("value").stringvalue
+		      
+		      list.AddRow(array(key, value))
+		      
+		      data.MoveNext
+		    Wend
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub showReport()
 		  
 		  compareView.ReportView.LoadPage(reportFile)
 		  compareView.ReportView.SetFocus
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub syncInterface(up as Boolean)
+		  if up then
+		    
+		    
+		    // Update the filtered result whenever the left filter is no longer running
+		    if  leftMetaFilter.State = Thread.NotRunning then
+		      leftMetaRecords = leftMetaFilter.foundRecords
+		      showList(compareView.ListMetaLeft, leftMetaRecords)
+		    end if
+		    
+		    // Update the filtered result whenever the right filter is no longer running
+		    if  rightMetaFilter.State = Thread.NotRunning then
+		      rightMetaRecords = rightMetaFilter.foundRecords
+		      showList(compareView.ListMetaRight, rightMetaRecords)
+		    end if
+		    
+		  else
+		    
+		    
+		  end if
+		  
 		End Sub
 	#tag EndMethod
 
@@ -95,9 +152,43 @@ Inherits NSViewController
 		compareView As CompareView
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h21
+		Private leftMetaFilter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftMetaRecords As RecordSet
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ""
+			End Get
+		#tag EndGetter
+		leftTypeSelected As Variant
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h0
 		reportFile As folderitem
 	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private rightMetaFilter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		rightMetaRecords As RecordSet
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return ""
+			End Get
+		#tag EndGetter
+		rightTypeSelected As Variant
+	#tag EndComputedProperty
 
 
 	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"5", Scope = Public

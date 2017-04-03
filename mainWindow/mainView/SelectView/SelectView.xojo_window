@@ -32,7 +32,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "20%,20%,10%,50%"
+      ColumnWidths    =   "30%,20%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -82,7 +82,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "20%,20%,10%,50%"
+      ColumnWidths    =   "30%,20%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -323,7 +323,7 @@ End
 	#tag Event
 		Sub Change()
 		  me.ActiveCell.BackColor = &c00FF00
-		  selectViewController.selectedCodeLeft = SelectViewController.SelectType(me,selectViewController.leftRecords)
+		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  Refresh
 		  selectViewController.exportAndCompare
 		End Sub
@@ -362,7 +362,7 @@ End
 		Sub Change()
 		  me.ActiveCell.BackColor = &cFF0000
 		  
-		  selectViewController.selectedCodeRight = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  refresh
 		  selectViewController.exportAndCompare
 		  
@@ -379,10 +379,10 @@ End
 #tag Events TextFieldFilterLeft
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		  selectViewController.leftDataFilter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
 		  selectViewController.leftDataFilter.Run
 		  
-		  selectViewController.leftTypesCounter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		  selectViewController.leftTypesCounter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
 		  selectViewController.leftTypesCounter.Run
 		  
 		  
@@ -391,10 +391,10 @@ End
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.leftDataFilter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		    selectViewController.leftDataFilter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
 		    selectViewController.leftDataFilter.Run
 		    
-		    selectViewController.leftTypesCounter.bindVariables(array(selectViewController.filterExpressionLeft, selectViewController.filterExpressionLeft))
+		    selectViewController.leftTypesCounter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
 		    selectViewController.leftTypesCounter.Run
 		  end if
 		End Function
@@ -403,10 +403,10 @@ End
 #tag Events TextFieldFilterRight
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		  selectViewController.rightDataFilter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
 		  selectViewController.rightDataFilter.Run
 		  
-		  selectViewController.rightTypesCounter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		  selectViewController.rightTypesCounter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
 		  selectViewController.rightTypesCounter.Run
 		  
 		End Sub
@@ -414,10 +414,10 @@ End
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.rightDataFilter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		    selectViewController.rightDataFilter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
 		    selectViewController.rightDataFilter.Run
 		    
-		    selectViewController.rightTypesCounter.bindVariables(array(selectViewController.filterExpressionRight, selectViewController.filterExpressionRight))
+		    selectViewController.rightTypesCounter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
 		    selectViewController.rightTypesCounter.Run
 		  end if
 		End Function
