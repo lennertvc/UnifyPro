@@ -1,6 +1,7 @@
 #tag Class
 Protected Class SelectViewController
 Inherits NSViewController
+Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub autoLayout()
 		  selectView.top = 0
@@ -48,26 +49,33 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
 		  
-		  leftDataFilter = new JVbackGroundQuery(selectData)
-		  leftDataFilter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftDataFilter = new JVbackGroundQuery(app.dataModel, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftDataFilter.backgroundTaskDelegate = me
+		  leftDataFilter.bindVariables()
 		  leftDataFilter.Run
 		  
-		  rightDataFilter = new JVbackGroundQuery(selectData)
-		  rightDataFilter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightDataFilter = new JVbackGroundQuery(app.dataModel, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightDataFilter.backgroundTaskDelegate = me
+		  rightDataFilter.bindVariables()
 		  rightDataFilter.Run
 		  
-		  leftTypesCounter = new JVbackGroundQuery(app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
-		  leftTypesCounter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftTypesCounter = new JVbackGroundQuery(app.dataModel, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftTypesCounter.backgroundTaskDelegate = me
+		  leftTypesCounter.bindVariables()
 		  leftTypesCounter.Run
 		  
-		  rightTypesCounter = new JVbackGroundQuery(app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
-		  rightTypesCounter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightTypesCounter = new JVbackGroundQuery(app.dataModel, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightTypesCounter.backgroundTaskDelegate = me
+		  rightTypesCounter.bindVariables()
 		  rightTypesCounter.Run
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
 		    exportFolder.CreateAsFolder
 		  end if
+		  
+		  leftSelectedType = -1
+		  rightSelectedType = -1
 		  
 		  leftSourceFile = new JVTextFile(exportFolder.Child("sourceLeft.txt"))
 		  rightSourceFile = new JVTextFile(exportFolder.Child("sourceRight.txt"))
@@ -76,7 +84,10 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h0
 		Sub exportAndCompare()
+		  
+		  
 		  if (leftSelectedCode <> "") and  (rightSelectedCode<> "")  then
+		    
 		    
 		    leftSourceFile.Write(leftSelectedCode)
 		    rightSourceFile.Write(rightSelectedCode)
@@ -85,6 +96,38 @@ Inherits NSViewController
 		    
 		  end if
 		  
+		  if (leftSelectedType <> -1) and (rightSelectedType <> -1) then
+		    app.mainWindowController.compareViewController.showMetaData(leftSelectedType, rightSelectedType)
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskFinished(sender as JVBackgroundTask)
+		  // Part of the JVBackgroundTaskDelegate interface.
+		  
+		  Select Case sender
+		    
+		  Case  leftDataFilter
+		    
+		    leftRecords = leftDataFilter.foundRecords
+		    showList(selectView.ListViewLeft, leftRecords)
+		    
+		  Case rightDataFilter
+		    
+		    rightRecords = rightDataFilter.foundRecords
+		    showList(selectView.ListViewRight, rightRecords)
+		    
+		  Case leftTypesCounter
+		    
+		    selectView.LabelCountLeft.Text = Str(leftTypesCounter.RecordCount) +" types op "+Str(leftDataFilter.recordCount)
+		    
+		  Case rightTypesCounter
+		    
+		    selectView.LabelCountRight.Text =  Str(rightTypesCounter.RecordCount) +" types op "+Str(rightDataFilter.recordCount)
+		    
+		  End Select
 		End Sub
 	#tag EndMethod
 
@@ -256,30 +299,8 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub syncInterface(up as Boolean)
+		Sub syncInterface(optional up as Boolean = TRUE)
 		  if up then
-		    
-		    
-		    // Update the filtered result whenever the left filter is no longer running
-		    if  leftDataFilter.State = Thread.NotRunning then
-		      leftRecords = leftDataFilter.foundRecords
-		      showList(selectView.ListViewLeft, leftRecords)
-		    end if
-		    
-		    if leftTypesCounter.State = Thread.NotRunning then
-		      selectView.LabelCountLeft.Text = Str(leftTypesCounter.RecordCount) +" types op "+Str(leftDataFilter.recordCount)
-		    end if
-		    
-		    
-		    // Update the filtered result whenever the right filter is no longer running
-		    if rightDataFilter.State = Thread.NotRunning then
-		      rightRecords = rightDataFilter.foundRecords
-		      showList(selectView.ListViewRight, rightRecords)
-		    end if
-		    
-		    if rightTypesCounter.State = Thread.NotRunning then
-		      selectView.LabelCountRight.Text =  Str(rightTypesCounter.RecordCount) +" types op "+Str(rightDataFilter.recordCount)
-		    end if
 		    
 		  else
 		    
@@ -320,7 +341,7 @@ Inherits NSViewController
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		leftselectedType As Integer
+		leftSelectedType As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -410,9 +431,10 @@ Inherits NSViewController
 			Name="leftSelectedCode"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="leftselectedType"
+			Name="leftSelectedType"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
@@ -426,6 +448,7 @@ Inherits NSViewController
 			Name="rightSelectedCode"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="rightSelectedType"

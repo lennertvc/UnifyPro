@@ -168,7 +168,6 @@ Begin NSView CompareView
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Metadata"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -180,6 +179,14 @@ Begin NSView CompareView
       Underline       =   False
       Visible         =   True
       Width           =   100
+   End
+   Begin Timer timerUpdateUI
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   500
+      Scope           =   0
+      TabPanelIndex   =   0
    End
 End
 #tag EndWindow
@@ -197,6 +204,13 @@ End
 
 #tag EndWindowCode
 
+#tag Events timerUpdateUI
+	#tag Event
+		Sub Action()
+		  compareViewController.syncInterface(TRUE)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

@@ -277,14 +277,6 @@ Begin NSView SelectView
       Visible         =   True
       Width           =   100
    End
-   Begin Timer timerUpdateUI
-      Index           =   -2147483648
-      LockedInPosition=   False
-      Mode            =   2
-      Period          =   500
-      Scope           =   0
-      TabPanelIndex   =   0
-   End
 End
 #tag EndWindow
 
@@ -304,55 +296,78 @@ End
 #tag Events ListViewLeft
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  g.ForeColor = &cFFFFFF
 		  
 		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
+		    
 		    if (column = 0) then
 		      me.CellType(row,0) = Listbox.TypeCheckbox
 		    end if
 		    
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		      g.ForeColor = &c00FF00
+		      g.FillRect(0, 0, me.Width,me.RowHeight)
+		      System.DebugLog ("Painting")
+		      
+		      return TRUE
 		    End If
+		    
+		  else
+		    
+		    return FALSE
 		    
 		  end if
 		  
-		  g.FillRect(0, 0, me.Width,me.RowHeight)
+		  
+		  
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  System.DebugLog ("BeginChange")
 		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
-		  Refresh
 		  selectViewController.exportAndCompare
+		  Refresh(TRUE)
+		  System.DebugLog ("Changed")
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub CellAction(row As Integer, column As Integer)
+		  System.DebugLog ("Action begin")
 		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
+		    System.DebugLog ("Action execute")
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
+		  System.DebugLog ("Action end")
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events ListViewRight
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  g.ForeColor = &cFFFFFF
 		  
 		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
+		    
 		    if (column = 0) then
 		      me.CellType(row,0) = Listbox.TypeCheckbox
 		    end if
 		    
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		      g.ForeColor = &cFF0000
+		      g.FillRect(0, 0, me.Width,me.RowHeight)
+		      
+		      return TRUE
 		    End If
+		    
+		  else
+		    
+		    return FALSE
 		    
 		  end if
 		  
 		  
-		  g.FillRect(0, 0, me.Width,me.RowHeight)
+		  
 		  
 		End Function
 	#tag EndEvent
@@ -360,9 +375,8 @@ End
 		Sub Change()
 		  
 		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
-		  refresh
 		  selectViewController.exportAndCompare
-		  
+		  Refresh(TRUE)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -370,6 +384,7 @@ End
 		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -418,13 +433,6 @@ End
 		    selectViewController.rightTypesCounter.Run
 		  end if
 		End Function
-	#tag EndEvent
-#tag EndEvents
-#tag Events timerUpdateUI
-	#tag Event
-		Sub Action()
-		  selectViewController.syncInterface(TRUE)
-		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

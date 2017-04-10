@@ -32,6 +32,7 @@ Inherits NSViewController
 
 	#tag Method, Flags = &h0
 		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
+		  
 		  // Execute Compare it trough the CLI of Compare-it when on the right platform
 		  
 		  #if TargetWindows then
@@ -50,13 +51,13 @@ Inherits NSViewController
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new CompareView, nil)
 		  
-		  dim leftMetaFilter as new JVbackGroundQuery(app.datamodel.Prepare("SELECT* FROM metaData WHERE regelingTypeID = ?"))
-		  leftMetaFilter.bindVariables(array(leftTypeSelected))
+		  leftMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  leftMetaFilter.bindVariables()
 		  leftMetaFilter.Run
 		  
-		  dim righMetaFilter as new JVbackGroundQuery(app.datamodel.Prepare("SELECT* FROM metaData WHERE regelingTypeID = ?"))
-		  righMetaFilter.bindVariables(array(leftTypeSelected))
-		  righMetaFilter.Run
+		  rightMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  rightMetaFilter.bindVariables()
+		  rightMetaFilter.Run
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  system.debuglog(reportFolder.absolutePath)
@@ -106,6 +107,16 @@ Inherits NSViewController
 		    
 		  end if
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showMetaData(leftType as Variant, rightType as Variant)
+		  leftMetaFilter.bindVariables(array(leftType))
+		  leftMetaFilter.run
+		  
+		  rightMetaFilter.bindVariables(array(rightType))
+		  rightMetaFilter.run
 		End Sub
 	#tag EndMethod
 
@@ -160,15 +171,6 @@ Inherits NSViewController
 		leftMetaRecords As RecordSet
 	#tag EndProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ""
-			End Get
-		#tag EndGetter
-		leftTypeSelected As Variant
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h0
 		reportFile As folderitem
 	#tag EndProperty
@@ -182,12 +184,7 @@ Inherits NSViewController
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return ""
-			End Get
-		#tag EndGetter
-		rightTypeSelected As Variant
+		selectViewController As SelectViewController
 	#tag EndComputedProperty
 
 

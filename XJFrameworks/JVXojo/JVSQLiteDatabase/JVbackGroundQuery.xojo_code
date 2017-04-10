@@ -1,6 +1,6 @@
 #tag Class
 Protected Class JVbackGroundQuery
-Inherits Thread
+Inherits JVBackgroundTask
 	#tag Event
 		Sub Run()
 		  foundRecords = preparedStatement.SQLSelect
@@ -9,17 +9,33 @@ Inherits Thread
 
 
 	#tag Method, Flags = &h0
-		Sub bindVariables(variables() as Variant)
+		Sub bindVariables(optional variables() as Variant = nil)
+		  
+		  if variables =  nil then
+		    variables = emptyVariables
+		  end if
+		  
 		  preparedStatement.bindVariables(variables)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(preparedStatement as SQLitePreparedStatement)
-		  me.preparedStatement = preparedStatement
+		Sub Constructor(database as sqliteDatabase , statementString as String)
+		  super.constructor
+		  
+		  dim variableCount as Integer = statementString.Split("?").Ubound+1
+		  for emptyVariable as Integer = 1 to variableCount
+		    emptyVariables.append ("%")
+		  next
+		  
+		  me.preparedStatement = database.Prepare(statementString)
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		emptyVariables() As Variant
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		foundRecords As RecordSet

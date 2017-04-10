@@ -1,0 +1,42 @@
+#tag Interface
+Protected Interface JVTaskDelegate
+	#tag Method, Flags = &h0
+		Sub onTaskBegin(sender as JVtask)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskFinished(sender as JVtask)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskKilled(sender as JVtask)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskRun(sender as JVTask)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskUpdateUI(sender as JVtask)
+		  
+		End Sub
+	#tag EndMethod
+
+
+	#tag Note, Name = Protocol description
+		Defines the protocol all JVtask-delegates must conform to
+		
+		
+	#tag EndNote
+
+
+End Interface
+#tag EndInterface
