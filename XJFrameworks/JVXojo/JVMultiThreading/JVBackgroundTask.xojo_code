@@ -18,9 +18,10 @@ Inherits Thread
 		  mTimer = New Timer
 		  mTimer.Mode = Timer.ModeMultiple
 		  mTimer.Period = 500
-		  mTimer.Enabled = TRUE
 		  
 		  AddHandler mTimer.Action, WeakAddressOf checkCurrentState
+		  mTimer.Enabled = TRUE
+		  
 		End Sub
 	#tag EndMethod
 
@@ -69,10 +70,6 @@ Inherits Thread
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		#tag Note
-			This timer is used to punt events from the thread onto the main thread, where
-			popFromEventQueue will process all of the queued events.
-		#tag EndNote
 		Private mTimer As Timer
 	#tag EndProperty
 

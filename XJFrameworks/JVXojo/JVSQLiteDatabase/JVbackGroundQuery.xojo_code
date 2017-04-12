@@ -23,12 +23,19 @@ Inherits JVBackgroundTask
 		Sub Constructor(database as sqliteDatabase , statementString as String)
 		  super.constructor
 		  
-		  dim variableCount as Integer = statementString.Split("?").Ubound+1
-		  for emptyVariable as Integer = 1 to variableCount
-		    emptyVariables.append ("%")
-		  next
-		  
 		  me.preparedStatement = database.Prepare(statementString)
+		  
+		  dim splitVariables() as string = statementString.Split("?")
+		  dim lastVariable as Integer = splitVariables.Ubound-1
+		  for  variableNumber as Integer = 0 to lastVariable
+		    dim variableString as String = splitVariables(variableNumber)
+		    if variableString.contains("Like") then
+		      emptyVariables.append ("%")
+		    else
+		      emptyVariables.append ("")
+		    end if
+		    
+		  next
 		End Sub
 	#tag EndMethod
 

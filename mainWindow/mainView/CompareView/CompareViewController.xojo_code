@@ -1,6 +1,7 @@
 #tag Class
 Protected Class CompareViewController
 Inherits NSViewController
+Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub autoLayout()
 		  compareView.top = compareView.window.height*0.33
@@ -52,10 +53,12 @@ Inherits NSViewController
 		  Super.Constructor(new CompareView, nil)
 		  
 		  leftMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  leftMetaFilter.backgroundTaskDelegate = me
 		  leftMetaFilter.bindVariables()
 		  leftMetaFilter.Run
 		  
 		  rightMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  rightMetaFilter.backgroundTaskDelegate = me
 		  rightMetaFilter.bindVariables()
 		  rightMetaFilter.Run
 		  
@@ -70,6 +73,26 @@ Inherits NSViewController
 		  #endif
 		  reportFile = reportFolder.Child(reportName)
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskFinished(sender as JVBackgroundTask)
+		  // Part of the JVBackgroundTaskDelegate interface.
+		  
+		  Select Case sender
+		    
+		  Case  leftMetaFilter
+		    
+		    leftMetaRecords = leftMetaFilter.foundRecords
+		    showList(compareView.ListMetaLeft, leftMetaRecords)
+		    
+		  Case rightMetaFilter
+		    
+		    rightMetaRecords = rightMetaFilter.foundRecords
+		    showList(compareView.ListMetaRight, rightMetaRecords)
+		    
+		  End Select
 		End Sub
 	#tag EndMethod
 
@@ -129,21 +152,9 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub syncInterface(up as Boolean)
+		Sub syncInterface(optional up as Boolean =TRUE)
 		  if up then
 		    
-		    
-		    // Update the filtered result whenever the left filter is no longer running
-		    if  leftMetaFilter.State = Thread.NotRunning then
-		      leftMetaRecords = leftMetaFilter.foundRecords
-		      showList(compareView.ListMetaLeft, leftMetaRecords)
-		    end if
-		    
-		    // Update the filtered result whenever the right filter is no longer running
-		    if  rightMetaFilter.State = Thread.NotRunning then
-		      rightMetaRecords = rightMetaFilter.foundRecords
-		      showList(compareView.ListMetaRight, rightMetaRecords)
-		    end if
 		    
 		  else
 		    
