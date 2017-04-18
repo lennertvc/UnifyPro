@@ -182,6 +182,7 @@ Begin NSView CompareView
       Width           =   100
    End
    Begin Timer timerUpdateUI
+      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
