@@ -168,6 +168,7 @@ Begin NSView CompareView
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Metadata"
       TextAlign       =   0
       TextColor       =   &c00000000

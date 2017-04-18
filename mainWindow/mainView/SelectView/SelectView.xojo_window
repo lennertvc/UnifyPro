@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      BackColor       =   &cFFFF00FF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -166,13 +166,34 @@ Begin NSView SelectView
       UseFocusRing    =   True
       Visible         =   True
       Width           =   138
+      Begin ProgressWheel ProgressWheelLeft
+         AutoDeactivate  =   True
+         Enabled         =   True
+         Height          =   16
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TextFieldFilterLeft"
+         Left            =   139
+         LockBottom      =   False
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   0
+         TabPanelIndex   =   0
+         TabStop         =   True
+         Top             =   14
+         Visible         =   False
+         Width           =   16
+      End
    End
    Begin TextField TextFieldFilterRight
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      BackColor       =   &cFFFF00FF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -208,6 +229,27 @@ Begin NSView SelectView
       UseFocusRing    =   True
       Visible         =   True
       Width           =   138
+      Begin ProgressWheel ProgressWheelRight
+         AutoDeactivate  =   True
+         Enabled         =   True
+         Height          =   16
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TextFieldFilterRight"
+         Left            =   455
+         LockBottom      =   False
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   0
+         TabPanelIndex   =   0
+         TabStop         =   True
+         Top             =   14
+         Visible         =   False
+         Width           =   16
+      End
    End
    Begin Label LabelCountLeft
       AutoDeactivate  =   True
@@ -231,7 +273,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      Text            =   "Untitled"
+      Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
       TextFont        =   "System"
@@ -265,7 +307,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      Text            =   "Untitled"
+      Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
       TextFont        =   "System"
@@ -304,12 +346,16 @@ End
 		    end if
 		    
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      
 		      g.ForeColor = &c00FF00
 		      g.FillRect(0, 0, me.Width,me.RowHeight)
-		      System.DebugLog ("Painting")
-		      
 		      return TRUE
-		    End If
+		      
+		    else
+		      
+		      return FALSE
+		      
+		    end If
 		    
 		  else
 		    
@@ -317,28 +363,25 @@ End
 		    
 		  end if
 		  
-		  
-		  
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  System.DebugLog ("BeginChange")
+		  
 		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  selectViewController.exportAndCompare
-		  Refresh(TRUE)
-		  System.DebugLog ("Changed")
+		  
+		  refresh(TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  
+		  
 		  
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub CellAction(row As Integer, column As Integer)
-		  System.DebugLog ("Action begin")
 		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
-		    System.DebugLog ("Action execute")
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
-		  System.DebugLog ("Action end")
 		  
 		End Sub
 	#tag EndEvent
@@ -354,21 +397,22 @@ End
 		    end if
 		    
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
+		      
 		      g.ForeColor = &cFF0000
 		      g.FillRect(0, 0, me.Width,me.RowHeight)
-		      
 		      return TRUE
-		    End If
+		      
+		    else
+		      
+		      return FALSE
+		      
+		    end If
 		    
 		  else
 		    
 		    return FALSE
 		    
 		  end if
-		  
-		  
-		  
-		  
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -376,7 +420,9 @@ End
 		  
 		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  selectViewController.exportAndCompare
-		  Refresh(TRUE)
+		  
+		  refresh(TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -391,48 +437,66 @@ End
 #tag Events TextFieldFilterLeft
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.leftDataFilter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
-		  selectViewController.leftDataFilter.Run
-		  
-		  selectViewController.leftTypesCounter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
-		  selectViewController.leftTypesCounter.Run
-		  
-		  
+		  if (me.text) <> (selectViewController.leftFilterExpression.StringValue.replaceAll("%", "")) then
+		    
+		    selectViewController.leftFilterExpression = me.text
+		    selectViewController.loadLeftData
+		    
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.leftDataFilter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
-		    selectViewController.leftDataFilter.Run
 		    
-		    selectViewController.leftTypesCounter.bindVariables(array(selectViewController.leftFilterExpression, selectViewController.leftFilterExpression))
-		    selectViewController.leftTypesCounter.Run
+		    if (me.text) <> (selectViewController.leftFilterExpression.StringValue.replaceAll("%", "")) then
+		      
+		      selectViewController.leftFilterExpression = me.text
+		      selectViewController.loadLeftData
+		      
+		    end if
+		    
+		    return TRUE
 		  end if
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.BackColor = &cFFFFFF
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events TextFieldFilterRight
 	#tag Event
 		Sub LostFocus()
-		  selectViewController.rightDataFilter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
-		  selectViewController.rightDataFilter.Run
-		  
-		  selectViewController.rightTypesCounter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
-		  selectViewController.rightTypesCounter.Run
-		  
+		  if (me.text) <> (selectViewController.rightFilterExpression.StringValue.replaceAll("%", "")) then
+		    
+		    selectViewController.rightFilterExpression = me.Text
+		    selectViewController.loadrightData
+		    
+		  end if
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function KeyDown(Key As String) As Boolean
 		  if Key = CHR(13) or Key = CHR(10) then
-		    selectViewController.rightDataFilter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
-		    selectViewController.rightDataFilter.Run
 		    
-		    selectViewController.rightTypesCounter.bindVariables(array(selectViewController.rightFilterExpression, selectViewController.rightFilterExpression))
-		    selectViewController.rightTypesCounter.Run
+		    if (me.text) <> (selectViewController.rightFilterExpression.StringValue.replaceAll("%", "")) then
+		      
+		      selectViewController.rightFilterExpression = me.Text
+		      selectViewController.loadrightData
+		      
+		    end if
+		    
+		    return TRUE
 		  end if
+		  
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.BackColor = &cFFFFFF
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag ViewBehavior

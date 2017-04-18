@@ -47,27 +47,23 @@ Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
+		  Super.Constructor(new SelectView, app.dataModel)
 		  
-		  leftDataFilter = new JVbackGroundQuery(app.dataModel, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
 		  leftDataFilter.backgroundTaskDelegate = me
 		  leftDataFilter.bindVariables()
-		  leftDataFilter.Run
 		  
-		  rightDataFilter = new JVbackGroundQuery(app.dataModel, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
 		  rightDataFilter.backgroundTaskDelegate = me
 		  rightDataFilter.bindVariables()
-		  rightDataFilter.Run
 		  
-		  leftTypesCounter = new JVbackGroundQuery(app.dataModel, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
 		  leftTypesCounter.backgroundTaskDelegate = me
 		  leftTypesCounter.bindVariables()
-		  leftTypesCounter.Run
 		  
-		  rightTypesCounter = new JVbackGroundQuery(app.dataModel, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
 		  rightTypesCounter.backgroundTaskDelegate = me
 		  rightTypesCounter.bindVariables()
-		  rightTypesCounter.Run
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
@@ -104,20 +100,59 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub loadLeftData()
+		  
+		  selectView.ProgressWheelLeft.Visible = TRUE
+		  selectView.LabelCountLeft.text ="Loading data"
+		  selectView.Refresh
+		  app.DoEvents
+		  
+		  leftDataFilter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftDataFilter.Run
+		  
+		  leftTypesCounter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftTypesCounter.Run
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub loadRightData()
+		  
+		  selectView.ProgressWheelRight.Visible = TRUE
+		  selectView.LabelCountRight.text ="Loading data"
+		  selectView.Refresh
+		  app.DoEvents
+		  
+		  rightDataFilter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightDataFilter.Run
+		  
+		  rightTypesCounter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightTypesCounter.Run
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onTaskFinished(sender as JVBackgroundTask)
 		  // Part of the JVBackgroundTaskDelegate interface.
 		  
 		  Select Case sender
 		    
+		    
 		  Case  leftDataFilter
 		    
 		    leftRecords = leftDataFilter.foundRecords
 		    showList(selectView.ListViewLeft, leftRecords)
+		    selectView.ProgressWheelLeft.Visible = FALSE
 		    
 		  Case rightDataFilter
 		    
 		    rightRecords = rightDataFilter.foundRecords
 		    showList(selectView.ListViewRight, rightRecords)
+		    selectView.ProgressWheelRight.Visible = FALSE
 		    
 		  Case leftTypesCounter
 		    
@@ -134,6 +169,13 @@ Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub onviewActivate(sender as nsview)
 		  autoLayout
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onViewOpen(sender as NSView)
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -179,7 +221,7 @@ Implements JVBackgroundTaskDelegate
 		    
 		    if list.Selected(rowNumber) then
 		      // Remember the selections parent and its code
-		      selectedParentRow = currentParentRow
+		      selectedParentRow = currentParentRow 
 		      selectedParentCode = currentParentCode
 		      // Report the selected row while developing
 		      #if DebugBuild then
@@ -203,7 +245,7 @@ Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h21
 		Private Sub showList(list as JVTreeView, data as recordset)
 		  
-		  If data <> Nil and data.RecordCount > 0  and not Data.EOF Then
+		  If (list <> Nil)  and (data <> Nil) and (data.RecordCount > 0)  and (not Data.EOF) Then
 		    
 		    list.DeleteAllRows
 		    
@@ -325,10 +367,16 @@ Implements JVBackgroundTaskDelegate
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterLeft.Text+"%"
+			  dim filterExpression as Variant = "%"+mLeftFilterExpression+"%"
 			  Return filterExpression
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  System.DebugLog(value.StringValue)
+			  mLeftFilterExpression = value.StringValue
+			End Set
+		#tag EndSetter
 		leftFilterExpression As Variant
 	#tag EndComputedProperty
 
@@ -352,6 +400,14 @@ Implements JVBackgroundTaskDelegate
 		leftTypesCounter As JVbackGroundQuery
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mLeftFilterExpression As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRightFilterExpression As String
+	#tag EndProperty
+
 	#tag Property, Flags = &h0
 		#tag Note
 			_
@@ -362,10 +418,16 @@ Implements JVBackgroundTaskDelegate
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterRight.Text+"%"
+			  dim filterExpression as Variant = "%"+mRightFilterExpression+"%"
 			  Return filterExpression
+			  
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  mRightFilterExpression =  value.StringValue
+			End Set
+		#tag EndSetter
 		rightFilterExpression As Variant
 	#tag EndComputedProperty
 
@@ -392,10 +454,10 @@ Implements JVBackgroundTaskDelegate
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return SQLitePreparedStatement(representedObject)
+			  return SQLiteDatabase(representedObject)
 			End Get
 		#tag EndGetter
-		selectData As SQLitePreparedStatement
+		selectData As SQLiteDatabase
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0

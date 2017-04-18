@@ -3,8 +3,9 @@ Protected Class JVBackgroundTask
 Inherits Thread
 	#tag Method, Flags = &h21
 		Private Sub checkCurrentState(sender as Timer)
-		  If State= Thread.NotRunning then
+		  If  State= Thread.NotRunning and not mEventWasFired then
 		    
+		    mEventWasFired=  TRUE
 		    RaiseEvent finished
 		    
 		  end if
@@ -15,12 +16,23 @@ Inherits Thread
 		Sub constructor()
 		  // mLock = New CriticalSection
 		  
+		  mEventWasFired = FALSE
+		  
 		  mTimer = New Timer
-		  mTimer.Mode = Timer.ModeMultiple
 		  mTimer.Period = 500
+		  mTimer.Mode = Timer.ModeMultiple
 		  
 		  AddHandler mTimer.Action, WeakAddressOf checkCurrentState
 		  mTimer.Enabled = TRUE
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub run()
+		  mEventWasFired = FALSE
+		  super.run
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -62,7 +74,11 @@ Inherits Thread
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mbackgroundTaskDelegate As JVBackgroundTaskDelegate
+		Private mBackgroundTaskDelegate As JVBackgroundTaskDelegate
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		mEventWasFired As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -81,6 +97,11 @@ Inherits Thread
 			Group="ID"
 			Type="Integer"
 			EditorType="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="mEventWasFired"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

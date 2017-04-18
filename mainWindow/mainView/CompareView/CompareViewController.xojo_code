@@ -50,14 +50,14 @@ Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new CompareView, nil)
+		  Super.Constructor(new CompareView, app.datamodel)
 		  
-		  leftMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  leftMetaFilter = new JVbackGroundQuery(compareData, "SELECT* FROM metaData WHERE regelingTypeID = ?")
 		  leftMetaFilter.backgroundTaskDelegate = me
 		  leftMetaFilter.bindVariables()
 		  leftMetaFilter.Run
 		  
-		  rightMetaFilter = new JVbackGroundQuery(app.datamodel, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  rightMetaFilter = new JVbackGroundQuery(compareData, "SELECT* FROM metaData WHERE regelingTypeID = ?")
 		  rightMetaFilter.backgroundTaskDelegate = me
 		  rightMetaFilter.bindVariables()
 		  rightMetaFilter.Run
@@ -164,6 +164,15 @@ Implements JVBackgroundTaskDelegate
 		End Sub
 	#tag EndMethod
 
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return SQLiteDatabase(representedObject)
+			End Get
+		#tag EndGetter
+		compareData As SQLiteDatabase
+	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

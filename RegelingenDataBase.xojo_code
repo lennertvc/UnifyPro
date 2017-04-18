@@ -97,6 +97,7 @@ Inherits SQLiteDatabase
 		  If  (defaultFile <> nil) and (defaultFile.exists) Then
 		    
 		    // Open
+		    
 		    Dim database As New RegelingenDataBase
 		    database.databaseFile = defaultFile
 		    
@@ -105,7 +106,9 @@ Inherits SQLiteDatabase
 		    else
 		      msgbox("[RegelingenDataBase] Error connecting to database 'Regelingendatabse' "+database.ErrorMessage)
 		      return nil
+		      
 		    end if
+		    
 		    
 		  else
 		    

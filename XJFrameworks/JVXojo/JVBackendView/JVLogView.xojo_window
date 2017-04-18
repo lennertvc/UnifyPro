@@ -30,7 +30,7 @@ Begin NSView JVLogView
       Alignment       =   1
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      BackColor       =   &cFFFF00FF
       Bold            =   False
       Border          =   True
       DataField       =   ""
