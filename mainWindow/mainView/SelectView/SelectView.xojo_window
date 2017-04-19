@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFFFFFF00
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -193,7 +193,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFFFFFF00
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -348,20 +348,19 @@ End
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		      
 		      g.ForeColor = &c00FF00
-		      g.FillRect(0, 0, me.Width,me.RowHeight)
-		      return TRUE
+		      g.FillRect(0, 0, g.Width,g.Height)
 		      
 		    else
-		      
-		      return FALSE
-		      
+		      g.ForeColor = &cFFFFFF
+		      g.FillRect(0, 0, g.Width,g.Height)
 		    end If
 		    
 		  else
-		    
-		    return FALSE
-		    
+		    g.ForeColor = &cFFFFFF
+		    g.FillRect(0, 0, g.Width,g.Height)
 		  end if
+		  
+		  me.InvalidateCell(row,-1)
 		  
 		End Function
 	#tag EndEvent
@@ -371,7 +370,7 @@ End
 		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  selectViewController.exportAndCompare
 		  
-		  refresh(TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  refresh( TRUE) // Repaint  the cells backgrounds after the selection has changed
 		  
 		  
 		  
@@ -389,7 +388,6 @@ End
 #tag Events ListViewRight
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  
 		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
 		    
 		    if (column = 0) then
@@ -399,20 +397,19 @@ End
 		    If (me.CellState(row, 0) = CheckBox.CheckedStates.Checked) Then
 		      
 		      g.ForeColor = &cFF0000
-		      g.FillRect(0, 0, me.Width,me.RowHeight)
-		      return TRUE
+		      g.FillRect(0, 0, g.Width,g.Height)
 		      
 		    else
-		      
-		      return FALSE
-		      
+		      g.ForeColor = &cFFFFFF
+		      g.FillRect(0, 0, g.Width,g.Height)
 		    end If
 		    
 		  else
-		    
-		    return FALSE
-		    
+		    g.ForeColor = &cFFFFFF
+		    g.FillRect(0, 0, g.Width,g.Height)
 		  end if
+		  
+		  me.InvalidateCell(row,-1)
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -422,6 +419,7 @@ End
 		  selectViewController.exportAndCompare
 		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  
 		  
 		End Sub
 	#tag EndEvent
