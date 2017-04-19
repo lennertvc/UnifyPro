@@ -360,8 +360,7 @@ End
 		    g.FillRect(0, 0, g.Width,g.Height)
 		  end if
 		  
-		  me.InvalidateCell(row,-1)
-		  
+		  me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted when the next selection has changed
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -370,7 +369,7 @@ End
 		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  selectViewController.exportAndCompare
 		  
-		  refresh( TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
 		  
@@ -409,7 +408,7 @@ End
 		    g.FillRect(0, 0, g.Width,g.Height)
 		  end if
 		  
-		  me.InvalidateCell(row,-1)
+		  me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted when the next selection has changed
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -418,7 +417,7 @@ End
 		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  selectViewController.exportAndCompare
 		  
-		  refresh(TRUE) // Repaint  the cells backgrounds after the selection has changed
+		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
 		End Sub
