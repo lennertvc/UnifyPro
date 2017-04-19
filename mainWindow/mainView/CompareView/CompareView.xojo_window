@@ -181,6 +181,15 @@ Begin NSView CompareView
       Visible         =   True
       Width           =   100
    End
+   Begin Timer timerUpdateUI
+      Enabled         =   True
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   500
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
 End
 #tag EndWindow
 
@@ -197,6 +206,13 @@ End
 
 #tag EndWindowCode
 
+#tag Events timerUpdateUI
+	#tag Event
+		Sub Action()
+		  compareViewController.syncInterface(TRUE)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

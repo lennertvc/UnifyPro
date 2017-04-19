@@ -2,15 +2,13 @@
 Protected Class RegelingenDataBase
 Inherits SQLiteDatabase
 	#tag Method, Flags = &h0
-		Function addCodeToDB(originalcode as string,cleanedupcode as String,procesPart as string,metadata as integer) As Boolean
+		Function addCodeToDB(originalcode as string,cleanedupcode as String,procesPart as string) As Boolean
 		  Dim record As New DatabaseRecord
+		  
 		  // ID will be added automatically
 		  record.Column("OriginalCode") = originalcode
 		  record.Column("CleanedUpCode") = cleanedupcode
 		  record.Column("procesDeel") = procesPart
-		  
-		  // Foreign keys
-		  record.IntegerColumn("metaData") = metadata
 		  
 		  InsertRecord("RegelingTypes", record)
 		  
@@ -48,14 +46,15 @@ Inherits SQLiteDatabase
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function addMetaData(Number0 as integer,Number1 as integer,Number2 as integer,Number3 as string,Number4 as string) As Boolean
+		Function addMetaData(Key as string,value as string,foreignkey as integer) As Boolean
 		  Dim record As New DatabaseRecord
+		  
 		  // ID will be added automatically
-		  record.Column("NumberW") =str( Number0)
-		  record.Column("NumberM") = str(Number1)
-		  record.Column("NumberV") = str(Number2)
-		  record.Column("Config") = Number3
-		  record.Column("PIDControl") = Number4
+		  record.Column("Key") =Key
+		  record.Column("Value") = Value
+		  
+		  // Foreign keys
+		  record.IntegerColumn("RegelingTypeID") = foreignkey
 		  
 		  InsertRecord("Metadata", record)
 		  
@@ -85,22 +84,6 @@ Inherits SQLiteDatabase
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function lookupRecordMeta(lookupValue0 as string,lookupValue1 as string,lookupValue2 as string,lookupValue3 as string,lookupValue4 as string) As integer
-		  dim number as integer =0
-		  'dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From "+lookupTable+" WHERE "+lookupField+" = '"+lookupValue+"'")
-		  dim previousRecords as Recordset = SQLSelect("Select metaDataID From metaData where numberW= "+"'"+lookupValue0+"'"+" and numberM= "+"'"+lookupValue1+"'"+" and numberV= "+"'"+lookupValue2+"'"+" and Config= "+"'"+lookupValue3+"'"+" and PIDControl= "+"'"+lookupValue4+"'")
-		  if previousrecords.fieldcount>=1 then
-		    system.DebugLog("ident")
-		    previousRecords.MoveFirst 
-		    number=previousRecords.Field("MetaDataID").IntegerValue
-		    return number
-		  end if
-		  
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function newPKFromTable(TableName as String) As Integer
 		  dim newPK as RecordSet= SQLSelect("select seq from sqlite_sequence where name='"+TableName +"';")
 		  return newPK.Field("seq").IntegerValue
@@ -114,6 +97,7 @@ Inherits SQLiteDatabase
 		  If  (defaultFile <> nil) and (defaultFile.exists) Then
 		    
 		    // Open
+		    
 		    Dim database As New RegelingenDataBase
 		    database.databaseFile = defaultFile
 		    
@@ -122,7 +106,9 @@ Inherits SQLiteDatabase
 		    else
 		      msgbox("[RegelingenDataBase] Error connecting to database 'Regelingendatabse' "+database.ErrorMessage)
 		      return nil
+		      
 		    end if
+		    
 		    
 		  else
 		    

@@ -131,11 +131,7 @@ Inherits TabPanel
 		#tag ViewProperty
 			Name="TabDefinition"
 			Group="Appearance"
-<<<<<<< HEAD
-			InitialValue="Tab 0\\\\\\\\\\\\\\\\rTab 1"
-=======
-			InitialValue="Tab 0\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\rTab 1"
->>>>>>> master
+			InitialValue="Tab 0\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\rTab 1"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty

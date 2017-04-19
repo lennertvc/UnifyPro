@@ -14,6 +14,7 @@ Inherits NSApplicationDelegate
 		  
 		  preProcess= new PreProcessor
 		  
+		  
 		  mainController = new mainWindowController
 		  
 		  
@@ -26,6 +27,13 @@ Inherits NSApplicationDelegate
 		    JVDevelopmentViewController.sharedDevelopmentViewController.addTestButton("Lees Multiline",  NSButton.action(addressof testRoutineMultiLine))
 		    
 		  #endif
+		  
+		  // Xojo only supports coöperitive multitasking so threads simply divide the resources of as single processor core
+		  // Therefore Xojo halts the creation of window and viewcontrollers when lots of data gets pulled from the dbase to soon.
+		  // This is why the data gets loaded here, when the app is fully initialized an all windows are already open
+		  mainWindowController.selectViewController.loadLeftData 
+		  mainWindowController.selectViewController.loadRightData 
+		  
 		End Sub
 	#tag EndEvent
 
@@ -40,9 +48,9 @@ Inherits NSApplicationDelegate
 	#tag Method, Flags = &h0
 		Sub testRoutineFillDatabase(sender as NSButton)
 		  dim filler as new FillDatabase
-		  dim datamodel as new RegelingenDataBase
-		  
-		  datamodel = RegelingenDataBase.open
+		  // dim datamodel as new RegelingenDataBase
+		  // 
+		  // datamodel = RegelingenDataBase.open
 		  filler.addData(preprocess,datamodel,a)
 		  
 		End Sub
@@ -75,27 +83,12 @@ Inherits NSApplicationDelegate
 	#tag Note, Name = ToDo Jan v2.0
 		Extra windows voorzien voor tonen original code
 		
-	#tag EndNote
-
-	#tag Note, Name = ToDo Jan
 		
-		Mergen met Masterversie en branch Lennert
+		
 	#tag EndNote
 
 	#tag Note, Name = ToDo Lennert
-		Vullen veld procesdeel
-		Vullen veld Installatie
-		Vullen veld Kostenplaats
-		Vullen veld filepath met correcte data
-		WegFilteren van de prefix van de subroutine op basis van een variabele die gekend is met bij regex \D+(SiSTSP) en vervangen door xx
 		
-		Private methods als dusdanig aanduiden
-		Wegwerken defaultvalues in arrays door gebruik van append inplaats van item(i)
-		For next loops indien mogelijk voorzien van fast enumaration
-		
-		
-		
-		Vullen van metadata
 		
 	#tag EndNote
 

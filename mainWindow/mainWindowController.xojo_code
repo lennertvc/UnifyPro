@@ -1,5 +1,5 @@
 #tag Class
-Protected Class mainWindowController
+Protected Class MainWindowController
 Inherits NSWindowController
 	#tag Method, Flags = &h0
 		Sub constructor()

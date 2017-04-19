@@ -5,27 +5,9 @@ Protected Class FillDatabase
 		  // Quit Unity if it's still running
 		  Unitypro.quitall
 		  
-		  
-<<<<<<< HEAD
-		  dim b() as Dictionary
-		  dim c() as Dictionary
-		  dim array0() as string
-=======
-		  
->>>>>>> master
-		  
-		  
+		  //start loop
 		  for j as integer = 0 to a.Ubound
 		    
-<<<<<<< HEAD
-		    dim tt as folderitem =a(j).value("file_folderitem")
-		    
-		    //starup project + retrieve sectionnames
-		    b=preprocessor.retrievesectionnames( a(j).value("file_folderitem") )
-		    
-		    //extract original code (destination table = regelingtypes, column = originalcode)
-		    array0=preprocessor.extractoriginalcode
-=======
 		    dim b() as Dictionary
 		    dim c() as Dictionary
 		    dim array0() as string
@@ -39,45 +21,31 @@ Protected Class FillDatabase
 		    
 		    //extract original code (destination table = regelingtypes, column = originalcode)
 		    array0=preprocessor.extractoriginalcode(array1)
->>>>>>> master
 		    
 		    //convert original code (destination table = regelingtypes, column = cleanedupcode)
 		    c=preprocessor.convertCode(array0)
 		    
-		    //write to DB (table = RegelingTypes)
-		    
+		    //write info to DB 
 		    for i as integer =0 to c.ubound
 		      
-<<<<<<< HEAD
-		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
-		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") , datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")))
-		      end if
-		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
-		        call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , " " , c(i).value("proces"))
-		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"))
-=======
 		      //collect metadata
 		      dim d as new Dictionary
 		      d=preprocessor.FindMetaData(c(i).value("cleanedUpCode"))
 		      
+		      //check presence in DB
 		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
 		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") , datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")),b(i).value("section_FM"))
 		      end if
-		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
-		        
-		        if datamodel.lookupRecordMeta(d.Value("NumberW"),d.Value("NumberM"),d.Value("NumberV"),d.Value("Config"),d.Value("PIDControl"))= 0  then
-		          call datamodel.addMetaData(d.Value("NumberW"),d.Value("NumberM"),d.Value("NumberV"),d.Value("Config"),d.Value("PIDControl"))
-		          call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , c(i).value("proces"),datamodel.newpkfromtable("metaData"))
-		          call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"),b(i).value("section_FM"))
-		          
-		        else
-		          call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , c(i).value("proces"),datamodel.lookupRecordMeta(d.Value("NumberW"),d.Value("NumberM"),d.Value("NumberV"),d.Value("Config"),d.Value("PIDControl")))
-		          call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"),b(i).value("section_FM"))
-		        end if
-		        
->>>>>>> master
-		      end if
 		      
+		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
+		        call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , c(i).value("proces"))
+		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"),b(i).value("section_FM"))
+		        call datamodel.addMetaData("aantal werktuigen",d.Value("NumberW"),datamodel.newpkfromtable("regelingTypes"))
+		        call datamodel.addMetaData("aantal metingen",d.Value("NumberM"),datamodel.newpkfromtable("regelingTypes"))
+		        call datamodel.addMetaData("aantal vlotters",d.Value("NumberV"),datamodel.newpkfromtable("regelingTypes"))
+		        call datamodel.addMetaData("opstelling",d.Value("Config"),datamodel.newpkfromtable("regelingTypes"))
+		        call datamodel.addMetaData("PID",d.Value("PIDControl"),datamodel.newpkfromtable("regelingTypes"))
+		      end if
 		      
 		    next
 		    

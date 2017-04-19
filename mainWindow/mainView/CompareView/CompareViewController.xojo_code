@@ -1,6 +1,7 @@
 #tag Class
 Protected Class CompareViewController
 Inherits NSViewController
+Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub autoLayout()
 		  compareView.top = compareView.window.height*0.33
@@ -31,7 +32,8 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub compare(leftFile as folderItem, rightFile as FolderItem)
+		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
+		  
 		  // Execute Compare it trough the CLI of Compare-it when on the right platform
 		  
 		  #if TargetWindows then
@@ -48,8 +50,17 @@ Inherits NSViewController
 	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new CompareView, nil)
+		  Super.Constructor(new CompareView, app.datamodel)
 		  
+		  leftMetaFilter = new JVbackGroundQuery(compareData, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  leftMetaFilter.backgroundTaskDelegate = me
+		  leftMetaFilter.bindVariables()
+		  leftMetaFilter.Run
+		  
+		  rightMetaFilter = new JVbackGroundQuery(compareData, "SELECT* FROM metaData WHERE regelingTypeID = ?")
+		  rightMetaFilter.backgroundTaskDelegate = me
+		  rightMetaFilter.bindVariables()
+		  rightMetaFilter.Run
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  system.debuglog(reportFolder.absolutePath)
@@ -66,6 +77,26 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onTaskFinished(sender as JVBackgroundTask)
+		  // Part of the JVBackgroundTaskDelegate interface.
+		  
+		  Select Case sender
+		    
+		  Case  leftMetaFilter
+		    
+		    leftMetaRecords = leftMetaFilter.foundRecords
+		    showList(compareView.ListMetaLeft, leftMetaRecords)
+		    
+		  Case rightMetaFilter
+		    
+		    rightMetaRecords = rightMetaFilter.foundRecords
+		    showList(compareView.ListMetaRight, rightMetaRecords)
+		    
+		  End Select
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onViewActivate(sender as NSView)
 		  autoLayout
 		End Sub
@@ -77,6 +108,41 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub showList(list as JVTreeView, data as recordset)
+		  
+		  If data <> Nil and data.RecordCount > 0  and not Data.EOF Then
+		    
+		    list.DeleteAllRows
+		    
+		    dim key as String
+		    dim value as String
+		    
+		    While Not data.EOF
+		      
+		      key = data.field("key").stringvalue
+		      value = data.field("value").stringvalue
+		      
+		      list.AddRow(array(key, value))
+		      
+		      data.MoveNext
+		    Wend
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showMetaData(leftType as Variant, rightType as Variant)
+		  leftMetaFilter.bindVariables(array(leftType))
+		  leftMetaFilter.run
+		  
+		  rightMetaFilter.bindVariables(array(rightType))
+		  rightMetaFilter.run
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub showReport()
 		  
@@ -85,6 +151,28 @@ Inherits NSViewController
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub syncInterface(optional up as Boolean =TRUE)
+		  if up then
+		    
+		    
+		  else
+		    
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return SQLiteDatabase(representedObject)
+			End Get
+		#tag EndGetter
+		compareData As SQLiteDatabase
+	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -95,9 +183,29 @@ Inherits NSViewController
 		compareView As CompareView
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h21
+		Private leftMetaFilter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftMetaRecords As RecordSet
+	#tag EndProperty
+
 	#tag Property, Flags = &h0
 		reportFile As folderitem
 	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private rightMetaFilter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		rightMetaRecords As RecordSet
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		selectViewController As SelectViewController
+	#tag EndComputedProperty
 
 
 	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"5", Scope = Public
