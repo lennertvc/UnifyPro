@@ -4,68 +4,64 @@ Protected Class DeleteFolderContent
 		Function DeleteEntireFolder(theFolder as FolderItem, continueIfErrors as Boolean = false) As Integer
 		  // Returns an error code if it fails, or zero if the folder was deleted successfully
 		  
-		  dim returnCode, lastErr, itemCount as integer
-		  dim files(), dirs() as FolderItem
+		  Dim returnCode, lastErr, itemCount As Integer
+		  Dim files(), dirs() As FolderItem
 		  
-		  if theFolder = nil or not theFolder.Exists() then
-		    return 0
-		  end if
+		  If theFolder = Nil Or Not theFolder.Exists Then
+		    Return 0
+		  End If
 		  
 		  // Collect the folder‘s contents first.
 		  // This is faster than collecting them in reverse order and deleting them right away!
 		  itemCount = theFolder.Count
-		  for i as integer = 1 to itemCount
-		    dim f as FolderItem
+		  For i As Integer = 1 To itemCount
+		    Dim f As FolderItem
 		    f = theFolder.TrueItem( i )
-		    if f <> nil then
-		      if f.Directory then
+		    If f <> Nil Then
+		      If f.Directory Then
 		        dirs.Append f
-		      else
+		      Else
 		        files.Append f
-		      end if
-		    end if
-		  next
+		      End If
+		    End If
+		  Next
 		  
 		  // Now delete the files
-		  for each f as FolderItem in files
+		  For Each f As FolderItem In files
 		    f.Delete
 		    lastErr = f.LastErrorCode   // Check if an error occurred
-		    if lastErr <> 0 then
-		      if continueIfErrors then
-		        if returnCode = 0 then returnCode = lastErr
-		      else
+		    If lastErr <> 0 Then
+		      If continueIfErrors Then
+		        If returnCode = 0 Then returnCode = lastErr
+		      Else
 		        // Return the error code if any. This will cancel the deletion.
-		        return lastErr
-		      end if
-		    end if
-		  next
+		        Return lastErr
+		      End If
+		    End If
+		  Next
 		  
-		  redim files(-1) // free the memory used by the files array before we enter recursion
+		  Redim files(-1) // free the memory used by the files array before we enter recursion
 		  
 		  // Now delete the directories
-		  for each f as FolderItem in dirs
+		  For Each f As FolderItem In dirs
 		    lastErr = DeleteEntireFolder( f, continueIfErrors )
-		    if lastErr <> 0 then
-		      if continueIfErrors then
-		        if returnCode = 0 then returnCode = lastErr
-		      else
+		    If lastErr <> 0 Then
+		      If continueIfErrors Then
+		        If returnCode = 0 Then returnCode = lastErr
+		      Else
 		        // Return the error code if any. This will cancel the deletion.
-		        return lastErr
-		      end if
-		    end if
-		  next
+		        Return lastErr
+		      End If
+		    End If
+		  Next
 		  
-		  if returnCode = 0 then
+		  If returnCode = 0 Then
 		    // We‘re done without error, so the folder should be empty and we can delete it.
-<<<<<<< HEAD
-		    theFolder.Delete
-=======
 		    'theFolder.Delete
->>>>>>> master
 		    returnCode = theFolder.LastErrorCode
-		  end if
+		  End If
 		  
-		  return returnCode
+		  Return returnCode
 		End Function
 	#tag EndMethod
 

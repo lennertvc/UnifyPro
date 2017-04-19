@@ -273,6 +273,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -307,6 +308,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -338,7 +340,6 @@ End
 #tag Events ListViewLeft
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  
 		  if  (row < me.ListCount) and (me.RowIsFolder(row)) then
 		    
 		    if (column = 0) then
@@ -355,12 +356,19 @@ End
 		      g.FillRect(0, 0, g.Width,g.Height)
 		    end If
 		    
+		    Me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted with the next change in selection (and the associated refresh)
+		    
+		    Return TRUE
+		    
 		  else
 		    g.ForeColor = &cFFFFFF
 		    g.FillRect(0, 0, g.Width,g.Height)
+		    
+		    Return  FALSE
+		    
 		  end if
 		  
-		  me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted when the next selection has changed
+		  
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -403,12 +411,19 @@ End
 		      g.FillRect(0, 0, g.Width,g.Height)
 		    end If
 		    
+		    Me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted with the next change in selection (and the associated refresh)
+		    
+		    return TRUE
+		    
 		  else
 		    g.ForeColor = &cFFFFFF
 		    g.FillRect(0, 0, g.Width,g.Height)
+		    
+		    Return  FALSE
+		    
 		  end if
 		  
-		  me.InvalidateCell(row,-1) // Invalidate this entire row, so it gets repainted when the next selection has changed
+		  
 		End Function
 	#tag EndEvent
 	#tag Event
