@@ -56,12 +56,12 @@ Begin NSView CompareView
       ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
-      DefaultRowHeight=   -1
+      DefaultRowHeight=   22
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   2
-      GridLinesVertical=   2
+      GridLinesHorizontal=   1
+      GridLinesVertical=   1
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   188
@@ -106,12 +106,12 @@ Begin NSView CompareView
       ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
-      DefaultRowHeight=   -1
+      DefaultRowHeight=   22
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   2
-      GridLinesVertical=   2
+      GridLinesHorizontal=   1
+      GridLinesVertical=   1
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   188
@@ -168,7 +168,6 @@ Begin NSView CompareView
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Metadata"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -182,7 +181,6 @@ Begin NSView CompareView
       Width           =   100
    End
    Begin Timer timerUpdateUI
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -206,6 +204,26 @@ End
 
 #tag EndWindowCode
 
+#tag Events ListMetaLeft
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if column = 0 then
+		    g.ForeColor=&cD9D9D9
+		    g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
+		  end if
+		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events ListMetaRight
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if column = 0 then
+		    g.ForeColor=&cD9D9D9
+		    g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
+		  end if
+		End Function
+	#tag EndEvent
+#tag EndEvents
 #tag Events timerUpdateUI
 	#tag Event
 		Sub Action()
