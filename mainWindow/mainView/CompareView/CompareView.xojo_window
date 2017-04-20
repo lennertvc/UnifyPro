@@ -168,6 +168,7 @@ Begin NSView CompareView
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Metadata"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -181,6 +182,7 @@ Begin NSView CompareView
       Width           =   100
    End
    Begin Timer timerUpdateUI
+      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2

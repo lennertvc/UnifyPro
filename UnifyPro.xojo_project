@@ -272,5 +272,4 @@ HiDPI=True
 CopyRedistNextToWindowsEXE=False
 IsWebProject=False
 MacBuildArchitecture=1
-WindowsBuildArchitecture=1
 OptimizationLevel=0

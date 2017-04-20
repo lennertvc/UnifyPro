@@ -27,10 +27,10 @@ Begin Window versionUpdateWindow
    Visible         =   True
    Width           =   600
    Begin Timer Timer1
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -39,10 +39,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer2
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -51,10 +51,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer3
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -63,10 +63,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer_0
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -75,10 +75,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer4
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -87,10 +87,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer5
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -99,10 +99,10 @@ Begin Window versionUpdateWindow
       TabPanelIndex   =   0
    End
    Begin Timer Timer6
-<<<<<<< HEAD
-=======
+      <               =   "<<<<<HEAD"
+      =               =   "====="
+      >               =   ">>>>>master"
       Enabled         =   True
->>>>>>> master
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
