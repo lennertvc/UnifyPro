@@ -49,11 +49,11 @@ Implements JVBackgroundTaskDelegate
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, app.dataModel)
 		  
-		  leftDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
 		  leftDataFilter.backgroundTaskDelegate = me
 		  leftDataFilter.bindVariables()
 		  
-		  rightDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
 		  rightDataFilter.backgroundTaskDelegate = me
 		  rightDataFilter.bindVariables()
 		  
@@ -107,10 +107,10 @@ Implements JVBackgroundTaskDelegate
 		  selectView.Refresh
 		  app.DoEvents
 		  
-		  leftDataFilter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftDataFilter.bindVariables(array(leftFilterExpression, leftFilterExpression, leftFilterExpression))
 		  leftDataFilter.Run
 		  
-		  leftTypesCounter.bindVariables(array(leftFilterExpression, leftFilterExpression))
+		  leftTypesCounter.bindVariables(array(leftFilterExpression, leftFilterExpression, leftFilterExpression))
 		  leftTypesCounter.Run
 		  
 		  
@@ -125,10 +125,10 @@ Implements JVBackgroundTaskDelegate
 		  selectView.Refresh
 		  app.DoEvents
 		  
-		  rightDataFilter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightDataFilter.bindVariables(array(rightFilterExpression, rightFilterExpression, rightFilterExpression))
 		  rightDataFilter.Run
 		  
-		  rightTypesCounter.bindVariables(array(rightFilterExpression, rightFilterExpression))
+		  rightTypesCounter.bindVariables(array(rightFilterExpression, rightFilterExpression, rightFilterExpression))
 		  rightTypesCounter.Run
 		  
 		  
