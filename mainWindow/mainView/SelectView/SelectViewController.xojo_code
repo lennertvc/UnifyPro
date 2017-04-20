@@ -57,11 +57,11 @@ Implements JVBackgroundTaskDelegate
 		  rightDataFilter.backgroundTaskDelegate = me
 		  rightDataFilter.bindVariables()
 		  
-		  leftTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  leftTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
 		  leftTypesCounter.backgroundTaskDelegate = me
 		  leftTypesCounter.bindVariables()
 		  
-		  rightTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE Installatie LIKE ? OR kostenplaats LIKE ?")
+		  rightTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
 		  rightTypesCounter.backgroundTaskDelegate = me
 		  rightTypesCounter.bindVariables()
 		  
