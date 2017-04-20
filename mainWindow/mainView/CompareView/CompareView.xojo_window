@@ -168,7 +168,6 @@ Begin NSView CompareView
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Metadata"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -182,7 +181,6 @@ Begin NSView CompareView
       Width           =   100
    End
    Begin Timer timerUpdateUI
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -215,6 +213,11 @@ End
 		  end if
 		End Function
 	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag Events ListMetaRight
 	#tag Event
@@ -224,6 +227,11 @@ End
 		    g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
 		  end if
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events timerUpdateUI

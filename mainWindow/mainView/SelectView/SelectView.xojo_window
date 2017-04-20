@@ -373,8 +373,10 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  dim typeAndCode as Pair = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  
-		  selectViewController.leftSelectedCode = SelectViewController.SelectType(me,selectViewController.leftRecords)
+		  selectViewController.leftSelectedtype = typeAndCode.left
+		  selectViewController.leftSelectedCode = typeAndCode.right
 		  selectViewController.exportAndCompare
 		  
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
@@ -428,8 +430,10 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  dim typeAndCode as Pair = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  
-		  selectViewController.rightSelectedCode = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  selectViewController.rightSelectedType = typeAndCode.left
+		  selectViewController.rightSelectedCode = typeAndCode.right
 		  selectViewController.exportAndCompare
 		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed

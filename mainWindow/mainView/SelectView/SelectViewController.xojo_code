@@ -187,7 +187,7 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function selectType(list as JVTreeView, data as RecordSet) As String
+		Function selectType(list as JVTreeView, data as RecordSet) As Pair
 		  // Start with no record selected in the dataset
 		  data.MoveFirst
 		  data.MovePrevious
@@ -198,6 +198,9 @@ Implements JVBackgroundTaskDelegate
 		  dim currentParentCode as String
 		  dim selectedParentCode as String = ""
 		  
+		  dim currentParentType as Integer = 0
+		  dim selectedParentType as Integer = -1
+		  
 		  for rowNumber as Integer =  0 to list.listcount-1
 		    
 		    data.MoveNext
@@ -206,6 +209,7 @@ Implements JVBackgroundTaskDelegate
 		    if list.RowIsFolder(rownumber) then
 		      
 		      currentParentRow = rowNumber
+		      currentParentType = data.Field("regelingTypeID").IntegerValue
 		      currentParentCode = data.Field("cleanedUpcode").StringValue
 		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.UnChecked
 		      
@@ -222,12 +226,14 @@ Implements JVBackgroundTaskDelegate
 		    if list.Selected(rowNumber) then
 		      // Remember the selections parent and its code
 		      selectedParentRow = currentParentRow 
+		      selectedParentType = currentParentType
 		      selectedParentCode = currentParentCode
 		      // Report the selected row while developing
 		      #if DebugBuild then
+		        dim type as String = data.Field("regelingTypeID").StringValue
 		        dim installatie as String =data.Field("installatie").StringValue
 		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
-		        System.DebugLog(installatie+", " +kostenplaats+" Selected")
+		        System.DebugLog("Type "+type+", "+installatie+" " +kostenplaats+" Selected")
 		      #endif
 		    end if
 		  next
@@ -238,7 +244,9 @@ Implements JVBackgroundTaskDelegate
 		  end if
 		  
 		  // and return the code
-		  return selectedParentCode
+		  Dim typeWithCode As Pair = selectedParentType : selectedParentCode
+		  
+		  return typeWithCode
 		End Function
 	#tag EndMethod
 
