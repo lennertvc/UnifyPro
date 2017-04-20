@@ -371,13 +371,12 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  dim typeAndCode as Pair = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  
-		  selectViewController.leftSelectedtype = typeAndCode.left
-		  selectViewController.leftSelectedCode = typeAndCode.right
-		  selectViewController.exportAndCompare
+		  selectViewController.leftSelectedtype = SelectViewController.SelectType(me,selectViewController.leftRecords)
+		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
 		  
-		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType)
+		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
+		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
@@ -430,13 +429,12 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  dim typeAndCode as Pair = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  
-		  selectViewController.rightSelectedType = typeAndCode.left
-		  selectViewController.rightSelectedCode = typeAndCode.right
-		  selectViewController.exportAndCompare
+		  selectViewController.rightSelectedType = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
 		  
-		  app.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType)
+		  App.mainWindowController.CompareViewController.showRightMetaData(selectViewController.rightSelectedType.ID)
+		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  

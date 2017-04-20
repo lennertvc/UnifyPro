@@ -992,14 +992,36 @@ Protected Class PreProcessor
 		  //find number of vlotters
 		  dim aResultV() as string
 		  
-		  re.SearchPattern = "v[0-9lh]p"
+		  re.SearchPattern = "v[0-9][lh]p"
 		  match = re.Search(CleanedUpCode)
 		  Do
 		    If match <> Nil Then
 		      if aResultV.IndexOf(match.SubExpressionString(0))=-1 then
 		        aresultV.append(match.SubExpressionString(0))
 		      end if
-		    end if   
+		    end if  
+		    match=re.search
+		  Loop Until match Is Nil
+		  
+		  re.SearchPattern = "vlotter"
+		  match = re.Search(CleanedUpCode)
+		  Do
+		    If match <> Nil Then
+		      if aResultV.IndexOf(match.SubExpressionString(0))=-1 then
+		        aresultV.append(match.SubExpressionString(0))
+		      end if
+		    end if  
+		    match=re.search
+		  Loop Until match Is Nil
+		  
+		  re.SearchPattern = "v[0-9]vl"
+		  match = re.Search(CleanedUpCode)
+		  Do
+		    If match <> Nil Then
+		      if aResultV.IndexOf(match.SubExpressionString(0))=-1 then
+		        aresultV.append(match.SubExpressionString(0))
+		      end if
+		    end if  
 		    match=re.search
 		  Loop Until match Is Nil
 		  
@@ -1008,7 +1030,6 @@ Protected Class PreProcessor
 		  else
 		    myDictionary.value("NumberV")=0
 		  end if
-		  
 		  
 		  
 		  //find PID controller

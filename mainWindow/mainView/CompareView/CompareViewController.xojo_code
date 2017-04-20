@@ -34,16 +34,19 @@ Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
 		  
-		  // Execute Compare it trough the CLI of Compare-it when on the right platform
-		  
-		  #if TargetWindows then
-		    dim compareShellController as new JVTerminalViewController
-		    compareShellController.view = JVTerminalViewController.MainTerminalView
+		  if (leftFile <> nil) and (rightFile <> nil) then
+		    // Execute Compare it trough the CLI of Compare-it when on the right platform
 		    
-		    compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
-		  #endif
-		  
-		  showReport // On Mac OSX the last report created under Windows will be shown
+		    #if TargetWindows then
+		      dim compareShellController as new JVTerminalViewController
+		      compareShellController.view = JVTerminalViewController.MainTerminalView
+		      
+		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
+		    #endif
+		    
+		    showReport // On Mac OSX the last report created under Windows will be shown
+		    
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -152,7 +155,7 @@ Implements JVBackgroundTaskDelegate
 
 	#tag Method, Flags = &h0
 		Sub showRightMetaData(type as Variant)
-		  if type <> -1 then
+		  if type <> nil then
 		    rightMetaFilter.bindVariables(array(type))
 		    rightMetaFilter.run
 		  end if

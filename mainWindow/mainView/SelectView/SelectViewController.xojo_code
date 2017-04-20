@@ -70,27 +70,11 @@ Implements JVBackgroundTaskDelegate
 		    exportFolder.CreateAsFolder
 		  end if
 		  
-		  leftSelectedType = -1
-		  rightSelectedType = -1
+		  leftSelectedType = nil
+		  rightSelectedType = nil
 		  
 		  leftSourceFile = new JVTextFile(exportFolder.Child("sourceLeft.txt"))
 		  rightSourceFile = new JVTextFile(exportFolder.Child("sourceRight.txt"))
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub exportAndCompare()
-		  if (leftSelectedCode <> "") and  (rightSelectedCode<> "")  then
-		    
-		    
-		    leftSourceFile.Write(leftSelectedCode)
-		    rightSourceFile.Write(rightSelectedCode)
-		    
-		    app.mainWindowController.compareViewController.compare(leftSourceFile, rightSourceFile)
-		    
-		  end if
-		  
-		  
 		End Sub
 	#tag EndMethod
 
@@ -182,36 +166,40 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function selectType(list as JVTreeView, data as RecordSet) As Pair
-		  // Start with no record selected in the dataset
+		Function selectType(list as JVTreeView, data as RecordSet) As RegelingType
 		  data.MoveFirst
-		  data.MovePrevious
+		  dim selection as new RegelingType
 		  
 		  dim currentParentRow as Integer = 0
-		  dim selectedParentRow as Integer = -1
-		  
-		  dim currentParentCode as String
-		  dim selectedParentCode as String = ""
-		  
 		  dim currentParentType as Integer = 0
-		  dim selectedParentType as Integer = -1
+		  dim currentParentCode as String = ""
+		  dim numberOfChildren as Integer = 0
 		  
-		  for rowNumber as Integer =  0 to list.listcount-1
+		  dim currentInstallatie as String
+		  dim currentKP as String
+		  
+		  dim rowNumber as Integer = 0
+		  while rowNumber < list.listcount
 		    
-		    data.MoveNext
-		    
-		    // Unchek all the parentfolders
 		    if list.RowIsFolder(rownumber) then
 		      
 		      currentParentRow = rowNumber
-		      currentParentType = data.Field("regelingTypeID").IntegerValue
-		      currentParentCode = data.Field("cleanedUpcode").StringValue
+		      
+		      // Unchek the parentfolder and
 		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.UnChecked
 		      
-		      //  It's a closed parentrow, skip over the extra invisible rows
-		      if (list.Expanded(currentParentRow) = FALSE) And (list.RowTag(rowNumber) <> nil ) then
-		        dim closedRows(-1,-1) as String = list.RowTag(rowNumber)
-		        for closedRow as Integer = 1 to ubound(closedRows)
+		      // store the data from the first record in it
+		      currentParentType = data.Field("regelingTypeID").IntegerValue
+		      currentParentCode = data.Field("cleanedUpcode").StringValue
+		      numberOfChildren = data.Field("timesUsed").IntegerValue
+		      
+		      currentInstallatie = data.Field("Installatie").StringValue
+		      currentKP = data.Field("kostenplaats").StringValue
+		      
+		      data.MovePrevious // Set the datapointer to the beginning of the first child, there are no extra extra records for the enclosing folders
+		      if list.Expanded(currentParentRow) = FALSE then
+		        // Skip data for rows dat are invisible/collapsed and therefore will not be processed
+		        for invisbleRow as integer = 1 to numberOfChildren
 		          data.MoveNext
 		        next
 		      end if
@@ -219,29 +207,26 @@ Implements JVBackgroundTaskDelegate
 		    end if
 		    
 		    if list.Selected(rowNumber) then
-		      // Remember the selections parent and its code
-		      selectedParentRow = currentParentRow 
-		      selectedParentType = currentParentType
-		      selectedParentCode = currentParentCode
-		      // Report the selected row while developing
+		      
+		      // Check the parentfolder if it has records selected within
+		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.Checked
+		      
+		      // and keep de data that was stored before for the parentfolder 
+		      selection.ID = currentParentType
+		      selection.cleanedUpCode = currentParentCode
+		      
+		      // Log each selection during debugging, since this is a complicated method
 		      #if DebugBuild then
-		        dim type as String = data.Field("regelingTypeID").StringValue
-		        dim installatie as String =data.Field("installatie").StringValue
-		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
-		        System.DebugLog("Type "+type+", "+installatie+" " +kostenplaats+" Selected")
+		        system.debuglog("Type "+Str(selection.ID)+", "+ currentInstallatie+" "+currentKP+ " selected")
 		      #endif
+		      
 		    end if
-		  next
+		    
+		    rowNumber = rowNumber+1
+		    data.MoveNext
+		  wend
 		  
-		  // Reselect the parent type afterwords
-		  if selectedParentRow >=0 then
-		    list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
-		  end if
-		  
-		  // and return the code
-		  Dim typeWithCode As Pair = selectedParentType : selectedParentCode
-		  
-		  return typeWithCode
+		  return selection
 		End Function
 	#tag EndMethod
 
@@ -388,11 +373,7 @@ Implements JVBackgroundTaskDelegate
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		leftSelectedCode As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		leftSelectedType As Integer
+		leftSelectedType As RegelingType
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -439,11 +420,7 @@ Implements JVBackgroundTaskDelegate
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		rightSelectedCode As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		rightSelectedType As Integer
+		rightSelectedType As RegelingType
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -493,32 +470,10 @@ Implements JVBackgroundTaskDelegate
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="leftSelectedCode"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="leftSelectedType"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
 			Type="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="rightSelectedCode"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="rightSelectedType"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
