@@ -80,8 +80,6 @@ Implements JVBackgroundTaskDelegate
 
 	#tag Method, Flags = &h0
 		Sub exportAndCompare()
-		  
-		  
 		  if (leftSelectedCode <> "") and  (rightSelectedCode<> "")  then
 		    
 		    
@@ -92,9 +90,6 @@ Implements JVBackgroundTaskDelegate
 		    
 		  end if
 		  
-		  if (leftSelectedType <> -1) and (rightSelectedType <> -1) then
-		    app.mainWindowController.compareViewController.showMetaData(leftSelectedType, rightSelectedType)
-		  end if
 		  
 		End Sub
 	#tag EndMethod

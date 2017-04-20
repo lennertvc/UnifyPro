@@ -108,6 +108,15 @@ Implements JVBackgroundTaskDelegate
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub showLeftMetaData(type as Variant)
+		  if type <> -1 then
+		    leftMetaFilter.bindVariables(array(type))
+		    leftMetaFilter.run
+		  end if
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub showList(list as JVTreeView, data as recordset)
 		  
@@ -134,20 +143,19 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub showMetaData(leftType as Variant, rightType as Variant)
-		  leftMetaFilter.bindVariables(array(leftType))
-		  leftMetaFilter.run
-		  
-		  rightMetaFilter.bindVariables(array(rightType))
-		  rightMetaFilter.run
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub showReport()
 		  
 		  compareView.ReportView.LoadPage(reportFile)
 		  compareView.ReportView.SetFocus
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub showRightMetaData(type as Variant)
+		  if type <> -1 then
+		    rightMetaFilter.bindVariables(array(type))
+		    rightMetaFilter.run
+		  end if
 		End Sub
 	#tag EndMethod
 

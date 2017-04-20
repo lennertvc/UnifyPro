@@ -273,7 +273,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -308,7 +307,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -379,6 +377,8 @@ End
 		  selectViewController.leftSelectedCode = typeAndCode.right
 		  selectViewController.exportAndCompare
 		  
+		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType)
+		  
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
@@ -435,6 +435,8 @@ End
 		  selectViewController.rightSelectedType = typeAndCode.left
 		  selectViewController.rightSelectedCode = typeAndCode.right
 		  selectViewController.exportAndCompare
+		  
+		  app.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType)
 		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
