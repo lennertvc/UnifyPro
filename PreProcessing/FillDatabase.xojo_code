@@ -32,10 +32,41 @@ Protected Class FillDatabase
 		      dim d as new Dictionary
 		      d=preprocessor.FindMetaData(c(i).value("cleanedUpCode"))
 		      
-		      //check presence in DB
+		      //check for removed sections
+		      dim match as boolean = false
+		      dim deletedSections as Recordset =  datamodel.SQLSelect("Select naam From regelingen where Installatie= '"+a(j).value("file_RWZI")+"'"+" AND filePath = '"+a(j).value("file_path")+"';")
+		      while not deletedSections.eof
+		        match=false
+		        for y as integer = 0 to c.ubound
+		          if b(y).value("section_name") =deletedSections.Field("naam").StringValue then
+		            match=true
+		            exit for
+		          end if
+		        next
+		        if match = false then
+		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
+		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
+		        end if
+		        deletedSections.movenext
+		      wend
+		      
+		      
+		      //check presence of section_name in DB
+		      if datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ) <> 0 then
+		        dim f as RecordSet = datamodel.SQLSelect( "Select cleanedUpCode From regelingTypes where regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"'")
+		        if c(i).value("cleanedUpCode") <> f.Field("cleanedUpCode").StringValue then
+		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
+		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
+		        else
+		          goto label
+		        end if
+		      end If
+		      
+		      //check presence of clean code in DB
 		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
 		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") , datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")),b(i).value("section_FM"))
 		      end if
+		      
 		      
 		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
 		        call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , c(i).value("proces"))
@@ -47,7 +78,12 @@ Protected Class FillDatabase
 		        call datamodel.addMetaData("PID",d.Value("PIDControl"),datamodel.newpkfromtable("regelingTypes"))
 		      end if
 		      
+		      //label
+		      label:
+		      
 		    next
+		    
+		    
 		    
 		    // Quit Unity if it's still running
 		    Unitypro.quitall

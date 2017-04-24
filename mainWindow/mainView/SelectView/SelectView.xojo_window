@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      BackColor       =   &cFFFF00FF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -193,7 +193,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      BackColor       =   &cFFFF00FF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -273,6 +273,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -307,6 +308,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -382,6 +384,9 @@ End
 		  
 		  
 		  
+		  
+		  
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -439,6 +444,8 @@ End
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
+		  
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -446,6 +453,7 @@ End
 		  if  (row < me.ListCount) and (me.RowIsFolder(row))  and column = 0 then
 		    me.Selected(row) = (me.CellState(row, 0) = CheckBox.CheckedStates.Checked)
 		  end if
+		  
 		  
 		End Sub
 	#tag EndEvent

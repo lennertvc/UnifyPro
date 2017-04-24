@@ -3,6 +3,97 @@ Protected Class CompareViewController
 Inherits NSViewController
 Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
+		Sub addMetaData()
+		  dim ID as integer
+		  dim dbRecordset as RecordSet
+		  
+		  //get RegelingTypeID and associated metadata
+		  ID = app.mainWindowController.selectViewController.rightSelectedType.ID
+		  App.mainWindowController.CompareViewController.showRightMetaData(ID)
+		  dbRecordset=rightMetaFilter.foundRecords
+		  
+		  //compare data between listbox and database => UPDATE - INSERT - DELETE
+		  If dbRecordset <> Nil and dbRecordset.RecordCount > 0  and not dbRecordset.EOF Then
+		    
+		    if dbRecordset.RecordCount=compareview.ListMetaRight.ListCount or dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then 
+		      dim key as String
+		      dim value as String
+		      dim match as boolean =false
+		      
+		      While Not dbRecordset.EOF
+		        match = false
+		        key = dbRecordset.field("key").stringvalue
+		        value = dbRecordset.field("value").stringvalue
+		        
+		        for index as integer =0 to dbRecordset.RecordCount-1
+		          if key = compareview.ListMetaRight.Cell(index,0) then
+		            match=true
+		            if value <> compareview.ListMetaRight.Cell(index,1) then
+		              if compareview.ListMetaRight.Cell(index,1) ="" then
+		                app.dataModel.SQLExecute("DELETE FROM metaData WHERE value= '"+value+"';")
+		              else
+		                app.dataModel.SQLExecute ( "UPDATE metaData SET Value = '"+compareview.ListMetaRight.Cell(index,1)+"'"+" WHERE metaDataID = '"+dbRecordset.field("metaDataID").stringvalue+"';" )
+		              end if
+		            end if
+		          end if
+		        next
+		        
+		        if not match then
+		          app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
+		          for j as integer = 0 to compareview.ListMetaRight.ListCount -1
+		            dim row as new DatabaseRecord
+		            row.Column("Key")=compareview.ListMetaRight.Cell(j,0)
+		            row.Column("Value")=compareview.ListMetaRight.cell(j,1)
+		            row.Column("RegelingTypeID")=str(ID)
+		            app.dataModel.InsertRecord("metaData",row)
+		          next
+		          
+		          
+		        end if
+		        
+		        dbRecordset.MoveNext
+		      Wend
+		      
+		    end if
+		    
+		    if dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then
+		      for i as integer = dbRecordset.recordcount to compareview.ListMetaRight.ListCount -1
+		        dim row as new DatabaseRecord
+		        row.Column("Key")=compareview.ListMetaRight.Cell(i,0)
+		        row.Column("Value")=compareview.ListMetaRight.cell(i,1)
+		        row.Column("RegelingTypeID")=str(ID)
+		        app.dataModel.InsertRecord("metaData",row)
+		      next
+		      
+		    end if
+		    
+		  end if
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub addRow(sender as JVTreeView)
+		  // Part of the JVBackgroundTaskDelegate interface.
+		  
+		  Select Case sender
+		    
+		  Case  compareView.ListMetaRight
+		    
+		    if compareView.ListMetaRight.Cell(compareView.ListMetaRight.LastIndex,0) <>"" and compareView.ListMetaRight.Cell(compareView.ListMetaRight.LastIndex,1) <>"" then
+		      compareview.ListMetaRight.addrow()
+		    end if 
+		    
+		  Case compareView.ListMetaLeft
+		    
+		    if compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,0) <>"" and compareView.ListMetaRight.Cell(compareView.ListMetaLeft.LastIndex,1) <>"" then
+		      compareview.ListMetaLeft.addrow()
+		    end if 
+		    
+		  End Select
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub autoLayout()
 		  compareView.top = compareView.window.height*0.33
 		  compareView.left = 0
@@ -65,6 +156,7 @@ Implements JVBackgroundTaskDelegate
 		  rightMetaFilter.bindVariables()
 		  rightMetaFilter.Run
 		  
+		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
 		  system.debuglog(reportFolder.absolutePath)
 		  
@@ -75,6 +167,86 @@ Implements JVBackgroundTaskDelegate
 		    reportName ="ExampleReport.html"
 		  #endif
 		  reportFile = reportFolder.Child(reportName)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub modifyMetaData(sender as JVTreeView,row as integer,column as integer)
+		  dim ID as integer
+		  dim dbRecordset as RecordSet
+		  
+		  //get RegelingTypeID and associated metadata
+		  ID = app.mainWindowController.selectViewController.rightSelectedType.ID
+		  App.mainWindowController.CompareViewController.showRightMetaData(ID)
+		  dbRecordset=rightMetaFilter.foundRecords
+		  
+		  //compare data between listbox and database => UPDATE - INSERT - DELETE
+		  If dbRecordset <> Nil and dbRecordset.RecordCount > 0  and not dbRecordset.EOF Then
+		    
+		    
+		    
+		    
+		    
+		    
+		    if dbRecordset.RecordCount=sender.ListCount or  dbRecordset.RecordCount < sender.ListCount  then 
+		      dim key as String
+		      dim value as String
+		      dim match as boolean =false
+		      
+		      While Not dbRecordset.EOF
+		        match = false
+		        key = dbRecordset.field("key").stringvalue
+		        value = dbRecordset.field("value").stringvalue
+		        
+		        for index as integer =0 to dbRecordset.RecordCount-1
+		          if key = sender.Cell(index,0) then
+		            match=true
+		            if value <> sender.Cell(index,1) then
+		              if sender.Cell(index,1) =""  then
+		                app.dataModel.SQLExecute("DELETE FROM metaData WHERE key= '"+key+"';")
+		              else
+		                app.dataModel.SQLExecute ( "UPDATE metaData SET Value = '"+sender.Cell(index,1)+"'"+" WHERE metaDataID = '"+dbRecordset.field("metaDataID").stringvalue+"';" )
+		              end if
+		            end if
+		          end if
+		        next
+		        
+		        if not match then
+		          app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
+		          for j as integer = 0 to Sender.ListCount -1
+		            dim rowRecord as new DatabaseRecord
+		            rowRecord.Column("Key")=sender.Cell(j,0)
+		            rowRecord.Column("Value")=sender.cell(j,1)
+		            rowRecord.Column("RegelingTypeID")=str(ID)
+		            app.dataModel.InsertRecord("metaData",rowRecord)
+		          next
+		          
+		          
+		        end if
+		        
+		        dbRecordset.MoveNext
+		      Wend
+		      
+		    end if
+		    
+		    if dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then
+		      for i as integer = dbRecordset.recordcount to compareview.ListMetaRight.ListCount -1
+		        dim rowRecord as new DatabaseRecord
+		        rowRecord.Column("Key")=compareview.ListMetaRight.Cell(i,0)
+		        rowRecord.Column("Value")=compareview.ListMetaRight.cell(i,1)
+		        rowRecord.Column("RegelingTypeID")=str(ID)
+		        app.dataModel.InsertRecord("metaData",rowRecord)
+		      next
+		      
+		    end if
+		    
+		  end if
+		  
+		  
+		  
+		  
+		  
 		  
 		End Sub
 	#tag EndMethod

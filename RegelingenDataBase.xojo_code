@@ -1,6 +1,6 @@
 #tag Class
 Protected Class RegelingenDataBase
-Inherits SQLiteDatabase
+Inherits JVSQLiteDatabase
 	#tag Method, Flags = &h0
 		Function addCodeToDB(originalcode as string,cleanedupcode as String,procesPart as string) As Boolean
 		  Dim record As New DatabaseRecord
@@ -64,6 +64,20 @@ Inherits SQLiteDatabase
 		  End If
 		  
 		  Return True
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function lookupChanges(lookupvalue1 as string,lookupValue2 as string, lookupValue3 as string) As integer
+		  dim number as integer =0
+		  'dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From "+lookupTable+" WHERE "+lookupField+" = '"+lookupValue+"'")
+		  dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From regelingen where installatie= "+"'"+lookupValue1+"'"+" AND filepath = " +"'"+lookupValue2+"'"+" AND naam = " +"'"+lookupValue3+"';")
+		  if previousrecords.fieldcount>=1 then
+		    system.DebugLog("ident")
+		    previousRecords.MoveFirst 
+		    number=previousRecords.Field("regelingTypeID").IntegerValue
+		    return number
+		  end if
 		End Function
 	#tag EndMethod
 

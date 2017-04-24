@@ -182,7 +182,6 @@ Begin NSView CompareView
       Width           =   100
    End
    Begin Timer timerUpdateUI
-      Enabled         =   True
       Index           =   -2147483648
       LockedInPosition=   False
       Mode            =   2
@@ -230,7 +229,7 @@ End
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
 		  if row < me.ListCount then
 		    
-		    if (column = 0) and (me.Cell(row, column) <> "") then
+		    if (column = 0) and (row<5) and (me.Cell(row, column) <> "") then
 		      g.ForeColor=&cD9D9D9
 		      g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
 		    end if
@@ -241,7 +240,29 @@ End
 	#tag Event
 		Sub Open()
 		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		  
+		  me.ColumnType(0)=ListMetaRight.TypeEditable
+		  me.ColumnType(1)=ListMetaRight.TypeEditable
+		  
+		  
+		  
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  Me.EditCell(row,column)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub CellLostFocus(row as Integer, column as Integer)
+		  
+		  compareViewController.modifyMetaData(compareview.ListMetaRight,row,column)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(x As Integer, y As Integer) As Boolean
+		  compareViewController.addRow(CompareView.ListMetaRight)
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events timerUpdateUI

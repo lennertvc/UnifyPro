@@ -11,6 +11,12 @@ Protected Class RegelingType
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="cleanedUpCode"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="ID"
 			Group="Behavior"
 			Type="Integer"

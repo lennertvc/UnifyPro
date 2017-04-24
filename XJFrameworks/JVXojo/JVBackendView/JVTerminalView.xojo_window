@@ -62,7 +62,7 @@ Begin NSView JVTerminalView
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &cFF00FFFF
+      TextColor       =   &c00FFFFFF
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
