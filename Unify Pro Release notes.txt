@@ -1,0 +1,14 @@
+v2.0
+Er kan nu gefilterd worden op het procesdeel (bijv. op'Defosfatatie').
+Ondersteuning voor automatisch toegevoegde metadata voor regelingtypes (bijv. Aantal werktuigen, Aantal metingen, Aantal vlotters, PID regelaar aanwezig,... enz.).
+Ondersteuning voor handmatig toegevoegde metadata aan regelingtypes (bijv. 'Is kandidaat Master', 'Bevat fouten'... enz.).
+App opent de main interface nu sneller.
+App reageert sneller en is stabieler door de introductie van multithreading.
+
+v1.0.
+Eerste public release!
+Ondersteunt inladen van PLC-regelingen (en regelingtypes) in een SQLiteDbase.
+Weergave van de dbase inhoud ingedeeld per regelingtype.
+Selecteren van 2 types en generatie van een compare-it-rapport.
+
+
