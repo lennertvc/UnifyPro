@@ -50,6 +50,15 @@ Implements JVBackgroundTaskDelegate
 		  dim IDright as string
 		  dim IDleft as string
 		  
+		  
+		  For i as integer = 0 to selectview.ListViewRight.ListCount-1
+		    selectView.ListViewRight.CellBold(i,0)=false
+		  Next
+		  
+		  For i as integer = 0 to selectview.ListViewLeft.ListCount-1
+		    selectView.ListViewLeft.CellBold(i,0)=false
+		  Next
+		  
 		  colorRecordSet=app.dataModel.SQLSelect("Select regelingTypeID From metadata where Key= 'STANDAARD';")
 		  
 		  if rightRecords=nil then
