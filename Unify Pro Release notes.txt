@@ -5,6 +5,7 @@ Ondersteuning voor handmatig toegevoegde metadata aan regelingtypes (bijv. 'Tijd
 In de metadata kan handmatig het Label "STANDAARD" worden ingevoerd waarna het regelingtype in het vet in de lijst met types komt te staan.
 App opent de main interface nu sneller.
 App reageert sneller en is stabieler nadat alle data is geladen.
+Betere logging bij het inladen van de regelingen uit de PLC (detectie van verwijderde, toegevoegde en aangepaste regelingen).
 
 v1.0.
 Eerste public release!
