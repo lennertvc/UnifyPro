@@ -3,75 +3,6 @@ Protected Class CompareViewController
 Inherits NSViewController
 Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
-		Sub addMetaData()
-		  dim ID as integer
-		  dim dbRecordset as RecordSet
-		  
-		  //get RegelingTypeID and associated metadata
-		  ID = app.mainWindowController.selectViewController.rightSelectedType.ID
-		  App.mainWindowController.CompareViewController.showRightMetaData(ID)
-		  dbRecordset=rightMetaFilter.foundRecords
-		  
-		  //compare data between listbox and database => UPDATE - INSERT - DELETE
-		  If dbRecordset <> Nil and dbRecordset.RecordCount > 0  and not dbRecordset.EOF Then
-		    
-		    if dbRecordset.RecordCount=compareview.ListMetaRight.ListCount or dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then 
-		      dim key as String
-		      dim value as String
-		      dim match as boolean =false
-		      
-		      While Not dbRecordset.EOF
-		        match = false
-		        key = dbRecordset.field("key").stringvalue
-		        value = dbRecordset.field("value").stringvalue
-		        
-		        for index as integer =0 to dbRecordset.RecordCount-1
-		          if key = compareview.ListMetaRight.Cell(index,0) then
-		            match=true
-		            if value <> compareview.ListMetaRight.Cell(index,1) then
-		              if compareview.ListMetaRight.Cell(index,1) ="" then
-		                app.dataModel.SQLExecute("DELETE FROM metaData WHERE value= '"+value+"';")
-		              else
-		                app.dataModel.SQLExecute ( "UPDATE metaData SET Value = '"+compareview.ListMetaRight.Cell(index,1)+"'"+" WHERE metaDataID = '"+dbRecordset.field("metaDataID").stringvalue+"';" )
-		              end if
-		            end if
-		          end if
-		        next
-		        
-		        if not match then
-		          app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
-		          for j as integer = 0 to compareview.ListMetaRight.ListCount -1
-		            dim row as new DatabaseRecord
-		            row.Column("Key")=compareview.ListMetaRight.Cell(j,0)
-		            row.Column("Value")=compareview.ListMetaRight.cell(j,1)
-		            row.Column("RegelingTypeID")=str(ID)
-		            app.dataModel.InsertRecord("metaData",row)
-		          next
-		          
-		          
-		        end if
-		        
-		        dbRecordset.MoveNext
-		      Wend
-		      
-		    end if
-		    
-		    if dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then
-		      for i as integer = dbRecordset.recordcount to compareview.ListMetaRight.ListCount -1
-		        dim row as new DatabaseRecord
-		        row.Column("Key")=compareview.ListMetaRight.Cell(i,0)
-		        row.Column("Value")=compareview.ListMetaRight.cell(i,1)
-		        row.Column("RegelingTypeID")=str(ID)
-		        app.dataModel.InsertRecord("metaData",row)
-		      next
-		      
-		    end if
-		    
-		  end if
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub addRow(sender as JVTreeView)
 		  // Part of the JVBackgroundTaskDelegate interface.
 		  
@@ -85,7 +16,7 @@ Implements JVBackgroundTaskDelegate
 		    
 		  Case compareView.ListMetaLeft
 		    
-		    if compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,0) <>"" and compareView.ListMetaRight.Cell(compareView.ListMetaLeft.LastIndex,1) <>"" then
+		    if compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,0) <>"" and compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,1) <>"" then
 		      compareview.ListMetaLeft.addrow()
 		    end if 
 		    
@@ -172,76 +103,98 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub modifyMetaData(sender as JVTreeView,row as integer,column as integer)
-		  dim ID as integer
-		  dim dbRecordset as RecordSet
-		  
-		  //get RegelingTypeID and associated metadata
-		  ID = app.mainWindowController.selectViewController.rightSelectedType.ID
-		  App.mainWindowController.CompareViewController.showRightMetaData(ID)
-		  dbRecordset=rightMetaFilter.foundRecords
-		  
+		Sub modifyMetaData(sender as JVTreeView,row as integer,column as integer,ID as integer,dbRecordset as RecordSet)
 		  //compare data between listbox and database => UPDATE - INSERT - DELETE
+		  
+		  
 		  If dbRecordset <> Nil and dbRecordset.RecordCount > 0  and not dbRecordset.EOF Then
 		    
 		    
-		    
-		    
-		    
-		    
-		    if dbRecordset.RecordCount=sender.ListCount or  dbRecordset.RecordCount < sender.ListCount  then 
-		      dim key as String
-		      dim value as String
-		      dim match as boolean =false
+		    //both rows contain data
+		    if sender.cell(row,0)<>"" and sender.cell(row,1)<>"" then
 		      
-		      While Not dbRecordset.EOF
-		        match = false
-		        key = dbRecordset.field("key").stringvalue
-		        value = dbRecordset.field("value").stringvalue
+		      //DB count = cell listcount
+		      if dbRecordset.RecordCount=sender.ListCount or  dbRecordset.RecordCount < sender.ListCount  then 
+		        dim key as String
+		        dim value as String
+		        dim match as boolean =false
 		        
-		        for index as integer =0 to dbRecordset.RecordCount-1
-		          if key = sender.Cell(index,0) then
-		            match=true
-		            if value <> sender.Cell(index,1) then
-		              if sender.Cell(index,1) =""  then
-		                app.dataModel.SQLExecute("DELETE FROM metaData WHERE key= '"+key+"';")
-		              else
-		                app.dataModel.SQLExecute ( "UPDATE metaData SET Value = '"+sender.Cell(index,1)+"'"+" WHERE metaDataID = '"+dbRecordset.field("metaDataID").stringvalue+"';" )
+		        //check for updates through use of DB key's 
+		        While Not dbRecordset.EOF
+		          match = false
+		          key = dbRecordset.field("key").stringvalue
+		          value = dbRecordset.field("value").stringvalue
+		          
+		          for index as integer =0 to dbRecordset.RecordCount-1
+		            if key = sender.Cell(index,0) then
+		              match=true
+		              if value <> sender.Cell(index,1) then
+		                if sender.Cell(index,1) =""  then
+		                  app.dataModel.SQLExecute("DELETE FROM metaData WHERE key= '"+key+"';")
+		                else
+		                  app.dataModel.SQLExecute ( "UPDATE metaData SET Value = '"+sender.Cell(index,1)+"'"+" WHERE metaDataID = '"+dbRecordset.field("metaDataID").stringvalue+"';" )
+		                end if
 		              end if
 		            end if
-		          end if
-		        next
-		        
-		        if not match then
-		          app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
-		          for j as integer = 0 to Sender.ListCount -1
-		            dim rowRecord as new DatabaseRecord
-		            rowRecord.Column("Key")=sender.Cell(j,0)
-		            rowRecord.Column("Value")=sender.cell(j,1)
-		            rowRecord.Column("RegelingTypeID")=str(ID)
-		            app.dataModel.InsertRecord("metaData",rowRecord)
 		          next
 		          
+		          //if DB key not found => regenerate metadata
+		          if not match then
+		            app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
+		            for j as integer = 0 to Sender.ListCount -1
+		              dim rowRecord as new DatabaseRecord
+		              if sender.Cell(j,0)<>"" and sender.Cell(j,1) <>""  then
+		                rowRecord.Column("Key")=sender.Cell(j,0)
+		                rowRecord.Column("Value")=sender.cell(j,1)
+		                rowRecord.Column("RegelingTypeID")=str(ID)
+		                app.dataModel.InsertRecord("metaData",rowRecord)
+		              end if
+		            next
+		          end if
 		          
+		          dbRecordset.MoveNext
+		        Wend
+		      end if
+		      
+		      //DB count < cell listcount
+		      if dbRecordset.RecordCount < sender.ListCount then
+		        for i as integer = dbRecordset.recordcount to sender.ListCount -1
+		          dim rowRecord as new DatabaseRecord
+		          if sender.Cell(i,0)<>"" and sender.Cell(i,1) <>""  then
+		            rowRecord.Column("Key")=sender.Cell(i,0)
+		            rowRecord.Column("Value")=sender.cell(i,1)
+		            rowRecord.Column("RegelingTypeID")=str(ID)
+		            app.dataModel.InsertRecord("metaData",rowRecord)
+		          end if
+		        next
+		      end if
+		      
+		    end if
+		    
+		    
+		    
+		    //only one or no cells contain data => regenerate metadata
+		    if sender.cell(row,0)="" or sender.cell(row,1)="" then
+		      app.dataModel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(ID)+"';")
+		      for l as integer = 0 to sender.ListCount -1
+		        dim rowRecord as new DatabaseRecord
+		        if sender.Cell(l,0)<>"" or sender.Cell(l,1)<>"" then
+		          rowRecord.Column("Key")=sender.Cell(l,0)
+		          rowRecord.Column("Value")=sender.cell(l,1)
+		          rowRecord.Column("RegelingTypeID")=str(ID)
+		          app.dataModel.InsertRecord("metaData",rowRecord)
 		        end if
 		        
-		        dbRecordset.MoveNext
-		      Wend
-		      
+		      next
 		    end if
 		    
-		    if dbRecordset.RecordCount < compareview.ListMetaRight.ListCount then
-		      for i as integer = dbRecordset.recordcount to compareview.ListMetaRight.ListCount -1
-		        dim rowRecord as new DatabaseRecord
-		        rowRecord.Column("Key")=compareview.ListMetaRight.Cell(i,0)
-		        rowRecord.Column("Value")=compareview.ListMetaRight.cell(i,1)
-		        rowRecord.Column("RegelingTypeID")=str(ID)
-		        app.dataModel.InsertRecord("metaData",rowRecord)
-		      next
-		      
-		    end if
+		    
+		    
 		    
 		  end if
+		  
+		  
+		  
 		  
 		  
 		  
@@ -366,8 +319,8 @@ Implements JVBackgroundTaskDelegate
 		compareView As CompareView
 	#tag EndComputedProperty
 
-	#tag Property, Flags = &h21
-		Private leftMetaFilter As JVbackGroundQuery
+	#tag Property, Flags = &h0
+		leftMetaFilter As JVbackGroundQuery
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -378,8 +331,8 @@ Implements JVBackgroundTaskDelegate
 		reportFile As folderitem
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private rightMetaFilter As JVbackGroundQuery
+	#tag Property, Flags = &h0
+		rightMetaFilter As JVbackGroundQuery
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

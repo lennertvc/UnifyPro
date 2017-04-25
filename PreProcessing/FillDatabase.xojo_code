@@ -32,7 +32,7 @@ Protected Class FillDatabase
 		      dim d as new Dictionary
 		      d=preprocessor.FindMetaData(c(i).value("cleanedUpCode"))
 		      
-		      //check for removed sections
+		      //check for removed
 		      dim match as boolean = false
 		      dim deletedSections as Recordset =  datamodel.SQLSelect("Select naam From regelingen where Installatie= '"+a(j).value("file_RWZI")+"'"+" AND filePath = '"+a(j).value("file_path")+"';")
 		      while not deletedSections.eof
@@ -46,6 +46,7 @@ Protected Class FillDatabase
 		        if match = false then
 		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
 		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
+		          JVBackendViewController.sharedBackendViewController.logController.logAsPlainText(deletedSections.Field("naam").StringValue + " has been deleted on location "+a(j).value("file_path"))
 		        end if
 		        deletedSections.movenext
 		      wend
@@ -57,10 +58,13 @@ Protected Class FillDatabase
 		        if c(i).value("cleanedUpCode") <> f.Field("cleanedUpCode").StringValue then
 		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
 		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
+		          JVBackendViewController.sharedBackendViewController.logController.logAsPlainText( b(i).value("section_name") + " has been changed on location "+a(j).value("file_path"))
 		        else
 		          goto label
 		        end if
-		      end If
+		      else
+		        JVBackendViewController.sharedBackendViewController.logController.logAsPlainText( b(i).value("section_name") + " has been added on location "+a(j).value("file_path"))
+		      end if
 		      
 		      //check presence of clean code in DB
 		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) <>0 then
@@ -69,6 +73,7 @@ Protected Class FillDatabase
 		      
 		      
 		      if datamodel.lookupRecord("regelingTypes","cleanedUpCode",c(i).value("cleanedUpCode")) = 0 then
+		        
 		        call datamodel.addcodetodb(array0(i) , c(i).value("cleanedUpCode") , c(i).value("proces"))
 		        call datamodel.addFilePath( a(j).value("file_path") , a(j).value("file_RWZI") , a(j).value("file_KP") , b(i).value("section_name") ,datamodel.newpkfromtable("regelingTypes"),b(i).value("section_FM"))
 		        call datamodel.addMetaData("aantal werktuigen",d.Value("NumberW"),datamodel.newpkfromtable("regelingTypes"))
@@ -83,11 +88,11 @@ Protected Class FillDatabase
 		      
 		    next
 		    
-		    
-		    
 		    // Quit Unity if it's still running
 		    Unitypro.quitall
+		    
 		  next
+		  
 		  
 		End Sub
 	#tag EndMethod

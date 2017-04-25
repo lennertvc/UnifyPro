@@ -20,6 +20,7 @@ Inherits NSWindowController
 		  #if DebugBuild then
 		    mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
 		    mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
+		    
 		  #endif
 		  
 		  window.Show

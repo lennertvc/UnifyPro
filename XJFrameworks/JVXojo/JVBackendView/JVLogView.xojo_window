@@ -88,6 +88,13 @@ End
 
 #tag EndWindowCode
 
+#tag Events Console
+	#tag Event
+		Sub Open()
+		  me.BackColor = &cFFFFFF
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

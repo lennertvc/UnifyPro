@@ -221,6 +221,36 @@ End
 	#tag Event
 		Sub Open()
 		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		  
+		  me.ColumnType(0)=ListMetaLeft.TypeEditable
+		  me.ColumnType(1)=ListMetaLeft.TypeEditable
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  Me.EditCell(row,column)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(x As Integer, y As Integer) As Boolean
+		  compareViewController.addRow(CompareView.ListMetaLeft)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub CellLostFocus(row as Integer, column as Integer)
+		  //get RegelingTypeID and associated metadata
+		  dim eID as integer
+		  dim edbRecordset as RecordSet
+		  
+		  eID = app.mainWindowController.selectViewController.leftSelectedType.ID
+		  App.mainWindowController.CompareViewController.showLeftMetaData(eID)
+		  edbRecordset=compareViewController.LeftMetaFilter.foundRecords
+		  
+		  //call eventhandler
+		  compareViewController.modifyMetaData(compareview.ListMetaLeft,row,column,eID,edbRecordset)
+		  
+		  //regenerate compareview window
+		  App.mainWindowController.CompareViewController.showLeftMetaData(app.mainWindowController.selectViewController.LeftSelectedType.ID)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -256,7 +286,19 @@ End
 	#tag Event
 		Sub CellLostFocus(row as Integer, column as Integer)
 		  
-		  compareViewController.modifyMetaData(compareview.ListMetaRight,row,column)
+		  //get RegelingTypeID and associated metadata
+		  dim eID as integer
+		  dim edbRecordset as RecordSet
+		  
+		  eID = app.mainWindowController.selectViewController.rightSelectedType.ID
+		  App.mainWindowController.CompareViewController.showRightMetaData(eID)
+		  edbRecordset=compareViewController.rightMetaFilter.foundRecords
+		  
+		  //call eventhandler
+		  compareViewController.modifyMetaData(compareview.ListMetaRight,row,column,eID,edbRecordset)
+		  
+		  //regenerate compareview window
+		  App.mainWindowController.CompareViewController.showRightMetaData(app.mainWindowController.selectViewController.rightSelectedType.ID)
 		End Sub
 	#tag EndEvent
 	#tag Event
