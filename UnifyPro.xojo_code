@@ -14,7 +14,6 @@ Inherits NSApplicationDelegate
 		  
 		  preProcess= new PreProcessor
 		  
-		  
 		  mainController = new mainWindowController
 		  
 		  

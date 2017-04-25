@@ -1,5 +1,5 @@
 Type=Desktop
-RBProjectVersion=2017.01
+RBProjectVersion=2017.011
 MinIDEVersion=20070100
 MenuBar=MainMenuBar;MainMenuBar.xojo_menu;&h486C4FFF;&h0;false
 Class=IHealthServerGen;UnityProServer/UnityProBroker/IHealthServerGen.xojo_code;&h47617FFF;&h3DEFFF;false
@@ -254,7 +254,7 @@ WinInternalName=
 WinProductName=Unify Pro
 WinFileDescription=
 AutoIncrementVersionInformation=True
-BuildFlags=&h7910
+BuildFlags=&h5910
 BuildLanguage=&h0
 DebugLanguage=&h0
 Region=

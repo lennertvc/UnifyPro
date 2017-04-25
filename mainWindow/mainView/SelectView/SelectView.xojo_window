@@ -273,7 +273,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -308,7 +307,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -364,9 +362,11 @@ End
 		    g.ForeColor = &cFFFFFF
 		    g.FillRect(0, 0, g.Width,g.Height)
 		    
+		    
 		    Return  FALSE
 		    
 		  end if
+		  
 		  
 		  
 		End Function
@@ -380,6 +380,7 @@ End
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
+		  app.mainWindowController.selectViewController.colorTextDefault
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
@@ -441,6 +442,7 @@ End
 		  App.mainWindowController.CompareViewController.showRightMetaData(selectViewController.rightSelectedType.ID)
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
+		  app.mainWindowController.selectViewController.colorTextDefault
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  

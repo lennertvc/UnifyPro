@@ -45,6 +45,72 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub colorTextDefault()
+		  dim colorRecordSet as RecordSet
+		  dim IDright as string
+		  dim IDleft as string
+		  
+		  colorRecordSet=app.dataModel.SQLSelect("Select regelingTypeID From metadata where Key= 'STANDAARD';")
+		  
+		  if rightRecords=nil then
+		    goto lable
+		  end if
+		  if rightRecords.EOF then
+		    rightRecords.movefirst
+		  end if
+		  
+		  while not rightRecords.eof
+		    while not colorRecordSet.eof
+		      if rightRecords.Field("regelingTypeID").integervalue= colorRecordSet.field("regelingTypeID").integervalue then
+		        
+		        For i as integer = 0 to selectview.ListViewRight.ListCount-1
+		          IDright=selectview.ListViewRight.cell(i,0).mid(instr(selectview.ListViewRight.cell(i,0),"-")+1,4)
+		          IDright=IDright.trim
+		          if IDright=str(rightRecords.Field("regelingTypeID").IntegerValue) then
+		            selectView.ListViewRight.CellBold(i,0)=true
+		          end if
+		        Next
+		        
+		      end if
+		      colorRecordSet.MoveNext
+		    wend
+		    colorRecordSet.movefirst
+		    rightRecords.MoveNext
+		  wend
+		  
+		  
+		  
+		  if leftRecords=nil then
+		    goto lable
+		  end if
+		  if leftRecords.EOF then
+		    leftRecords.movefirst
+		  end if
+		  
+		  while not leftRecords.eof
+		    while not colorRecordSet.eof
+		      if leftRecords.Field("regelingTypeID").integervalue= colorRecordSet.field("regelingTypeID").integervalue then
+		        For i as integer = 0 to selectview.ListViewleft.ListCount-1
+		          IDleft=selectview.ListViewLeft.cell(i,0).mid(instr(selectview.ListViewLeft.cell(i,0),"-")+1,4)
+		          IDleft=IDleft.trim
+		          if IDleft=str(leftRecords.Field("regelingTypeID").IntegerValue) then
+		            selectView.ListViewLeft.CellBold(i,0)=true
+		          end if
+		        Next
+		        
+		      end if
+		      colorRecordSet.MoveNext
+		    wend
+		    colorRecordSet.movefirst
+		    leftRecords.MoveNext
+		  wend
+		  
+		  lable:
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(new SelectView, app.dataModel)
@@ -126,12 +192,14 @@ Implements JVBackgroundTaskDelegate
 		    leftRecords = leftDataFilter.foundRecords
 		    showList(selectView.ListViewLeft, leftRecords)
 		    selectView.ProgressWheelLeft.Visible = FALSE
+		    app.mainWindowController.selectViewController.colorTextDefault
 		    
 		  Case rightDataFilter
 		    
 		    rightRecords = rightDataFilter.foundRecords
 		    showList(selectView.ListViewRight, rightRecords)
 		    selectView.ProgressWheelRight.Visible = FALSE
+		    app.mainWindowController.selectViewController.colorTextDefault
 		    
 		  Case leftTypesCounter
 		    
@@ -285,7 +353,7 @@ Implements JVBackgroundTaskDelegate
 		          list.RowTag(previousRowNumber) = children
 		        end if
 		        
-		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
+		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling - " + currentTypeID
 		        list.AddFolder(regelingDescription)
 		        
 		        redim regelingen(numberOfChildren-1, list.ColumnCount-1)
