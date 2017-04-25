@@ -2,6 +2,12 @@
 Protected Class UnifyPro
 Inherits NSApplicationDelegate
 	#tag Event
+		Sub Close()
+		  app.dataModel.Close
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  #if not (TargetWindows or DebugBuild) then
 		    MsgBox("this program is Windows-only")

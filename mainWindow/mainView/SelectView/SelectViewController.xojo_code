@@ -328,7 +328,7 @@ Implements JVBackgroundTaskDelegate
 		    dim kostenPlaats as String
 		    dim filePath as String
 		    
-		    
+		    data.MoveFirst
 		    While Not data.EOF
 		      
 		      currentTypeID = data.field("regelingTypeID").stringvalue
