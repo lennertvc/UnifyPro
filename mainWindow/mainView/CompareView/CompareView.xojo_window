@@ -56,12 +56,12 @@ Begin NSView CompareView
       ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
-      DefaultRowHeight=   -1
+      DefaultRowHeight=   22
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   2
-      GridLinesVertical=   2
+      GridLinesHorizontal=   1
+      GridLinesVertical=   1
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   188
@@ -106,12 +106,12 @@ Begin NSView CompareView
       ColumnWidths    =   "25%,76%"
       DataField       =   ""
       DataSource      =   ""
-      DefaultRowHeight=   -1
+      DefaultRowHeight=   22
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   2
-      GridLinesVertical=   2
+      GridLinesHorizontal=   1
+      GridLinesVertical=   1
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   188
@@ -181,6 +181,14 @@ Begin NSView CompareView
       Visible         =   True
       Width           =   100
    End
+   Begin Timer timerUpdateUI
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   500
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
 End
 #tag EndWindow
 
@@ -197,6 +205,115 @@ End
 
 #tag EndWindowCode
 
+#tag Events ListMetaLeft
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if row < me.ListCount then
+		    
+		    if (column = 0) and (me.Cell(row, column) <> "") then
+		      g.ForeColor=&cD9D9D9
+		      g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
+		    end if
+		    
+		  end if
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		  
+		  me.ColumnType(0)=ListMetaLeft.TypeEditable
+		  me.ColumnType(1)=ListMetaLeft.TypeEditable
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  Me.EditCell(row,column)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(x As Integer, y As Integer) As Boolean
+		  compareViewController.addRow(CompareView.ListMetaLeft)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub CellLostFocus(row as Integer, column as Integer)
+		  //get RegelingTypeID and associated metadata
+		  dim eID as integer
+		  dim edbRecordset as RecordSet
+		  
+		  eID = app.mainWindowController.selectViewController.leftSelectedType.ID
+		  App.mainWindowController.CompareViewController.showLeftMetaData(eID)
+		  edbRecordset=compareViewController.LeftMetaFilter.foundRecords
+		  
+		  //call eventhandler
+		  compareViewController.modifyMetaData(compareview.ListMetaLeft,row,column,eID,edbRecordset)
+		  
+		  //regenerate compareview window
+		  App.mainWindowController.CompareViewController.showLeftMetaData(app.mainWindowController.selectViewController.LeftSelectedType.ID)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ListMetaRight
+	#tag Event
+		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  if row < me.ListCount then
+		    
+		    if (column = 0) and (row<5) and (me.Cell(row, column) <> "") then
+		      g.ForeColor=&cD9D9D9
+		      g.FillRoundRect( 5, 1, g.width-10, g.height-2, 20, 20)
+		    end if
+		    
+		  end if
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  me.ColumnAlignment(0) = ListBox.AlignCenter
+		  
+		  me.ColumnType(0)=ListMetaRight.TypeEditable
+		  me.ColumnType(1)=ListMetaRight.TypeEditable
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  Me.EditCell(row,column)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub CellLostFocus(row as Integer, column as Integer)
+		  
+		  //get RegelingTypeID and associated metadata
+		  dim eID as integer
+		  dim edbRecordset as RecordSet
+		  
+		  eID = app.mainWindowController.selectViewController.rightSelectedType.ID
+		  App.mainWindowController.CompareViewController.showRightMetaData(eID)
+		  edbRecordset=compareViewController.rightMetaFilter.foundRecords
+		  
+		  //call eventhandler
+		  compareViewController.modifyMetaData(compareview.ListMetaRight,row,column,eID,edbRecordset)
+		  
+		  //regenerate compareview window
+		  App.mainWindowController.CompareViewController.showRightMetaData(app.mainWindowController.selectViewController.rightSelectedType.ID)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(x As Integer, y As Integer) As Boolean
+		  compareViewController.addRow(CompareView.ListMetaRight)
+		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events timerUpdateUI
+	#tag Event
+		Sub Action()
+		  compareViewController.syncInterface(TRUE)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

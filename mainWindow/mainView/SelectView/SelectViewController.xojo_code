@@ -1,6 +1,7 @@
 #tag Class
 Protected Class SelectViewController
 Inherits NSViewController
+Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub autoLayout()
 		  selectView.top = 0
@@ -44,49 +45,194 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub colorTextDefault()
+		  dim colorRecordSet as RecordSet
+		  dim IDright as string
+		  dim IDleft as string
+		  
+		  
+		  For i as integer = 0 to selectview.ListViewRight.ListCount-1
+		    selectView.ListViewRight.CellBold(i,0)=false
+		  Next
+		  
+		  For i as integer = 0 to selectview.ListViewLeft.ListCount-1
+		    selectView.ListViewLeft.CellBold(i,0)=false
+		  Next
+		  
+		  colorRecordSet=app.dataModel.SQLSelect("Select regelingTypeID From metadata where Key= 'STANDAARD';")
+		  
+		  if rightRecords=nil then
+		    goto lable
+		  end if
+		  if rightRecords.EOF then
+		    rightRecords.movefirst
+		  end if
+		  
+		  while not rightRecords.eof
+		    while not colorRecordSet.eof
+		      if rightRecords.Field("regelingTypeID").integervalue= colorRecordSet.field("regelingTypeID").integervalue then
+		        
+		        For i as integer = 0 to selectview.ListViewRight.ListCount-1
+		          IDright=selectview.ListViewRight.cell(i,0).mid(instr(selectview.ListViewRight.cell(i,0),"-")+1,4)
+		          IDright=IDright.trim
+		          if IDright=str(rightRecords.Field("regelingTypeID").IntegerValue) then
+		            selectView.ListViewRight.CellBold(i,0)=true
+		          end if
+		        Next
+		        
+		      end if
+		      colorRecordSet.MoveNext
+		    wend
+		    colorRecordSet.movefirst
+		    rightRecords.MoveNext
+		  wend
+		  
+		  
+		  
+		  if leftRecords=nil then
+		    goto lable
+		  end if
+		  if leftRecords.EOF then
+		    leftRecords.movefirst
+		  end if
+		  
+		  while not leftRecords.eof
+		    while not colorRecordSet.eof
+		      if leftRecords.Field("regelingTypeID").integervalue= colorRecordSet.field("regelingTypeID").integervalue then
+		        For i as integer = 0 to selectview.ListViewleft.ListCount-1
+		          IDleft=selectview.ListViewLeft.cell(i,0).mid(instr(selectview.ListViewLeft.cell(i,0),"-")+1,4)
+		          IDleft=IDleft.trim
+		          if IDleft=str(leftRecords.Field("regelingTypeID").IntegerValue) then
+		            selectView.ListViewLeft.CellBold(i,0)=true
+		          end if
+		        Next
+		        
+		      end if
+		      colorRecordSet.MoveNext
+		    wend
+		    colorRecordSet.movefirst
+		    leftRecords.MoveNext
+		  wend
+		  
+		  lable:
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub constructor()
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(new SelectView, app.dataModel.Prepare("SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ?"))
+		  Super.Constructor(new SelectView, app.dataModel)
+		  
+		  leftDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
+		  leftDataFilter.backgroundTaskDelegate = me
+		  leftDataFilter.bindVariables()
+		  
+		  rightDataFilter = new JVbackGroundQuery(selectData, "SELECT * FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
+		  rightDataFilter.backgroundTaskDelegate = me
+		  rightDataFilter.bindVariables()
+		  
+		  leftTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
+		  leftTypesCounter.backgroundTaskDelegate = me
+		  leftTypesCounter.bindVariables()
+		  
+		  rightTypesCounter = new JVbackGroundQuery(selectData, "SELECT DISTINCT RegelingTypeID FROM 'DefaultListing' WHERE Installatie LIKE ? OR kostenplaats LIKE ? OR procesDeel LIKE ?")
+		  rightTypesCounter.backgroundTaskDelegate = me
+		  rightTypesCounter.bindVariables()
 		  
 		  exportFolder =SpecialFolder.ApplicationData.child("UnifyPro")
 		  if  not exportFolder.Exists then
 		    exportFolder.CreateAsFolder
 		  end if
 		  
-		  sourceFileLeft = exportFolder.Child("sourceLeft.txt")
-		  sourceFileRight = exportFolder.Child("sourceRight.txt")
+		  leftSelectedType = nil
+		  rightSelectedType = nil
+		  
+		  leftSourceFile = new JVTextFile(exportFolder.Child("sourceLeft.txt"))
+		  rightSourceFile = new JVTextFile(exportFolder.Child("sourceRight.txt"))
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub exportAndCompare()
-		  if (selectedCodeLeft <> "") and  (selectedCodeRight<> "")  then
-		    
-		    exportAsTextFile(sourceFileLeft,selectedCodeLeft)
-		    exportAsTextFile(sourceFileRight, selectedCodeRight)
-		    
-		    app.mainWindowController.compareViewController.compare(sourceFileLeft, sourceFileRight)
-		    
-		  end if
+		Sub loadLeftData()
+		  
+		  selectView.ProgressWheelLeft.Visible = TRUE
+		  selectView.LabelCountLeft.text ="Loading data"
+		  selectView.Refresh
+		  app.DoEvents
+		  
+		  leftDataFilter.bindVariables(array(leftFilterExpression, leftFilterExpression, leftFilterExpression))
+		  leftDataFilter.Run
+		  
+		  leftTypesCounter.bindVariables(array(leftFilterExpression, leftFilterExpression, leftFilterExpression))
+		  leftTypesCounter.Run
+		  
 		  
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub exportAsTextFile(file as FolderItem, contents as String)
-		  Dim tos As TextOutputStream
-		  If file <> Nil Then
-		    tos = TextOutputStream.Create(file)
-		    tos.WriteLine(contents)
-		    tos.Close
-		  End If
+	#tag Method, Flags = &h0
+		Sub loadRightData()
+		  
+		  selectView.ProgressWheelRight.Visible = TRUE
+		  selectView.LabelCountRight.text ="Loading data"
+		  selectView.Refresh
+		  app.DoEvents
+		  
+		  rightDataFilter.bindVariables(array(rightFilterExpression, rightFilterExpression, rightFilterExpression))
+		  rightDataFilter.Run
+		  
+		  rightTypesCounter.bindVariables(array(rightFilterExpression, rightFilterExpression, rightFilterExpression))
+		  rightTypesCounter.Run
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onTaskFinished(sender as JVBackgroundTask)
+		  // Part of the JVBackgroundTaskDelegate interface.
+		  
+		  Select Case sender
+		    
+		    
+		  Case  leftDataFilter
+		    
+		    leftRecords = leftDataFilter.foundRecords
+		    showList(selectView.ListViewLeft, leftRecords)
+		    selectView.ProgressWheelLeft.Visible = FALSE
+		    app.mainWindowController.selectViewController.colorTextDefault
+		    
+		  Case rightDataFilter
+		    
+		    rightRecords = rightDataFilter.foundRecords
+		    showList(selectView.ListViewRight, rightRecords)
+		    selectView.ProgressWheelRight.Visible = FALSE
+		    app.mainWindowController.selectViewController.colorTextDefault
+		    
+		  Case leftTypesCounter
+		    
+		    selectView.LabelCountLeft.Text = Str(leftTypesCounter.RecordCount) +" types op "+Str(leftDataFilter.recordCount)
+		    
+		  Case rightTypesCounter
+		    
+		    selectView.LabelCountRight.Text =  Str(rightTypesCounter.RecordCount) +" types op "+Str(rightDataFilter.recordCount)
+		    
+		  End Select
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub onviewActivate(sender as nsview)
 		  autoLayout
-		  syncInterface(TRUE)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub onViewOpen(sender as NSView)
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -97,32 +243,40 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function selectType(list as JVTreeView, data as RecordSet) As String
-		  // Start with no record selected in the dataset
+		Function selectType(list as JVTreeView, data as RecordSet) As RegelingType
 		  data.MoveFirst
-		  data.MovePrevious
+		  dim selection as new RegelingType
 		  
-		  dim currentParrentRow as Integer = 0
-		  dim selectedParentRow as Integer = -1
+		  dim currentParentRow as Integer = 0
+		  dim currentParentType as Integer = 0
+		  dim currentParentCode as String = ""
+		  dim numberOfChildren as Integer = 0
 		  
-		  dim currentParentCode as String
-		  dim selectedParentCode as String = ""
+		  dim currentInstallatie as String
+		  dim currentKP as String
 		  
-		  for rowNumber as Integer =  0 to list.listcount-1
+		  dim rowNumber as Integer = 0
+		  while rowNumber < list.listcount
 		    
-		    data.MoveNext
-		    
-		    // Unchek all the parentfolders
 		    if list.RowIsFolder(rownumber) then
 		      
-		      currentParrentRow = rowNumber
-		      currentParentCode = data.Field("cleanedUpcode").StringValue
-		      list.CellState(currentParrentRow, 0) = CheckBox.CheckedStates.UnChecked
+		      currentParentRow = rowNumber
 		      
-		      //  It's a closed parentrow, skip over the extra invisible rows
-		      if (list.Expanded(currentParrentRow) = FALSE) And (list.RowTag(rowNumber) <> nil ) then
-		        dim closedRows(-1,-1) as String = list.RowTag(rowNumber)
-		        for closedRow as Integer = 1 to ubound(closedRows)
+		      // Unchek the parentfolder and
+		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.UnChecked
+		      
+		      // store the data from the first record in it
+		      currentParentType = data.Field("regelingTypeID").IntegerValue
+		      currentParentCode = data.Field("cleanedUpcode").StringValue
+		      numberOfChildren = data.Field("timesUsed").IntegerValue
+		      
+		      currentInstallatie = data.Field("Installatie").StringValue
+		      currentKP = data.Field("kostenplaats").StringValue
+		      
+		      data.MovePrevious // Set the datapointer to the beginning of the first child, there are no extra extra records for the enclosing folders
+		      if list.Expanded(currentParentRow) = FALSE then
+		        // Skip data for rows dat are invisible/collapsed and therefore will not be processed
+		        for invisbleRow as integer = 1 to numberOfChildren
 		          data.MoveNext
 		        next
 		      end if
@@ -130,34 +284,35 @@ Inherits NSViewController
 		    end if
 		    
 		    if list.Selected(rowNumber) then
-		      // Remember the selections parent and its code
-		      selectedParentRow = currentParrentRow
-		      selectedParentCode = currentParentCode
-		      // Report the selected row while developing
+		      
+		      // Check the parentfolder if it has records selected within
+		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.Checked
+		      
+		      // and keep de data that was stored before for the parentfolder 
+		      selection.ID = currentParentType
+		      selection.cleanedUpCode = currentParentCode
+		      
+		      // Log each selection during debugging, since this is a complicated method
 		      #if DebugBuild then
-		        dim installatie as String =data.Field("installatie").StringValue
-		        dim kostenplaats as String =data.Field("kostenplaats").StringValue
-		        System.DebugLog(installatie+", " +kostenplaats+" Selected")
+		        system.debuglog("Type "+Str(selection.ID)+", "+ currentInstallatie+" "+currentKP+ " selected")
 		      #endif
+		      
 		    end if
-		  next
+		    
+		    rowNumber = rowNumber+1
+		    data.MoveNext
+		  wend
 		  
-		  // Reselect the parent type afterwords
-		  if selectedParentRow >=0 then
-		    list.CellState(selectedParentRow, 0) = CheckBox.CheckedStates.Checked
-		  end if
-		  
-		  // and return the code
-		  return selectedParentCode
+		  return selection
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub showList(list as JVTreeView, data as recordset)
 		  
-		  list.DeleteAllRows
-		  
-		  If data <> Nil Then
+		  If (list <> Nil)  and (data <> Nil) and (data.RecordCount > 0)  and (not Data.EOF) Then
+		    
+		    list.DeleteAllRows
 		    
 		    dim regelingen(-1,-1) as String
 		    dim regelingCounter as Integer = 0
@@ -207,7 +362,7 @@ Inherits NSViewController
 		          list.RowTag(previousRowNumber) = children
 		        end if
 		        
-		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling " + currentTypeID
+		        dim regelingDescription as String = Str(numberOfChildren) + " Keer " + procesDeel + " Regeling - " + currentTypeID
 		        list.AddFolder(regelingDescription)
 		        
 		        redim regelingen(numberOfChildren-1, list.ColumnCount-1)
@@ -251,34 +406,13 @@ Inherits NSViewController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub syncInterface(up as Boolean)
+		Sub syncInterface(optional up as Boolean = TRUE)
 		  if up then
-		    
-		    // Fill the lefthand TreeView
-		    
-		    selectData.BindType(array(filterExpressionLeft, filterExpressionLeft))
-		    selectData.Bind(array(filterExpressionLeft, filterExpressionLeft))
-		    recordsLeft = selectData.SQLSelect
-		    showList(selectView.ListViewLeft, recordsLeft)
-		    
-		    selectView.LabelCountLeft.Text = leftCount
-		    
-		    // Fill the righthand TreeView
-		    selectData.BindType(array(filterExpressionRight, filterExpressionRight))
-		    selectData.Bind(array(filterExpressionRight, filterExpressionRight))
-		    recordsRight = selectData.SQLSelect
-		    showList(selectView.ListViewRight, recordsRight)
-		    
-		    selectView.LabelCountRight.Text = rightCount
 		    
 		  else
 		    
 		    
-		    
 		  end if
-		  
-		  
-		  
 		  
 		End Sub
 	#tag EndMethod
@@ -288,88 +422,100 @@ Inherits NSViewController
 		exportFolder As FolderItem
 	#tag EndProperty
 
+	#tag Property, Flags = &h0
+		#tag Note
+			_
+		#tag EndNote
+		leftDataFilter As JVbackGroundQuery
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterLeft.Text+"%"
+			  dim filterExpression as Variant = "%"+mLeftFilterExpression+"%"
 			  Return filterExpression
 			End Get
 		#tag EndGetter
-		filterExpressionLeft As Variant
+		#tag Setter
+			Set
+			  System.DebugLog(value.StringValue)
+			  mLeftFilterExpression = value.StringValue
+			End Set
+		#tag EndSetter
+		leftFilterExpression As Variant
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		leftRecords As RecordSet
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftSelectedType As RegelingType
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftSourceFile As JVTextFile
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		leftTypesCounter As JVbackGroundQuery
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLeftFilterExpression As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRightFilterExpression As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		#tag Note
+			_
+		#tag EndNote
+		rightDataFilter As JVbackGroundQuery
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim filterExpression as Variant = "%"+selectview.TextFieldFilterRight.Text+"%"
+			  dim filterExpression as Variant = "%"+mRightFilterExpression+"%"
 			  Return filterExpression
+			  
 			End Get
 		#tag EndGetter
-		filterExpressionRight As Variant
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
-			  typesSearch.BindType(array(filterExpressionLeft))
-			  typesSearch.Bind(array(filterExpressionLeft))
-			  
-			  dim types as recordset = typesSearch.SQLSelect
-			  
-			  dim numberOfTypes as String = Str(types.RecordCount)
-			  
-			  dim numberOfRegelingen as String = Str(recordsLeft.RecordCount)
-			  
-			  Return numberOfTypes +" types op "+numberOfRegelingen
-			End Get
-		#tag EndGetter
-		leftCount As String
+		#tag Setter
+			Set
+			  mRightFilterExpression =  value.StringValue
+			End Set
+		#tag EndSetter
+		rightFilterExpression As Variant
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
-		recordsLeft As RecordSet
+		rightRecords As RecordSet
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		recordsRight As RecordSet
+		rightSelectedType As RegelingType
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		rightSourceFile As JVTextFile
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		rightTypesCounter As JVbackGroundQuery
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  dim typesSearch as SQLitePreparedStatement = app.dataModel.Prepare("SELECT DISTINCT RegelingTypeID FROM Regelingen WHERE filepath LIKE ?")
-			  typesSearch.BindType(array(filterExpressionright))
-			  typesSearch.Bind(array(filterExpressionright))
-			  
-			  dim types as recordset = typesSearch.SQLSelect
-			  
-			  dim numberOfTypes as String = Str(types.RecordCount)
-			  
-			  dim numberOfRegelingen as String = Str(recordsright.RecordCount)
-			  
-			  Return numberOfTypes +" types op "+numberOfRegelingen
+			  return SQLiteDatabase(representedObject)
 			End Get
 		#tag EndGetter
-		rightCount As String
+		selectData As SQLiteDatabase
 	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return SQLitePreparedStatement(representedObject)
-			End Get
-		#tag EndGetter
-		selectData As SQLitePreparedStatement
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		selectedCodeLeft As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		selectedCodeRight As String
-	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -379,14 +525,6 @@ Inherits NSViewController
 		#tag EndGetter
 		selectView As SelectView
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		sourceFileLeft As FolderItem
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		sourceFileRight As FolderItem
-	#tag EndProperty
 
 
 	#tag Constant, Name = margins, Type = Double, Dynamic = False, Default = \"5", Scope = Public
@@ -409,34 +547,10 @@ Inherits NSViewController
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="leftCount"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
 			Type="String"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="rightCount"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="selectedCodeLeft"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="selectedCodeRight"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

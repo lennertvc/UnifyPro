@@ -1,5 +1,5 @@
 #tag Class
-Protected Class mainWindowController
+Protected Class MainWindowController
 Inherits NSWindowController
 	#tag Method, Flags = &h0
 		Sub constructor()
@@ -20,6 +20,7 @@ Inherits NSWindowController
 		  #if DebugBuild then
 		    mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
 		    mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
+		    
 		  #endif
 		  
 		  window.Show

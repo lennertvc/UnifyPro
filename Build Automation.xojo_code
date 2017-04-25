@@ -12,6 +12,7 @@
 					Subdirectory = 
 					FolderItem = Li4vUmVnZWxpbmdlbkRhdGFCYXNlLmRi
 					FolderItem = Li4vQXJ0d29yay8=
+					FolderItem = Li4vVW5pZnklMjBQcm8lMjBSZWxlYXNlJTIwbm90ZXMudHh0
 				End
 			End
 			Begin BuildStepList Windows
@@ -23,6 +24,7 @@
 					Subdirectory = 
 					FolderItem = Li4vUmVnZWxpbmdlbkRhdGFCYXNlLmRi
 					FolderItem = Li4vQXJ0d29yay8=
+					FolderItem = Li4vVW5pZnklMjBQcm8lMjBSZWxlYXNlJTIwbm90ZXMudHh0
 				End
 			End
 #tag EndBuildAutomation

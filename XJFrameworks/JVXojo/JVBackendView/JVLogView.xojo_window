@@ -30,7 +30,7 @@ Begin NSView JVLogView
       Alignment       =   1
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFF00FFFF
       Bold            =   False
       Border          =   True
       DataField       =   ""
@@ -88,6 +88,13 @@ End
 
 #tag EndWindowCode
 
+#tag Events Console
+	#tag Event
+		Sub Open()
+		  me.BackColor = &cFFFFFF
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="AcceptFocus"

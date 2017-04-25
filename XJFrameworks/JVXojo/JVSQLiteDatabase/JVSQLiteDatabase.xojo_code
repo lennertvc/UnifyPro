@@ -2,162 +2,173 @@
 Protected Class JVSQLiteDatabase
 Inherits SQLiteDatabase
 	#tag Method, Flags = &h0
-		Shared Function Create(file as FolderItem) As AutomationProjectsDbase
-		  Dim database As  New AutomationProjectsDbase
-		  database.databaseFile = file
+		Sub InsertOrUpdateRecords(tableName as String, matchFields as Dictionary, newFields as Dictionary)
 		  
-		  if database.createDatabaseFile then
-		    
-		    database.updateDbaseDiagram
-		    database.fillLookupTabelSignalTypes
-		    
-		    return database
-		    
+		  dim recordsToUpdate as RecordSet = selectRecords(tableName, matchFields)
+		  
+		  if recordsToUpdate <> nil  then 
+		    updateRecords(tableName, recordsToUpdate, newFields)
 		  else
-		    
-		    msgbox("[AutomationProjectsDbase] Error creating database-file  'AutomationProjectsDbase' "+database.ErrorMessage)
-		    return nil
-		    
+		    insertRecords(tableName, newFields)
 		  end if
 		  
-		End Function
+		  
+		  
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function InsertOrUpdate(tableName as String, matchFields() as String, fields as Dictionary) As Boolean
-		  // WORKING EXAMPLE !!!
+		Sub insertRecords(tableName as String, newFields as Dictionary)
+		  newfields = stripPKsFromRecord(tableName, newFields)
 		  
-		  // Dim updateCondition as String= "KostenPlaats = '"+kostenplaats+"'"
-		  // Dim updateStatement as SQLitePreparedStatement = Prepare("UPDATE Projects SET Name=?, KostenPlaats=?, Number=? WHERE "+updateCondition)
-		  // updateStatement.BindType(0, SQLitePreparedStatement.SQLITE_TEXT)
-		  // updateStatement.BindType(1, SQLitePreparedStatement.SQLITE_TEXT)
-		  // updateStatement.BindType(2, SQLitePreparedStatement.SQLITE_TEXT)
-		  // updateStatement.SQLExecute(name, kostenplaats, number)
-		  // 
-		  // If Error Then
-		  // MsgBox("DB Error: " + ErrorMessage)
-		  // Return False
-		  // End If
-		  // 
-		  // Dim InsertStatement As SQLitePreparedStatement = Prepare("INSERT INTO Projects (Name, KostenPlaats, Number) SELECT ?, ?, ? WHERE Changes() = 0")
-		  // InsertStatement.BindType(0, SQLitePreparedStatement.SQLITE_TEXT)
-		  // InsertStatement.BindType(1, SQLitePreparedStatement.SQLITE_TEXT)
-		  // InsertStatement.BindType(2, SQLitePreparedStatement.SQLITE_TEXT)
-		  // InsertStatement.SQLExecute(name, kostenplaats, number)
-		  // 
-		  // If Error Then
-		  // MsgBox("DB Error: " + ErrorMessage)
-		  // Return False
-		  // End If
-		  
-		  if fields.HasKey("ID") then
-		    fields.Remove("ID") // Never update or insert a PK
-		  end if
-		  
-		  dim updatesFields() as String
-		  redim updatesFields(-1)
-		  dim insertFields() as String
-		  redim insertFields(-1)
-		  dim insertPlaceholders() as String
-		  redim insertPlaceholders(-1)
-		  
-		  for each fieldKey as Variant in fields.Keys
-		    dim fieldName as String = fieldKey.StringValue
-		    updatesFields.append(fieldName+ "=?") 
-		    insertFields.append(fieldName) 
-		    insertPlaceholders.Append("?")
+		  dim newFieldNames() as String
+		  dim placeHolders() as String
+		  for each fieldName as String in newFields.keys
+		    newFieldNames.append(fieldName)
+		    placeHolders.append("?")
 		  next
-		  dim updatesFieldsString as String= join(updatesFields, " AND ")
-		  dim insertFieldsString as String= join(insertFields, ", ")
-		  dim insertPlaceholdersString as String= join(insertPlaceholders, ", ")
+		  dim newFieldNamesString as String= join(newFieldNames, ", ")
+		  dim placeHolderString as String= join(placeHolders, ", ")
 		  
-		  Dim updateConditions() as String
-		  redim updateConditions(-1)
-		  for each matchfield as String in matchFields
-		    updateConditions.append(matchfield+" = '"+fields.value(matchfield)+"'")
-		  next
-		  dim updateConditionsString as String = Join(updateConditions, " AND ")
+		  dim sqlString as String = "INSERT INTO "+tableName+" ("+newFieldNamesString+") VALUES ("+placeHolderString+")" 
+		  dim sqlStatement as SQLitePreparedStatement = Prepare(sqlString)
 		  
-		  dim tempTestUpdate as string = "UPDATE "+tableName+" SET "+updatesFieldsString+" WHERE "+updateConditionsString
+		  sqlStatement.bindType(newFields.Values)
+		  sqlStatement.bind(newFields.Values)
 		  
-		  Dim updateStatement as SQLitePreparedStatement = Prepare("UPDATE "+tableName+" SET "+updatesFieldsString+" WHERE "+updateConditionsString)
-		  setBindTypes(updateStatement, fields)
-		  updateStatement.SQLExecute(fields.values)
+		  sqlStatement.SQLExecute
 		  
 		  If Error Then
-		    MsgBox("DB Error: " + ErrorMessage)
-		    Return False
+		    #if debugbuild then
+		      system.debuglog( _
+		      "[JVSQLiteDatabase] DB Error: " + ErrorMessage+ENDOFLINE+ _
+		      sqlString)
+		    #endif
+		    
 		  End If
 		  
-		  dim tempTestInsert as string = "INSERT INTO "+tableName+" ("+insertFieldsString+") SELECT "+insertPlaceholdersString+" WHERE Changes() = 0"
-		  
-		  Dim InsertStatement As SQLitePreparedStatement = Prepare("INSERT INTO "+tableName+" ("+insertFieldsString+") SELECT "+insertPlaceholdersString+" WHERE Changes() = 0")
-		  setBindTypes(InsertStatement, fields)
-		  InsertStatement.SQLExecute(fields.values)
-		  
-		  If Error Then
-		    MsgBox("DB Error: " + ErrorMessage)
-		    Return False
-		  End If
-		End Function
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Shared Function Open(file as FolderItem) As AutomationProjectsDbase
+		Function lookupID(lookupTable as String, lookupFields as Dictionary) As Integer
 		  
-		  If  (file <> nil) and (file.exists) Then
-		    
-		    // or Open
-		    Dim database As New AutomationProjectsDbase
-		    database.databaseFile = file
-		    
-		    if database.connect Then
-		      database.updateDbaseDiagram
-		      return database
-		    else
-		      msgbox("[AutomationProjectsDbase] Error connecting to database Automation Projects' "+database.ErrorMessage)
-		      return nil
+		  dim pkField As String
+		  
+		  dim tableInfo as RecordSet = FieldSchema(lookupTable)
+		  while not tableInfo.eof
+		    if tableInfo.Field("IsPrimary").BooleanValue = TRUE then
+		      pkField = tableInfo.Field("ColumnName")
 		    end if
-		    
+		    tableInfo.MoveNext
+		  wend
+		  
+		  
+		  Dim matchFieldNames() as String
+		  for each fieldName as String in lookupFields.Keys
+		    matchFieldNames.append(fieldName+" = ?")
+		  next
+		  dim matchFieldsString as String= join(matchFieldNames, ", ")
+		  
+		  dim sqlString as String = "SELECT "+pkField+" FROM "+lookupTable+" WHERE "+matchFieldsString
+		  dim sqlStatement as SQLitePreparedStatement = Prepare(sqlString)
+		  
+		  sqlStatement.bindType(lookupFields.Values)
+		  sqlStatement.bind(lookupFields.Values)
+		  
+		  dim foundRecords as RecordSet = sqlStatement.SQLSelect
+		  
+		  If Error Then
+		    #if debugbuild then
+		      system.debuglog( _
+		      "[JVSQLiteDatabase] DB Error: " + ErrorMessage+ENDOFLINE+ _
+		      sqlString)
+		    #endif
+		    return -1
+		  End If
+		  
+		  if foundRecords <> nil then
+		    foundRecords.moveFirst
+		    return foundRecords.field(pkField).IntegerValue
 		  else
-		    
-		    // Create
-		    return JVSQLiteDatabase.Create(file)
-		    
+		    return -1
 		  end if
-		  
-		  
-		  
-		  
-		  
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub setBindTypes(statement as SqlitePreparedStatement, fields as Dictionary)
-		  dim fieldNumber as Integer = 0
-		  for  each fieldValue as Variant in fields.Values
-		    
-		    select case fieldValue.type
-		    case Variant.TypeBoolean
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_BOOLEAN)
-		    case Variant.TypeDouble
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_DOUBLE)
-		    case Variant.TypeInt64
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_INT64)
-		    case Variant.TypeInteger
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_INTEGER)
-		    case Variant.TypeNil
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_NULL)
-		    case Variant.TypeString
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_TEXT)
-		    else
-		      statement.BindType(fieldNumber, SQLitePreparedStatement.SQLITE_BLOB)
-		    end select
-		    
-		    fieldNumber = fieldNumber+1
+		Function selectRecords(tableName as String, matchFields as Dictionary) As Recordset
+		  Dim matchFieldNames() as String
+		  
+		  for each fieldName as String in matchFields.Keys
+		    matchFieldNames.append(fieldName+" = ?")
 		  next
+		  dim matchFieldsString as String= join(matchFieldNames, ", ")
+		  
+		  dim sqlString as String = "SELECT FROM "+tableName+" WHERE "+matchFieldsString
+		  dim sqlStatement as SQLitePreparedStatement = Prepare(sqlString)
+		  
+		  sqlStatement.bindType(matchFields.Values)
+		  sqlStatement.bind(matchFields.Values)
+		  
+		  dim foundRecords as RecordSet = sqlStatement.SQLSelect
+		  
+		  If Error Then
+		    #if debugbuild then
+		      system.debuglog( _
+		      "[JVSQLiteDatabase] DB Error: " + ErrorMessage+ENDOFLINE+ _
+		      sqlString)
+		    #endif
+		    Return nil
+		  End If
+		  
+		  return foundRecords
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function stripPKsFromRecord(tableName as String, record as Dictionary) As Dictionary
+		  // Make sure to exclude any Primary Keys from the new values
+		  dim fieldsInTable as RecordSet = FieldSchema(tableName)
+		  If fieldsInTable <> Nil Then
+		    While Not fieldsInTable.EOF
+		      dim isPrimaryField as Boolean = fieldsInTable.Field("IsPrimary")
+		      dim fieldName as String =  fieldsInTable.Field("ColumnName")
+		      if isPrimaryField and record.Keys.IndexOf(fieldname) >=0 then
+		        record.Remove(fieldname)
+		      end If
+		      fieldsInTable.MoveNext
+		    Wend
+		    fieldsInTable.Close
+		  End If 
+		  
+		  return record
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub updateRecords(tableName as String, records as RecordSet, newFields as Dictionary)
+		  newFields = stripPKsFromRecord(tableName, newFields)
+		  
+		  If records <> Nil Then
+		    records.MoveFirst
+		    records.Edit
+		    
+		    While Not records.EOF
+		      
+		      for each fieldName as String in newFields.keys
+		        dim fieldValue as Variant = newFields.value(fieldName)
+		        records.field(fieldName).value = fieldValue
+		      next
+		      
+		      records.Update
+		      records.MoveNext
+		    Wend
+		    
+		    records.Close
+		  End If
 		End Sub
 	#tag EndMethod
 
