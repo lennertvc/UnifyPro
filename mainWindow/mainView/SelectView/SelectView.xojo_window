@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFF00FFFF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -193,7 +193,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFF00FFFF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -380,8 +380,8 @@ End
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  
 		  // Export selection
-		  dim fileName as string = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)+".txt"
-		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(fileName))
+		  dim typeDescription as string = selectViewController.leftSelectedType.processPart+"_"+STR(selectViewController.leftSelectedType.ID) + ".txt"
+		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
 		  
 		  // Compare if possible
@@ -453,8 +453,8 @@ End
 		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
 		  // Export selection
-		  dim fileName as string = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)+".txt"
-		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(fileName))
+		  dim typeDescription as string = selectViewController.rightSelectedType.processPart+"_"+STR(selectViewController.rightSelectedType.ID)+ ".txt"
+		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
 		  
 		  // Compare if possible

@@ -224,6 +224,7 @@ Implements JVBackgroundTaskDelegate
 		      
 		      currentParentRow = rowNumber
 		      
+		      
 		      // Unchek the parentfolder and
 		      list.CellState(currentParentRow, 0) = CheckBox.CheckedStates.UnChecked
 		      
@@ -236,12 +237,17 @@ Implements JVBackgroundTaskDelegate
 		      currentInstallatie = data.Field("Installatie").StringValue
 		      currentKP = data.Field("kostenplaats").StringValue
 		      
-		      data.MovePrevious // Set the datapointer to the beginning of the first child, there are no extra extra records for the enclosing folders
+		      data.MovePrevious // Set the datapointer before  the beginning of the first child, there are no extra extra records for the enclosing folders
+		      
 		      if list.Expanded(currentParentRow) = FALSE then
-		        // Skip data for rows dat are invisible/collapsed and therefore will not be processed
-		        for invisbleRow as integer = 1 to numberOfChildren
-		          data.MoveNext
-		        next
+		        // Skip data for child rows dat are invisible/collapsed and therefore will not be processed
+		        if list.rowtag(rownumber) <> nil then
+		          dim hiddenChildrows(-1,-1) as String = list.RowTag(rownumber)
+		          for hiddenChildNumber as Integer = 0 to ubound(hiddenChildrows,1)
+		            data.MoveNext
+		          next
+		        end if
+		        
 		      end if
 		      
 		    end if
@@ -264,7 +270,7 @@ Implements JVBackgroundTaskDelegate
 		    end if
 		    
 		    rowNumber = rowNumber+1
-		    data.MoveNext
+		    data.MoveNext  // Move to the next visible record
 		  wend
 		  
 		  return selection
