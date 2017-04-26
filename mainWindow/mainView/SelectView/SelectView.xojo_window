@@ -382,7 +382,11 @@ End
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
-		  app.mainWindowController.selectViewController.colorTextDefault
+		  if selectviewcontroller.leftrecords.eof then
+		    selectViewController.leftRecords.MoveFirst
+		  end if
+		  app.mainWindowController.selectViewController.colorTextDefault(me,selectviewcontroller.leftRecords)
+		  
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
@@ -444,7 +448,11 @@ End
 		  App.mainWindowController.CompareViewController.showRightMetaData(selectViewController.rightSelectedType.ID)
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
-		  app.mainWindowController.selectViewController.colorTextDefault
+		  if selectviewcontroller.rightrecords.eof then
+		    selectViewController.rightRecords.MoveFirst
+		  end if
+		  app.mainWindowController.selectViewController.colorTextDefault(me,selectviewcontroller.rightRecords)
+		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
 		  
