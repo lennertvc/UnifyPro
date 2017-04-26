@@ -273,6 +273,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -307,6 +308,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -378,8 +380,8 @@ End
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  
 		  // Export selection
-		  dim typeDescription as string = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)
-		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
+		  dim fileName as string = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)+".txt"
+		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(fileName))
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
 		  
 		  // Compare if possible
@@ -451,8 +453,8 @@ End
 		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
 		  // Export selection
-		  dim typeDescription as string = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)
-		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
+		  dim fileName as string = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)+".txt"
+		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(fileName))
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
 		  
 		  // Compare if possible

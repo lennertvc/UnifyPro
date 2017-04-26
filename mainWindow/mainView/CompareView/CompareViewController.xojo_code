@@ -67,8 +67,8 @@ Implements JVBackgroundTaskDelegate
 		    
 		    showReport // On Mac OSX the last report created under Windows will be shown
 		    
-		    leftFile.delete
-		    rightFile.delete
+		    // leftFile.delete
+		    // rightFile.delete
 		  end if
 		  
 		  
