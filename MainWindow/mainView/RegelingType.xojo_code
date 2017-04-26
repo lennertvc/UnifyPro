@@ -8,6 +8,10 @@ Protected Class RegelingType
 		ID As Integer
 	#tag EndProperty
 
+	#tag Property, Flags = &h0
+		processPart As String
+	#tag EndProperty
+
 
 	#tag ViewBehavior
 		#tag ViewProperty
@@ -40,6 +44,13 @@ Protected Class RegelingType
 			Visible=true
 			Group="ID"
 			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="processPart"
+			Visible=true
+			Group="ID"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
