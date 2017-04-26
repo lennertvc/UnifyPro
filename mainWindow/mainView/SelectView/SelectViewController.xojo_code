@@ -111,8 +111,6 @@ Implements JVBackgroundTaskDelegate
 		  leftSelectedType = nil
 		  rightSelectedType = nil
 		  
-		  leftSourceFile = new JVTextFile(exportFolder.Child("sourceLeft.txt"))
-		  rightSourceFile = new JVTextFile(exportFolder.Child("sourceRight.txt"))
 		End Sub
 	#tag EndMethod
 
@@ -212,6 +210,7 @@ Implements JVBackgroundTaskDelegate
 		  
 		  dim currentParentRow as Integer = 0
 		  dim currentParentType as Integer = 0
+		  Dim currentParentProcessPart as String = ""
 		  dim currentParentCode as String = ""
 		  dim numberOfChildren as Integer = 0
 		  
@@ -230,6 +229,7 @@ Implements JVBackgroundTaskDelegate
 		      
 		      // store the data from the first record in it
 		      currentParentType = data.Field("regelingTypeID").IntegerValue
+		      currentParentProcessPart= data.Field("procesDeel").StringValue
 		      currentParentCode = data.Field("cleanedUpcode").StringValue
 		      numberOfChildren = data.Field("timesUsed").IntegerValue
 		      
@@ -253,6 +253,7 @@ Implements JVBackgroundTaskDelegate
 		      
 		      // and keep de data that was stored before for the parentfolder 
 		      selection.ID = currentParentType
+		      selection.processPart = currentParentProcessPart
 		      selection.cleanedUpCode = currentParentCode
 		      
 		      // Log each selection during debugging, since this is a complicated method

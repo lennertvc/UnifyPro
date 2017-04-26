@@ -373,19 +373,26 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  
+		  // Get and display selection
 		  selectViewController.leftSelectedtype = SelectViewController.SelectType(me,selectViewController.leftRecords)
+		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
+		  
+		  // Export selection
+		  dim typeDescription as string = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)
+		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
 		  
-		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
+		  // Compare if possible
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
+		  // Set "STANDAARD" types to bold
 		  if selectviewcontroller.leftrecords.eof then
 		    selectViewController.leftRecords.MoveFirst
 		  end if
 		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.leftRecords)
 		  
-		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
+		  // Repaint  the cells backgrounds after a selection has changed
+		  refresh( TRUE) 
 		  
 		  
 		  
@@ -439,22 +446,26 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  // Get and display selection
+		  selectViewController.rightSelectedtype = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
-		  selectViewController.rightSelectedType = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  // Export selection
+		  dim typeDescription as string = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)
+		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
 		  
-		  App.mainWindowController.CompareViewController.showRightMetaData(selectViewController.rightSelectedType.ID)
+		  // Compare if possible
 		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
+		  // Set "STANDAARD" types to bold
 		  if selectviewcontroller.rightrecords.eof then
 		    selectViewController.rightRecords.MoveFirst
 		  end if
 		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.rightRecords)
 		  
-		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
-		  
-		  
-		  
+		  // Repaint  the cells backgrounds after a selection has changed
+		  refresh( TRUE) 
 		  
 		End Sub
 	#tag EndEvent

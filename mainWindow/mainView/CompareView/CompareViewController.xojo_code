@@ -62,11 +62,16 @@ Implements JVBackgroundTaskDelegate
 		      compareShellController.view = JVTerminalViewController.MainTerminalView
 		      
 		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
+		      
 		    #endif
 		    
 		    showReport // On Mac OSX the last report created under Windows will be shown
 		    
+		    leftFile.delete
+		    rightFile.delete
 		  end if
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -87,7 +92,6 @@ Implements JVBackgroundTaskDelegate
 		  
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
-		  system.debuglog(reportFolder.absolutePath)
 		  
 		  dim reportName  as String
 		  #if TargetWindows then
