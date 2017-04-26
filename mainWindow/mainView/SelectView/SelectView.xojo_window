@@ -273,7 +273,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -308,7 +307,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -385,7 +383,7 @@ End
 		  if selectviewcontroller.leftrecords.eof then
 		    selectViewController.leftRecords.MoveFirst
 		  end if
-		  app.mainWindowController.selectViewController.colorTextDefault(me,selectviewcontroller.leftRecords)
+		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.leftRecords)
 		  
 		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
@@ -451,7 +449,7 @@ End
 		  if selectviewcontroller.rightrecords.eof then
 		    selectViewController.rightRecords.MoveFirst
 		  end if
-		  app.mainWindowController.selectViewController.colorTextDefault(me,selectviewcontroller.rightRecords)
+		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.rightRecords)
 		  
 		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  

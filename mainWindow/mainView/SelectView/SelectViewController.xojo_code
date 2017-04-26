@@ -45,7 +45,7 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub colorTextDefault(sender as JVTreeView,dbRecord as RecordSet)
+		Sub boldTextDafult(sender as JVTreeView,dbRecord as RecordSet)
 		  dim colorRecordSet as RecordSet
 		  dim ID as string
 		  
