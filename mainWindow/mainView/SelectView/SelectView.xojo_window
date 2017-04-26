@@ -32,7 +32,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "30%,20%,10%,40%"
+      ColumnWidths    =   "35%,15%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -82,7 +82,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "30%,20%,10%,40%"
+      ColumnWidths    =   "40%,10%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -273,7 +273,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -308,7 +307,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -380,12 +378,14 @@ End
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  
 		  // Export selection
-		  dim typeDescription as string = selectViewController.leftSelectedType.processPart+"_"+STR(selectViewController.leftSelectedType.ID) + ".txt"
-		  selectViewController.leftSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
+		  selectViewController.leftReportLabel = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)
 		  
 		  // Compare if possible
-		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
+		  App.mainWindowController.compareViewController.compare(_
+		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
+		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
+		  )
 		  
 		  // Set "STANDAARD" types to bold
 		  if selectviewcontroller.leftrecords.eof then
@@ -453,12 +453,15 @@ End
 		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
 		  // Export selection
-		  dim typeDescription as string = selectViewController.rightSelectedType.processPart+"_"+STR(selectViewController.rightSelectedType.ID)+ ".txt"
-		  selectViewController.rightSourceFile =  new JVTextFile(selectViewController.exportFolder.Child(typeDescription))
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
+		  selectViewController.rightReportLabel = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)
 		  
 		  // Compare if possible
-		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
+		  App.mainWindowController.compareViewController.compare(_
+		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
+		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
+		  )
+		  
 		  
 		  // Set "STANDAARD" types to bold
 		  if selectviewcontroller.rightrecords.eof then

@@ -52,25 +52,21 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
-		  
-		  if (leftFile <> nil) and (rightFile <> nil) then
+		Sub compare(leftSourceFile as JVTextFile, leftAlias as String, rightSourceFile as JVTextFile, rightAlias as String)
+		  if (leftSourceFile <> nil) and (rightSourceFile <> nil) then
 		    // Execute Compare it trough the CLI of Compare-it when on the right platform
 		    
 		    #if TargetWindows then
 		      dim compareShellController as new JVTerminalViewController
 		      compareShellController.view = JVTerminalViewController.MainTerminalView
 		      
-		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
-		      
+		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" /="+leftAlias+" "+rightSourceFile.absolutepath+" /="+rightAlias + " " +reportFile.absolutepath+"  /G:SH")
 		      
 		    #endif
 		    
 		    
 		    showReport // On Mac OSX the last report created under Windows will be shown
 		    
-		    'leftFile.delete
-		    'rightFile.delete
 		  end if
 		  
 		  

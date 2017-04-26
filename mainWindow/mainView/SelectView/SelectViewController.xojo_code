@@ -111,6 +111,11 @@ Implements JVBackgroundTaskDelegate
 		  leftSelectedType = nil
 		  rightSelectedType = nil
 		  
+		  leftSourceFile =  new JVTextFile(exportFolder.Child("leftSourceFile.txt"))
+		  rightSourceFile =  new JVTextFile(exportFolder.Child("leftSourceFile.txt"))
+		  
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -417,6 +422,10 @@ Implements JVBackgroundTaskDelegate
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		leftReportLabel As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		leftSelectedType As RegelingType
 	#tag EndProperty
 
@@ -461,6 +470,10 @@ Implements JVBackgroundTaskDelegate
 
 	#tag Property, Flags = &h0
 		rightRecords As RecordSet
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		rightReportLabel As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -514,9 +527,19 @@ Implements JVBackgroundTaskDelegate
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="leftReportLabel"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="rightReportLabel"
+			Group="Behavior"
 			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
