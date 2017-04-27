@@ -112,7 +112,9 @@ Implements JVBackgroundTaskDelegate
 		  rightSelectedType = nil
 		  
 		  leftSourceFile =  new JVTextFile(exportFolder.Child("leftSourceFile.txt"))
-		  rightSourceFile =  new JVTextFile(exportFolder.Child("leftSourceFile.txt"))
+		  rightSourceFile =  new JVTextFile(exportFolder.Child("rightSourceFile.txt"))
+		  
+		  
 		  
 		  
 		  
@@ -185,6 +187,24 @@ Implements JVBackgroundTaskDelegate
 		    selectView.LabelCountRight.Text =  Str(rightTypesCounter.RecordCount) +" types op "+Str(rightDataFilter.recordCount)
 		    
 		  End Select
+		  
+		  
+		  // Set "STANDAARD" types to bold
+		  if rightrecords<> nil and rightrecords.eof then
+		    rightRecords.MoveFirst
+		  end if
+		  if rightRecords<>nil then
+		    boldTextDafult(selectview.ListViewRight,rightRecords)
+		  end if
+		  
+		  
+		  // Set "STANDAARD" types to bold
+		  if leftrecords<> nil and leftrecords.eof then
+		    leftRecords.MoveFirst
+		  end if
+		  if leftRecords<>nil then
+		    boldTextDafult(selectview.ListViewLeft,leftRecords)
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -530,6 +550,7 @@ Implements JVBackgroundTaskDelegate
 			Name="leftReportLabel"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -541,6 +562,7 @@ Implements JVBackgroundTaskDelegate
 			Name="rightReportLabel"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

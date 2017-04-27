@@ -32,7 +32,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "35%,15%,10%,40%"
+      ColumnWidths    =   "30%,20%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -82,7 +82,7 @@ Begin NSView SelectView
       Border          =   True
       ColumnCount     =   4
       ColumnsResizable=   True
-      ColumnWidths    =   "40%,10%,10%,40%"
+      ColumnWidths    =   "30%,20%,10%,40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -379,7 +379,7 @@ End
 		  
 		  // Export selection
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
-		  selectViewController.leftReportLabel = selectViewController.leftSelectedType.processPart+" "+STR(selectViewController.leftSelectedType.ID)
+		  selectViewController.leftReportLabel = selectViewController.leftSelectedType.processPart+"_"+STR(selectViewController.leftSelectedType.ID)
 		  
 		  // Compare if possible
 		  App.mainWindowController.compareViewController.compare(_
@@ -454,7 +454,7 @@ End
 		  
 		  // Export selection
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
-		  selectViewController.rightReportLabel = selectViewController.rightSelectedType.processPart+" "+STR(selectViewController.rightSelectedType.ID)
+		  selectViewController.rightReportLabel = selectViewController.rightSelectedType.processPart+"_"+STR(selectViewController.rightSelectedType.ID)
 		  
 		  // Compare if possible
 		  App.mainWindowController.compareViewController.compare(_
