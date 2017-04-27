@@ -60,8 +60,8 @@ Implements JVBackgroundTaskDelegate
 		      dim compareShellController as new JVTerminalViewController
 		      compareShellController.view = JVTerminalViewController.MainTerminalView
 		      
-		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" /="+leftAlias+" "+rightSourceFile.absolutepath+" /="+rightAlias + " " +reportFile.absolutepath+"  /G:SH")
-		      
+		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" /="+leftalias+" "+rightSourceFile.absolutepath+" /="+rightalias+ " " +reportFile.absolutepath+"  /G:SH")
+		      'compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" "+ rightSourceFile.absolutepath + " " +reportFile.absolutepath+" /G:SH")
 		    #endif
 		    
 		    
