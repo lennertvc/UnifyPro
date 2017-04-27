@@ -4,23 +4,21 @@ Inherits NSViewController
 Implements JVBackgroundTaskDelegate
 	#tag Method, Flags = &h0
 		Sub addRow(sender as JVTreeView)
-		  // Part of the JVBackgroundTaskDelegate interface.
+		  // Select Case sender
+		  // 
+		  // Case  compareView.ListMetaRight
 		  
-		  Select Case sender
-		    
-		  Case  compareView.ListMetaRight
-		    
-		    if compareView.ListMetaRight.Cell(compareView.ListMetaRight.LastIndex,0) <>"" and compareView.ListMetaRight.Cell(compareView.ListMetaRight.LastIndex,1) <>"" then
-		      compareview.ListMetaRight.addrow()
-		    end if 
-		    
-		  Case compareView.ListMetaLeft
-		    
-		    if compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,0) <>"" and compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,1) <>"" then
-		      compareview.ListMetaLeft.addrow()
-		    end if 
-		    
-		  End Select
+		  if sender.Cell(sender.LastIndex,0) <>"" and sender.Cell(sender.LastIndex,1) <>"" then
+		    sender.addrow()
+		  end if 
+		  
+		  // Case compareView.ListMetaLeft
+		  // 
+		  // if compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,0) <>"" and compareView.ListMetaLeft.Cell(compareView.ListMetaLeft.LastIndex,1) <>"" then
+		  // compareview.ListMetaLeft.addrow()
+		  // end if 
+		  // 
+		  // End Select
 		End Sub
 	#tag EndMethod
 
@@ -54,21 +52,24 @@ Implements JVBackgroundTaskDelegate
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub compare(leftFile as JVTextFile, rightFile as JVTextFile)
-		  
-		  if (leftFile <> nil) and (rightFile <> nil) then
+		Sub compare(leftSourceFile as JVTextFile, leftAlias as String, rightSourceFile as JVTextFile, rightAlias as String)
+		  if (leftSourceFile <> nil) and (rightSourceFile <> nil) then
 		    // Execute Compare it trough the CLI of Compare-it when on the right platform
 		    
 		    #if TargetWindows then
 		      dim compareShellController as new JVTerminalViewController
 		      compareShellController.view = JVTerminalViewController.MainTerminalView
 		      
-		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftFile.absolutepath +" "+ rightFile.absolutepath + " " +reportFile.absolutepath+"  /G:SH")
+		      compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" /="+leftalias+" "+rightSourceFile.absolutepath+" /="+rightalias+ " " +reportFile.absolutepath+"  /G:SH")
+		      'compareShellController.Execute("c:\program files (x86)\Compare It!\wincmp3.exe",  leftSourceFile.absolutepath +" "+ rightSourceFile.absolutepath + " " +reportFile.absolutepath+" /G:SH")
 		    #endif
+		    
 		    
 		    showReport // On Mac OSX the last report created under Windows will be shown
 		    
 		  end if
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -89,7 +90,6 @@ Implements JVBackgroundTaskDelegate
 		  
 		  
 		  dim reportFolder as folderitem = SpecialFolder.ApplicationData.child("UnifyPro")
-		  system.debuglog(reportFolder.absolutePath)
 		  
 		  dim reportName  as String
 		  #if TargetWindows then

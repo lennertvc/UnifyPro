@@ -30,6 +30,12 @@ Inherits NSWindowController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub onWindowClose()
+		  exit
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub onWindowResized(sender as NSWindow)
 		  selectViewController.autoLayout
 		  compareViewController.autoLayout

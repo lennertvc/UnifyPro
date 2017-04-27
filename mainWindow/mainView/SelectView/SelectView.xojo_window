@@ -130,7 +130,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFF00FFFF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -193,7 +193,7 @@ Begin NSView SelectView
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFF00FF
+      BackColor       =   &cFF00FFFF
       Bold            =   False
       Border          =   True
       CueText         =   "Filter"
@@ -273,7 +273,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -308,7 +307,6 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -375,15 +373,28 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  
+		  // Get and display selection
 		  selectViewController.leftSelectedtype = SelectViewController.SelectType(me,selectViewController.leftRecords)
-		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
-		  
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
-		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
 		  
-		  app.mainWindowController.selectViewController.colorTextDefault
-		  refresh( TRUE) // Repaint  the cells backgrounds after a selection has changed
+		  // Export selection
+		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
+		  selectViewController.leftReportLabel = selectViewController.leftSelectedType.processPart+"_"+STR(selectViewController.leftSelectedType.ID)
+		  
+		  // Compare if possible
+		  App.mainWindowController.compareViewController.compare(_
+		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
+		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
+		  )
+		  
+		  // Set "STANDAARD" types to bold
+		  if selectviewcontroller.leftrecords.eof then
+		    selectViewController.leftRecords.MoveFirst
+		  end if
+		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.leftRecords)
+		  
+		  // Repaint  the cells backgrounds after a selection has changed
+		  refresh( TRUE) 
 		  
 		  
 		  
@@ -437,18 +448,29 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  // Get and display selection
+		  selectViewController.rightSelectedtype = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
-		  selectViewController.rightSelectedType = SelectViewController.SelectType(me,selectViewController.rightRecords)
+		  // Export selection
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
+		  selectViewController.rightReportLabel = selectViewController.rightSelectedType.processPart+"_"+STR(selectViewController.rightSelectedType.ID)
 		  
-		  App.mainWindowController.CompareViewController.showRightMetaData(selectViewController.rightSelectedType.ID)
-		  App.mainWindowController.compareViewController.compare(selectViewController.leftSourceFile, selectViewController.rightSourceFile)
+		  // Compare if possible
+		  App.mainWindowController.compareViewController.compare(_
+		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
+		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
+		  )
 		  
-		  app.mainWindowController.selectViewController.colorTextDefault
-		  refresh(TRUE) // Repaint  the cells backgrounds after a selection has changed
 		  
+		  // Set "STANDAARD" types to bold
+		  if selectviewcontroller.rightrecords.eof then
+		    selectViewController.rightRecords.MoveFirst
+		  end if
+		  app.mainWindowController.selectViewController.boldTextDafult(me,selectviewcontroller.rightRecords)
 		  
-		  
+		  // Repaint  the cells backgrounds after a selection has changed
+		  refresh( TRUE) 
 		  
 		End Sub
 	#tag EndEvent
