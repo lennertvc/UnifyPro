@@ -17,11 +17,9 @@ Inherits NSWindowController
 		  compareViewController.view.EmbedWithin(mainView)
 		  
 		  // Add some extra tools during debuging
-		  #if DebugBuild then
-		    mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
-		    mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
-		    
-		  #endif
+		  
+		  mainWindow.mainTabPanel.append(JVBackendViewController.sharedBackendViewController.backendView, "Backend")
+		  mainWindow.mainTabPanel.append(JVDevelopmentViewController.sharedDevelopmentViewController.developmentView, "Development")
 		  
 		  window.Show
 		  window.maximize

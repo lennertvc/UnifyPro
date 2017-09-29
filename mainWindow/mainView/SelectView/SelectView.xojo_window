@@ -61,6 +61,7 @@ Begin NSView SelectView
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
@@ -111,6 +112,7 @@ Begin NSView SelectView
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
@@ -273,6 +275,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -307,6 +310,7 @@ Begin NSView SelectView
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "..."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -373,19 +377,23 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  selectViewController.leftSourceFile.delete
+		  
 		  // Get and display selection
 		  selectViewController.leftSelectedtype = SelectViewController.SelectType(me,selectViewController.leftRecords)
 		  App.mainWindowController.CompareViewController.showLeftMetaData(selectViewController.leftSelectedType.ID)
 		  
 		  // Export selection
 		  selectViewController.leftSourceFile.Write(selectViewController.leftSelectedType.cleanedUpCode)
-		  selectViewController.leftReportLabel = selectViewController.leftSelectedType.processPart+"_"+STR(selectViewController.leftSelectedType.ID)
+		  selectViewController.leftReportLabel = STR(selectViewController.leftSelectedType.ID)
 		  
 		  // Compare if possible
+		  app.mainWindowController.compareViewController.reportFile.delete
 		  App.mainWindowController.compareViewController.compare(_
 		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
 		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
 		  )
+		  
 		  
 		  // Set "STANDAARD" types to bold
 		  if selectviewcontroller.leftrecords.eof then
@@ -448,19 +456,23 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
+		  selectViewController.rightSourceFile.delete
+		  
 		  // Get and display selection
 		  selectViewController.rightSelectedtype = SelectViewController.SelectType(me,selectViewController.rightRecords)
 		  App.mainWindowController.CompareViewController.showrightMetaData(selectViewController.rightSelectedType.ID)
 		  
 		  // Export selection
 		  selectViewController.rightSourceFile.Write(selectViewController.rightSelectedType.cleanedUpCode)
-		  selectViewController.rightReportLabel = selectViewController.rightSelectedType.processPart+"_"+STR(selectViewController.rightSelectedType.ID)
+		  selectViewController.rightReportLabel = STR(selectViewController.rightSelectedType.ID)
 		  
 		  // Compare if possible
+		  app.mainWindowController.compareViewController.reportFile.delete
 		  App.mainWindowController.compareViewController.compare(_
 		  selectViewController.leftSourceFile, selectViewController.leftReportLabel, _
 		  selectViewController.rightSourceFile, selectViewController.rightReportLabel _
 		  )
+		  
 		  
 		  
 		  // Set "STANDAARD" types to bold

@@ -35,29 +35,30 @@ Protected Class FillDatabase
 		      //check for removed
 		      dim match as boolean = false
 		      dim deletedSections as Recordset =  datamodel.SQLSelect("Select naam From regelingen where Installatie= '"+a(j).value("file_RWZI")+"'"+" AND filePath = '"+a(j).value("file_path")+"';")
-		      while not deletedSections.eof
-		        match=false
-		        for y as integer = 0 to c.ubound
-		          if b(y).value("section_name") =deletedSections.Field("naam").StringValue then
-		            match=true
-		            exit for
+		      if deletedSections <> nil then
+		        while not deletedSections.eof
+		          match=false
+		          for y as integer = 0 to c.ubound
+		            if b(y).value("section_name") =deletedSections.Field("naam").StringValue then
+		              match=true
+		              exit for
+		            end if
+		          next
+		          if match = false then
+		            datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
+		            JVBackendViewController.sharedBackendViewController.logController.logAsPlainText(deletedSections.Field("naam").StringValue + " has been deleted on location "+a(j).value("file_path"))
 		          end if
-		        next
-		        if match = false then
-		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
-		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), deletedSections.Field("naam").StringValue ))+"';")
-		          JVBackendViewController.sharedBackendViewController.logController.logAsPlainText(deletedSections.Field("naam").StringValue + " has been deleted on location "+a(j).value("file_path"))
-		        end if
-		        deletedSections.movenext
-		      wend
+		          deletedSections.movenext
+		        wend
+		      end if
 		      
 		      
 		      //check presence of section_name in DB
-		      if datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ) <> 0 then
-		        dim f as RecordSet = datamodel.SQLSelect( "Select cleanedUpCode From regelingTypes where regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"'")
+		      dim keySection as integer = datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") )
+		      if  keySection<> 0 then
+		        dim f as RecordSet = datamodel.SQLSelect( "Select cleanedUpCode From regelingTypes where regelingTypeID= '"+str(keySection)+"'")
 		        if c(i).value("cleanedUpCode") <> f.Field("cleanedUpCode").StringValue then
-		          'datamodel.SQLExecute("DELETE FROM metaData WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
-		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(datamodel.lookupChanges( a(j).value("file_RWZI") , a(j).value("file_path"), b(i).value("section_name") ))+"';")
+		          datamodel.SQLExecute("DELETE FROM regelingen WHERE regelingTypeID= '"+str(keySection)+"';")
 		          JVBackendViewController.sharedBackendViewController.logController.logAsPlainText( b(i).value("section_name") + " has been changed on location "+a(j).value("file_path"))
 		        else
 		          goto label
@@ -85,7 +86,7 @@ Protected Class FillDatabase
 		      
 		      //label
 		      label:
-		      
+		      system.debuglog(b(i).value("section_name") + " " +a(j).value("file_RWZI"))
 		    next
 		    
 		    // Quit Unity if it's still running

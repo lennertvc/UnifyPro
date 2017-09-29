@@ -10,44 +10,43 @@ Protected Class PreProcessor
 		  
 		  If rootFolder<> Nil Then
 		    dim oPathFinder as new LVCPathFinder
-		    dim oProgramFinder as new JVPathFind
-		    dim aResult() as FolderItem
 		    dim aBackupFile() as FolderItem
 		    dim aCompare() as string
 		    
 		    oPathFinder.basefolder = rootFolder
-		    aResult=oPathFinder.findFile("huidig")
+		    aBackupfile=oPathFinder.findFile("stu")
 		    
-		    for index10 as integer = 0 to aResult.Ubound
-		      oProgramFinder.baseFolder=aResult(index10)
-		      aBackupfile=oProgramFinder.findFile("stu")
+		    for index11 as integer=0 to aBackupFile.Ubound
+		      if aCompare.IndexOf(aBackupFile(index11).Name) =-1 then
+		        
+		        aBackupFile(index11).copyfileto  versionFolder
+		        aFilePath.append(aBackupFile(index11).NativePath)
+		        dim myDictionary as new Dictionary
+		        myDictionary.value("file_name")=aBackupFile(index11).Name
+		        
+		        Dim re As New RegEx
+		        dim match as RegExMatch
+		        dim matchString as string
+		        re.SearchPattern = "[0-9]{6} *- *([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)"
+		        match = re.Search(aFilepath(aFilepath.Ubound))
+		        matchString=match.SubExpressionString(0)
+		        Dim value As String = matchString
+		        
+		        myDictionary.value("file_KP")=value.Left(6)
+		        myDictionary.value("file_RWZI")=value.Replace(value.Left(9),"")
+		        myDictionary.value("file_folderitem")=aBackupFile(index11)
+		        
+		        re.SearchPattern = "[0-9]{6} *- *([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+),? ?PLC[0-9]{2}"
+		        match = re.Search(aFilepath(aFilepath.Ubound))
+		        matchString=match.SubExpressionString(0)
+		        value  = matchString
+		        myDictionary.value("file_path")="...\"+value
+		        
+		        aMyDictionary.append(myDictionary)
+		      end if 
 		      
-		      for index11 as integer=0 to aBackupFile.Ubound
-		        if aCompare.IndexOf(aBackupFile(index11).Name) =-1 then
-		          
-		          aBackupFile(index11).copyfileto  versionFolder
-		          aFilePath.append(aBackupFile(index11).NativePath)
-		          dim myDictionary as new Dictionary
-		          myDictionary.value("file_path")=aBackupFile(index11).NativePath
-		          myDictionary.value("file_name")=aBackupFile(index11).Name
-		          
-		          Dim re As New RegEx
-		          dim match as RegExMatch
-		          dim matchString as string
-		          re.SearchPattern = "([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+)? ?-?([a-z]+) - [0-9]{4}"
-		          match = re.Search(aFilepath(aFilepath.Ubound))
-		          matchString=match.SubExpressionString(0)
-		          Dim value As String = matchString
-		          
-		          myDictionary.value("file_KP")=value.Right(4)
-		          myDictionary.value("file_RWZI")=value.Replace(value.Right(7),"")
-		          myDictionary.value("file_folderitem")=aBackupFile(index11)
-		          aMyDictionary.append(myDictionary)
-		        end if 
-		        
-		        aCompare.Append(aBackupFile(index11).name)
-		        
-		      next
+		      aCompare.Append(aBackupFile(index11).name)
+		      
 		    next
 		  End If
 		  
@@ -361,7 +360,7 @@ Protected Class PreProcessor
 		    hulp=re.Replace(hulp)
 		    
 		    backuphulp=hulp
-		    re.SearchPattern = "Ba[a-z]+"
+		    re.SearchPattern = "Bavropvt"
 		    hulpkarakter=re.search(hulp)
 		    SR_beluchting=hulpkarakter <> nil
 		    
@@ -372,30 +371,53 @@ Protected Class PreProcessor
 		      re.Options.ReplaceAllMatches = True
 		      hulp=re.Replace(hulp)
 		    else
-		      re.SearchPattern = "\</program\>(\s)+\<program\>.*"
+		      're.SearchPattern = "\</program\>(\s)+\<program\>.*"
+		      're.ReplacementPattern = ""
+		      're.Options.ReplaceAllMatches = true
+		      'hulp=re.Replace(hulp)
+		      
+		      're.SearchPattern = "\<\?xml.*\</identProgram\>"
+		      're.ReplacementPattern = ""
+		      're.Options.ReplaceAllMatches = true
+		      'hulp=re.Replace(hulp)
+		      
+		      're.SearchPattern = "Ba[a-z]+" 
+		      'hulpkarakter=re.search(hulp)
+		      'if hulpkarakter <> nil then
+		      'hulp=backuphulp
+		      're.SearchPattern = "IF NOT Bavropvt.+\<program\>"
+		      're.ReplacementPattern = ""
+		      're.Options.ReplaceAllMatches = true
+		      'hulp=re.Replace(hulp)
+		      'end if
+		      
+		      're.SearchPattern = "\<\?xml.*\</identProgram\>"
+		      're.ReplacementPattern = ""
+		      're.Options.ReplaceAllMatches = true
+		      'hulp=re.Replace(hulp)
+		      
+		      re.SearchPattern = "\<datablock\>.*\</datablock\>"
+		      re.ReplacementPattern = ""
+		      re.Options.Greedy = false
+		      re.Options.ReplaceAllMatches = True
+		      hulp=re.Replace(hulp)
+		      
+		      re.SearchPattern = "\<DDTsource.*\</DDTsource\>"
+		      re.ReplacementPattern = ""
+		      re.Options.ReplaceAllMatches = True
+		      hulp=re.Replace(hulp)
+		      
+		      re.SearchPattern = "IF NOT Bavropvt.+\</program\>"
+		      re.Options.Greedy = false
 		      re.ReplacementPattern = ""
 		      re.Options.ReplaceAllMatches = true
 		      hulp=re.Replace(hulp)
 		      
-		      re.SearchPattern = "\<\?xml.*\</identProgram\>"
+		      re.SearchPattern = "\<\?xml.*\</Program\>"
+		      re.Options.Greedy = False
 		      re.ReplacementPattern = ""
 		      re.Options.ReplaceAllMatches = true
 		      hulp=re.Replace(hulp)
-		      
-		      re.SearchPattern = "Ba[a-z]+" 
-		      hulpkarakter=re.search(hulp)
-		      if hulpkarakter <> nil then
-		        hulp=backuphulp
-		        re.SearchPattern = "IF NOT Bavropvt.+\<program\>"
-		        re.ReplacementPattern = ""
-		        re.Options.ReplaceAllMatches = true
-		        hulp=re.Replace(hulp)
-		        
-		        re.SearchPattern = "\<\?xml.*\</identProgram\>"
-		        re.ReplacementPattern = ""
-		        re.Options.ReplaceAllMatches = true
-		        hulp=re.Replace(hulp)
-		      end if
 		      
 		    end if
 		    
@@ -1091,9 +1113,12 @@ Protected Class PreProcessor
 		      end if
 		    next
 		    
-		    myDictionary.value("Config")= str(maxlevel+maxlevelhigh)+" + "+str(myDictionary.value("NumberW")- maxlevel-maxlevelhigh)
+		    if myDictionary.value("NumberW")- maxlevel-maxlevelhigh>0 then
+		      myDictionary.value("Config")= str(maxlevel+maxlevelhigh)+" + "+str(myDictionary.value("NumberW")- maxlevel-maxlevelhigh)
+		    else
+		      myDictionary.value("Config")= str(maxlevel+maxlevelhigh)+" + "+str(0)
+		    end if
 		  end if
-		  
 		  return myDictionary
 		  
 		  

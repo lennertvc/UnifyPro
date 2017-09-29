@@ -71,12 +71,15 @@ Inherits JVSQLiteDatabase
 		Function lookupChanges(lookupvalue1 as string,lookupValue2 as string, lookupValue3 as string) As integer
 		  dim number as integer =0
 		  'dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From "+lookupTable+" WHERE "+lookupField+" = '"+lookupValue+"'")
-		  dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From regelingen where installatie= "+"'"+lookupValue1+"'"+" AND filepath = " +"'"+lookupValue2+"'"+" AND naam = " +"'"+lookupValue3+"';")
-		  if previousrecords.fieldcount>=1 then
-		    system.DebugLog("ident")
-		    previousRecords.MoveFirst 
-		    number=previousRecords.Field("regelingTypeID").IntegerValue
-		    return number
+		  dim previousRecords as Recordset = SQLSelect("Select regelingTypeID From regelingen where Installatie= "+"'"+lookupValue1+"'"+" AND filePath = " +"'"+lookupValue2+"'"+" AND naam = " +"'"+lookupValue3+"'")
+		  
+		  if previousRecords <> nil then
+		    if previousrecords.fieldcount>=1 then
+		      system.DebugLog("ident")
+		      previousRecords.MoveFirst 
+		      number=previousRecords.Field("regelingTypeID").IntegerValue
+		      return number
+		    end if
 		  end if
 		End Function
 	#tag EndMethod

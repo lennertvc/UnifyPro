@@ -82,6 +82,7 @@ Begin NSView CompareView
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
@@ -132,6 +133,7 @@ Begin NSView CompareView
       ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True

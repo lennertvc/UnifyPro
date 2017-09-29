@@ -285,6 +285,13 @@ Inherits Listbox
 			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="ShowDropIndicator"
+			Visible=true
+			Group="Appearance"
+			InitialValue="False"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
